@@ -1,0 +1,10 @@
+from typing import Literal
+
+TCodigoConfiguracao = Literal[
+    "WCM_CONTROLE_STATUS_ITENS",
+    "WCM_REINICIO_CODIGO_COMANDA",
+    "WCM_CONTROLE_ESTOQUE",
+    "WCM_PERCENTUAL_COMISSAO_GARCON",
+    "WCM_CLIENT_ID_IFOOD",
+    "WCM_CLIENT_SECRET_IFOOD",
+]

@@ -1,0 +1,47 @@
+[
+    {
+        "cl_nome": "Pedro",
+        "cl_sobrenome": "Neri",
+        "cl_nascimento": "2004-12-27",
+        "cl_celular": "",
+        "cl_telefone": "",
+        "cl_email": "pedro-neri8@outlook.com",
+        "cl_cep": "31080330",
+        "cl_estado": "MG",
+        "cl_cidade": "Belo Horizonte",
+        "cl_bairro": "Santa Inês",
+        "cl_rua": "Rua Materlândia",
+        "cl_numero": "772",
+        "cl_complemento": "Guardado pelo Bartholomeu(el substituto del Paco)"
+    },
+    {
+        "cl_nome": "Rafael",
+        "cl_sobrenome": "Noronha",
+        "cl_nascimento": "1995-02-01",
+        "cl_celular": "",
+        "cl_telefone": "",
+        "cl_email": "",
+        "cl_cep": "33170825",
+        "cl_estado": "MG",
+        "cl_cidade": "Santa Luzia",
+        "cl_bairro": "Liberdade",
+        "cl_rua": "Rua João Vital Pinto",
+        "cl_numero": "300",
+        "cl_complemento": ""
+    },
+    {
+        "cl_nome": "Davi",
+        "cl_sobrenome": "Silva Rafacho",
+        "cl_nascimento": "2003-04-05",
+        "cl_celular": "31975194725",
+        "cl_telefone": "",
+        "cl_email": "davi.s.rafacho@gmail.com",
+        "cl_cep": "31140500",
+        "cl_estado": "MG",
+        "cl_cidade": "Belo Horizonte",
+        "cl_bairro": "Silveira",
+        "cl_rua": "Rua Biaggio Polizzi",
+        "cl_numero": "257",
+        "cl_complemento": "Apto 301"
+    }
+]

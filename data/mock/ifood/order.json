@@ -1,0 +1,248 @@
+{
+  "id": "e0efa517-b9d9-44bb-8c27-d2e6bb4948c9",
+  "displayId": "5186",
+  "createdAt": "2024-11-12T15:17:42.348Z",
+  "category": "FOOD",
+  "orderTiming": "IMMEDIATE",
+  "orderType": "DELIVERY",
+  "delivery": {
+    "mode": "DEFAULT",
+    "description": "Padrão",
+    "deliveredBy": "MERCHANT",
+    "deliveryDateTime": "2024-11-12T15:47:42.348Z",
+    "deliveryAddress": {
+      "streetName": "Rua TESTE",
+      "streetNumber": "999999",
+      "formattedAddress": "Rua TESTE, 999999",
+      "neighborhood": "Bairro TESTE",
+      "complement": "Complemento TESTE",
+      "postalCode": "99999999",
+      "city": "TESTE",
+      "state": "XX",
+      "country": "XX",
+      "reference": "TESTE",
+      "coordinates": {
+        "latitude": 0.0,
+        "longitude": 0.0
+      }
+    },
+    "pickupCode": "2015"
+  },
+  "preparationStartDateTime": "2024-11-12T15:17:42.348Z",
+  "isTest": true,
+  "salesChannel": "IFOOD",
+  "merchant": {
+    "id": "85330304-7ee6-4182-b40d-6c65cca35a65",
+    "name": "Teste - davi-silva-rafacho"
+  },
+  "customer": {
+    "id": "f6580c5d-2cb8-4bab-8627-2ccff6d9016d",
+    "name": "PEDIDO DE TESTE -  DAVI SILVA RAFACHO",
+    "documentNumber": "123456789-00",
+    "phone": {
+      "number": "0800 705 3040",
+      "localizer": "83114390",
+      "localizerExpiration": "2024-11-12T19:17:42.348Z"
+    },
+    "ordersCountOnMerchant": 0,
+    "segmentation": "Cliente"
+  },
+  "items": [
+    {
+      "index": 1,
+      "id": "75b45885-0b1c-40b8-a49b-dd8d8f558a06",
+      "uniqueId": "467ec66a-41a1-41c1-9aa9-173de2bc9ea8",
+      "name": "PEDIDO DE TESTE - ITEM 1 - NÃO ENTREGAR",
+      "ean": "",
+      "quantity": 1,
+      "unit": "UN",
+      "unitPrice": 6.99,
+      "optionsPrice": 0,
+      "totalPrice": 6.99,
+      "price": 6.99,
+      "observations": "",
+      "options": [],
+      "imageUrl": "https://static-images.ifood.com.br/image/upload/t_high/pratos/e078d2e1-0af0-49c3-ba0d-ea4effffbd54/202305121137_XIHJ_i.jpg"
+    },
+    {
+      "index": 2,
+      "id": "d3d86b4b-a653-4b6d-a3c4-11c60954edb1",
+      "uniqueId": "8dcbef08-9848-4f18-974a-5826debeff93",
+      "name": "PEDIDO DE TESTE - ITEM 2 - NÃO ENTREGAR",
+      "ean": "",
+      "quantity": 1,
+      "unit": "UN",
+      "unitPrice": 6.99,
+      "optionsPrice": 0,
+      "totalPrice": 6.99,
+      "price": 6.99,
+      "observations": "",
+      "options": [],
+      "imageUrl": "https://static-images.ifood.com.br/image/upload/t_high/pratos/e078d2e1-0af0-49c3-ba0d-ea4effffbd54/202305121137_XIHJ_i.jpg"
+    },
+    {
+      "index": 3,
+      "id": "ea4e22bb-5b0a-40a7-a43f-b17d1d0e787a",
+      "uniqueId": "51d98142-abca-4bc7-b48d-3fcbf776eaca",
+      "name": "PEDIDO DE TESTE - COMBO",
+      "type": "COMBO_V2",
+      "ean": "",
+      "quantity": 1,
+      "unit": "UN",
+      "unitPrice": 6.99,
+      "optionsPrice": 7.96,
+      "totalPrice": 6.99,
+      "price": 6.99,
+      "observations": "",
+      "options": [
+        {
+          "index": 4,
+          "id": "4c0c3c52-9daa-4a1a-98f6-f6f8bcd8ad1e",
+          "name": "Chilli",
+          "type": "SPECIFICATION",
+          "groupName": "Adicione mais ingredientes",
+          "externalCode": "",
+          "ean": "",
+          "quantity": 1,
+          "unit": "UN",
+          "unitPrice": 1.99,
+          "addition": 0.0,
+          "price": 1.99
+        },
+        {
+          "index": 5,
+          "id": "647d0ee8-f5de-448c-8fb5-d48bf5750db5",
+          "name": "Ketchup",
+          "type": "OFFER_UNIT",
+          "groupName": "Deseja adicionar molhos?",
+          "externalCode": "",
+          "ean": "",
+          "quantity": 1,
+          "unit": "UN",
+          "unitPrice": 1.99,
+          "addition": 0.0,
+          "price": 1.99
+        },
+        {
+          "index": 6,
+          "id": "f8d0db31-e89c-45f1-9ae4-4de68f817072",
+          "name": "Sanduíche",
+          "type": "MAIN",
+          "groupName": "Meu sanduíche favorito",
+          "customizations": [
+            {
+              "id": "46b9bfb2-f6fb-4a07-ba88-536021029ebc",
+              "externalCode": "547222b6-3180-4408-8c1b-1ae66cac9496",
+              "name": "Catchup Kito The Ketchup 190g",
+              "groupName": "Grupo de Complemento Opcional",
+              "type": "SPECIFICATION",
+              "quantity": 1,
+              "unitPrice": 0.99,
+              "addition": 0.0,
+              "price": 0.99
+            },
+            {
+              "id": "d6c95b0e-bf30-4364-b6b1-0feda7d60ccf",
+              "externalCode": "3b2c9ec7-2d9a-4da9-965b-2b781ceb4216",
+              "name": "Complemento 2",
+              "groupName": "Grupo de Complemento Opcional",
+              "type": "SPECIFICATION",
+              "quantity": 1,
+              "unitPrice": 0.99,
+              "addition": 0.0,
+              "price": 0.99
+            },
+            {
+              "id": "91a816da-0370-4c0a-8e76-28a89cd13463",
+              "externalCode": "b8bc3259-f847-4c56-ada2-b92082ac53e4",
+              "name": "Complemento 7",
+              "groupName": "Grupo de Complemento Obrigatório",
+              "type": "SPECIFICATION",
+              "quantity": 1,
+              "unitPrice": 0.99,
+              "addition": 0.0,
+              "price": 0.99
+            },
+            {
+              "id": "01e3d267-49ec-44ce-8f38-33b06b88bd95",
+              "externalCode": "9dd0ad46-b07f-4916-a450-2e452e0037fb",
+              "name": "Complemento 6",
+              "groupName": "Grupo de Complemento Obrigatório",
+              "type": "SPECIFICATION",
+              "quantity": 1,
+              "unitPrice": 0.99,
+              "addition": 0.0,
+              "price": 0.99
+            }
+          ],
+          "externalCode": "",
+          "ean": "",
+          "quantity": 1,
+          "unit": "UN",
+          "unitPrice": 1.99,
+          "addition": 0.0,
+          "price": 1.99
+        },
+        {
+          "index": 7,
+          "id": "22e0670c-d81a-4f85-9d1a-95a1a3c9f620",
+          "name": "Complemento 1",
+          "type": "OFFER_UNIT",
+          "groupName": "Escolha seu acompanhamento",
+          "externalCode": "",
+          "ean": "",
+          "quantity": 1,
+          "unit": "UN",
+          "unitPrice": 1.99,
+          "addition": 0.0,
+          "price": 1.99
+        }
+      ],
+      "imageUrl": "https://static-images.ifood.com.br/image/upload/t_high/pratos/e078d2e1-0af0-49c3-ba0d-ea4effffbd54/202305121137_XIHJ_i.jpg"
+    }
+  ],
+  "total": {
+    "additionalFees": 0.99,
+    "subTotal": 32.89,
+    "deliveryFee": 10.0,
+    "benefits": 0,
+    "orderAmount": 43.88
+  },
+  "payments": {
+    "prepaid": 43.88,
+    "pending": 0,
+    "methods": [
+      {
+        "value": 43.88,
+        "currency": "BRL",
+        "method": "MEAL_VOUCHER",
+        "prepaid": true,
+        "type": "ONLINE",
+        "card": {
+          "brand": "SODEXO"
+        }
+      }
+    ]
+  },
+  "additionalFees": [
+    {
+      "type": "SMALL_ORDER_FEE_35_PROMOTIONS",
+      "description": "Taxa de Serviço",
+      "fullDescription": "É cobrada pelo iFood em pedidos que não atingem o valor de R$ 35, incluindo itens promocionais, sem contar com taxa de entrega e cupom.",
+      "value": 0.99,
+      "liabilities": [
+        {
+          "name": "IFOOD",
+          "percentage": 100.0
+        }
+      ]
+    }
+  ],
+  "additionalInfo": {
+    "metadata": {
+      "developerId": "fb084eb2-dc8c-4872-8cdb-fec4cba6fd35",
+      "customerEmail": "DAVI.S.RAFACHO.DEVELOPER@GMAIL.COM",
+      "developerEmail": "davi.s.rafacho.developer@gmail.com"
+    }
+  }
+}
