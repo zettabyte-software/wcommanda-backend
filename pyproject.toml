@@ -93,6 +93,6 @@ line-length = 120
     "local-folder",
   ]
 
-  [tool.pytest.ini_options]
-  DJANGO_SETTINGS_MODULE = "api.settings"
-  python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "api.settings"
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
