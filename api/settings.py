@@ -98,6 +98,7 @@ WCOMMANDA_APPS = [
     "apps.mesas",
     "apps.pedidos",
     "apps.produtos",
+    "apps.reservas",
     "apps.users",
     "apps.vendas",
     # system
