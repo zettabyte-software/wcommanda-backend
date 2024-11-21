@@ -38,7 +38,7 @@ class BaseModelSerializer(ModelSerializer):
 
         elif action in ("create", "update", "partial_update"):
             # del self.fields["owner"]
-            del self.fields["assinatura"]
+            # del self.fields["assinatura"]
 
             for field_name in self.fields:
                 field_cls = self.fields[field_name].__class__
