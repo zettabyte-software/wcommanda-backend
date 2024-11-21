@@ -17,7 +17,6 @@ EnviromentVar = Literal[
     "REDIS_HOST",
     "REDIS_PORT",
     "EMAIL_PASSWORD",
-    "WCOMMANDA_INTEGRATION_TOKEN",
     "IFOOD_CLIENT_ID",
     "IFOOD_CLIENT_SECRET",
     "SENTRY_DSN",
