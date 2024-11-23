@@ -23,8 +23,8 @@ class Configuracao(Base):
         "WCM_REINICIO_CODIGO_COMANDA": bool,
         "WCM_CONTROLE_ESTOQUE": bool,
         "WCM_PERCENTUAL_COMISSAO_GARCON": float,
-        "WCM_CLIENT_ID_IFOOD": float,
-        "WCM_CLIENT_SECRET_IFOOD": float,
+        "WCM_CLIENT_ID_IFOOD": str,
+        "WCM_CLIENT_SECRET_IFOOD": str,
     }
 
     cf_codigo = models.CharField(_("código"), max_length=40, editable=False)
