@@ -29,7 +29,7 @@ class Configuracao(Base):
 
     cf_codigo = models.CharField(_("código"), max_length=40, editable=False)
     cf_descricao = models.CharField(_("descrição"), max_length=100)
-    cf_valor = models.CharField(_("valor"), max_length=25)
+    cf_valor = models.CharField(_("valor"), max_length=150)
 
     @classmethod
     def normalize_value(cls, codigo, valor):
