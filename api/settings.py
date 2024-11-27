@@ -27,9 +27,7 @@ EXECUTION = get_env_var("DJANGO_EXECUTION_MODE")
 
 
 if not SECRET_KEY and DEBUG:
-    warnings.warn(
-        "'SECRET_KEY' não foi configurada, using a random temporary key.", stacklevel=2
-    )
+    warnings.warn("'SECRET_KEY' não foi configurada, using a random temporary key.", stacklevel=2)
     SECRET_KEY = get_random_secret_key()
 
 if IN_PRODUCTION:
@@ -95,6 +93,7 @@ WCOMMANDA_APPS = [
     "apps.filiais",
     "apps.financeiro",
     "apps.garcons",
+    "apps.ifood",
     "apps.mesas",
     "apps.pedidos",
     "apps.produtos",
@@ -250,21 +249,12 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "simple": {"format": "%(levelname)s %(message)s"},
-        "verbose": {
-            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-            "datefmt": "%Y-%m-%dT%H:%M:%S",
-        },
         "api_formatter": {
-            "format": "%(asctime)s [%(levelname)s] %(name)s - LOG - %(message)s",
-            "datefmt": "%Y-%m-%dT%H:%M:%S",
-        },
-        "error_formatter": {
-            "format": "%(asctime)s [%(levelname)s] %(name)s - ERROR - %(message)s",
-            "datefmt": "%Y-%m-%dT%H:%M:%S",
+            "format": "[%(asctime)s] %(name)s [%(levelname)s] %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
         },
         "cloud_formatter": {
-            "format": "%(asctime)s wcommanda %(name)s: [%(levelname)s] %(message)s",
+            "format": "[%(asctime)s] wcommanda %(name)s: [%(levelname)s] %(message)s",
             "datefmt": "%Y-%m-%dT%H:%M:%S",
         },
     },
@@ -312,13 +302,13 @@ LOGGING = {
             "filename": os.path.join(LOGGING_ROOT, "errors.log"),
             "maxBytes": 1024 * 1024 * 50,
             "backupCount": 10,
-            "formatter": "error_formatter",
+            "formatter": "api_formatter",
             "filters": ["error_filter"],
         },
         "api_errors_mail": {
             "level": "ERROR",
             "class": "django.utils.log.AdminEmailHandler",
-            "formatter": "error_formatter",
+            "formatter": "api_formatter",
             "filters": ["error_filter"],
         },
         "api_cloud_log": {
@@ -328,8 +318,30 @@ LOGGING = {
             "address": ("logs.papertrailapp.com", 17562),
         },
     },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "pika": {
+            "handlers": [],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "httpx": {
+            "handlers": [],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "httpcore": {
+            "handlers": [],
+            "level": "WARNING",
+            "propagate": False,
+        },
+    },
     "root": {
-        "handlers": ["api_activity", "api_errors"],
+        "handlers": ["console", "api_activity", "api_errors"],
         "level": "DEBUG",
         "propagate": True,
         "formatter": "simple",
