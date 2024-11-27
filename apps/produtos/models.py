@@ -1,4 +1,3 @@
-import base64
 import random
 
 from django.db import models
@@ -14,6 +13,7 @@ from apps.system.base.models import Base
 class TiposChoices(models.IntegerChoices):
     PREPARAVEL = 1, _("Preparável")
     CONSUMIVEL = 2, _("Consumível")
+    ADICIONAL = 3, _("ADICIONAL")
 
 
 class Produto(Base):
@@ -44,16 +44,6 @@ class Produto(Base):
         return f"{tenant.pk}/produtos/{new_file_name}.{file_extension}"
 
     pr_imagem = models.ImageField(_("foto"), upload_to=make_upload_path, blank=True, null=True)  # type: ignore
-
-    @property
-    def pr_imagem_base64(self):
-        if self.pr_imagem:
-            file = open(self.pr_imagem.path, "rb")
-            image_data = file.read()
-            base64_image = base64.b64encode(image_data).decode("utf-8")
-            return base64_image
-        else:
-            return None
 
     class Meta:
         db_table = "produto"
