@@ -15,43 +15,15 @@ from threadlocals.threadlocals import get_current_user
 class Base(TenantModel):
     tenant_id = "ambiente_id"
 
-    ativo = models.BooleanField(
-        _("ativo"),
-        default=True,
-    )
-
-    codigo = models.PositiveBigIntegerField(
-        _("código"),
-        editable=False,
-        default=1,
-    )
-
+    ativo = models.BooleanField(_("ativo"), default=True)
+    codigo = models.PositiveBigIntegerField(_("código"), editable=False, default=1)
     data_criacao = models.DateField(_("data de criação"), auto_now_add=True)
     hora_criacao = models.TimeField(_("hora de criação"), auto_now_add=True)
     data_ultima_alteracao = models.DateField(_("data da última alteração"), auto_now=True)
     hora_ultima_alteracao = models.TimeField(_("hora da última alteração"), auto_now=True)
-
-    filial = TenantForeignKey(
-        "filiais.Filial",
-        verbose_name=_("filial"),
-        on_delete=models.PROTECT,
-        null=True,
-    )
-
-    owner = TenantForeignKey(
-        verbose_name=_("owner"),
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        null=True,
-    )
-
-    ambiente = models.ForeignKey(
-        "tenants.Ambiente",
-        verbose_name=_("tenant"),
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True,
-    )
+    filial = TenantForeignKey(verbose_name=_("filial"), to="filiais.Filial", on_delete=models.PROTECT, null=True,)
+    owner = TenantForeignKey(verbose_name=_("owner"), to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True,)
+    ambiente = models.ForeignKey(verbose_name=_("tenant"), to="tenants.Ambiente", on_delete=models.PROTECT, null=True,blank=True)
 
     history = AuditlogHistoryField()
 
