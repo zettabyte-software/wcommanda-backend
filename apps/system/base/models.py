@@ -59,7 +59,7 @@ class Base(TenantModel):
         abstract = True
 
 
-class EstadosChoices(models.TextChoices):
+class EstadosChoices(models.IntegerChoices):
     EM_BRANCO = 0, "Em branco"
     RONDONIA = 1, "Rondônia"
     ACRE = 2, "Acre"
