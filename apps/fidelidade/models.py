@@ -80,7 +80,7 @@ class CartaoFidelidade(Base):
         request = get_current_request()
         host = request.headers.get(settings.TENANT_HOST_HEADER)
         token = get_current_token()
-        link = f"https://{host}/sespaco-do-cliente/cartoes-fidelidade/{self.pk}/?jwt={token}"
+        link = f"https://{host}/espaco-do-cliente/cartoes-fidelidade/{self.pk}/?jwt={token}"
         return link
 
     class Meta:
