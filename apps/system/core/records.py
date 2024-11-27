@@ -62,17 +62,11 @@ class DefaultRecord:
         instance.delete()
 
     def __str__(self):
-        ids = " ".join(
-            [f"{chave}='{valor}'" for chave, valor in self.identifiers.items()]
-        )
+        ids = " ".join([f"{chave}='{valor}'" for chave, valor in self.identifiers.items()])
         return f"<DefaultRecord model={self.model.__name__} {ids}>"
 
 
 class DefaultRecordsManger:
-    """Objeto responsável por popular o banco de dados com os
-    dados padrões do sistema.
-    """
-
     default_records_path = "data/records/default/"
 
     def __init__(self, database_alias="default"):
@@ -82,13 +76,13 @@ class DefaultRecordsManger:
     def apply_updates(self):
         records = self.get_records()
         for record in records:
-            print(f"[*] verificando registro:", record)
+            logger.info("verificando registro %s", record)
             if record.active and not record.exists:
-                print(f"[*] criando registro:", record)
+                logger.info("criando registro %s", record)
                 record.create()
 
             elif not record.active and record.exists:
-                print(f"[*] deletando registro:", record)
+                logger.info("deletando registro %s", record)
                 record.delete()
 
     def get_records(self):
@@ -107,7 +101,7 @@ class DefaultRecordsManger:
                     id_fields=id_fields_map,
                     active=active,
                     raw_data=data,
-                    database_alias=self.database_alias
+                    database_alias=self.database_alias,
                 )
 
                 records.append(default_record)
