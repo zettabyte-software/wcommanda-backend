@@ -51,6 +51,10 @@ class Base(TenantModel):
 
         return super().save(*args, **kwargs)
 
+    @classmethod
+    def get_column_names(cls):
+        return [field.name for field in cls._meta.get_fields() if field.concrete and not field.is_relation]
+
     class Meta:
         abstract = True
 
