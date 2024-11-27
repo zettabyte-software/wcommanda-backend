@@ -17,7 +17,7 @@ from .serializers import (
     ProdutoAlteracaoSerializer,
     ProdutoVisualizacaoSerializer,
 )
-from .services import sugerir_novo_codigo_cardapio
+from .services import gerar_codigo_cardapio
 
 
 class CategoriaProdutoViewSet(BaseModelViewSet):
@@ -49,11 +49,11 @@ class ProdutoViewSet(BaseModelViewSet):
 
     @action(methods=["get"], detail=False)
     def sugestao_codigo_cardapio(self, request):
-        codigo = sugerir_novo_codigo_cardapio()
+        codigo = gerar_codigo_cardapio()
         return Response({"pr_codigo_cardapio": codigo})
 
     def alterar_campos_unicos(self, instance):
-        instance.pr_codigo_cardapio = sugerir_novo_codigo_cardapio()
+        instance.pr_codigo_cardapio = gerar_codigo_cardapio()
 
 
 class RelatorioViewSet(ViewSet):
