@@ -40,27 +40,27 @@ class Produto(Base):
         default=StatusComandaItemChoices.ABERTO,
     )
 
-    def make_upload_path(self, filename):
-        file_extension = filename.split(".")[-1]
-        new_file_name = random.randint(1000000, 9999999)
-        tenant = get_current_tenant()
-        return f"{tenant.pk}/produtos/{new_file_name}.{file_extension}"
-
-    pr_imagem = models.ImageField(_("foto"), upload_to=make_upload_path, blank=True, null=True)  # type: ignore
+    pr_imagem = models.URLField(_("foto"), blank=True)
 
     bucket_client = R2CloudflareHandler()
 
     @classmethod
     def upload(cls, produto: "Produto", image: InMemoryUploadedFile):
         tenant = get_current_tenant()
-        path = f"{tenant.pk}/img/produtos/{produto.pk}/{image.name}"
+        file_extension = image.name.split(".")[-1]
+        new_file_name = random.randint(1000000, 9999999)
+
+        path = f"{tenant.pk}/img/produtos/{produto.pk}/{new_file_name}.{file_extension}"
+
         cls.bucket_client.upload(image, path)
-        return cls(
-            mg_produto=produto,
-            mg_cloudflare_url=get_env_var('CLOUDFLARE_R2_BUCKET_URL'),
-            mg_cloudflare_path=path,
-            mg_cloudflare_bucket=get_env_var("CLOUDFLARE_R2_BUCKET"),
-        )
+
+        url = get_env_var("CLOUDFLARE_R2_BUCKET_URL")
+        bucket = get_env_var("CLOUDFLARE_R2_BUCKET")
+
+        full_url = f"{url}/{bucket}/{path}"
+
+        produto.pr_imagem = full_url
+        produto.save()
 
     class Meta:
         db_table = "produto"
