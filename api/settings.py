@@ -339,6 +339,16 @@ LOGGING = {
             "level": "WARNING",
             "propagate": False,
         },
+        "botocore": {
+            "handlers": [],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "urllib3": {
+            "handlers": [],
+            "level": "WARNING",
+            "propagate": False,
+        },
     },
     "root": {
         "handlers": ["console", "api_activity", "api_errors"],
