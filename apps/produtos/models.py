@@ -1,5 +1,6 @@
 import random
 
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -8,6 +9,8 @@ from django_multitenant.utils import get_current_tenant
 
 from apps.comandas.models import StatusComandaItemChoices
 from apps.system.base.models import Base
+from lib.cloudflare.bucket import R2CloudflareHandler
+from utils.env import get_env_var
 
 
 class TiposChoices(models.IntegerChoices):
@@ -44,6 +47,20 @@ class Produto(Base):
         return f"{tenant.pk}/produtos/{new_file_name}.{file_extension}"
 
     pr_imagem = models.ImageField(_("foto"), upload_to=make_upload_path, blank=True, null=True)  # type: ignore
+
+    bucket_client = R2CloudflareHandler()
+
+    @classmethod
+    def upload(cls, produto: "Produto", image: InMemoryUploadedFile):
+        tenant = get_current_tenant()
+        path = f"{tenant.pk}/img/produtos/{produto.pk}/{image.name}"
+        cls.bucket_client.upload(image, path)
+        return cls(
+            mg_produto=produto,
+            mg_cloudflare_url=get_env_var('CLOUDFLARE_R2_BUCKET_URL'),
+            mg_cloudflare_path=path,
+            mg_cloudflare_bucket=get_env_var("CLOUDFLARE_R2_BUCKET"),
+        )
 
     class Meta:
         db_table = "produto"
