@@ -6,7 +6,6 @@ from django.utils.translation import gettext_lazy as _
 from django_multitenant.utils import get_current_tenant
 
 from apps.system.base.models import Base, EstadosChoices
-from utils.jwt import decode_jwt
 
 
 class Filial(Base):
