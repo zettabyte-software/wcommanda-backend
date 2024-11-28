@@ -5,7 +5,7 @@ from botocore.client import Config
 from botocore.errorfactory import ClientError
 from dataplane import s3_download, s3_upload
 
-from utils.classes import SingletonMeta
+from apps.system.core.classes import SingletonMeta
 from utils.env import get_env_var
 
 
