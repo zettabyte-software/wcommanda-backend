@@ -4,9 +4,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from apps.system.conf.models import Configuracao
-from apps.system.core.classes import DinamicAttrs
 
-from .dataclasses import PedidoIfood
 from .integrators import ImportarProdutosIfood, IntegradorPedidosIfood
 
 

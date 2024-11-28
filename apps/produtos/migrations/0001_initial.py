@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('pr_descricao', models.TextField(blank=True, default='', verbose_name='descrição')),
                 ('pr_controla_estoque', models.BooleanField(default=False, verbose_name='controla estoque')),
                 ('pr_status_padrao_comanda_item', models.PositiveSmallIntegerField(choices=[(1, 'Aberto'), (2, 'Preparando'), (3, 'Pronto'), (4, 'Entregue'), (5, 'Cancelado')], default=1, verbose_name='tipo')),
-                ('pr_imagem', models.ImageField(blank=True, null=True, upload_to=apps.produtos.models.Produto.make_upload_path, verbose_name='foto')),
+                ('pr_imagem', models.ImageField(blank=True, null=True, upload_to=apps.produtos.models.Produto, verbose_name='foto')),
             ],
             options={
                 'verbose_name': 'Produto',
