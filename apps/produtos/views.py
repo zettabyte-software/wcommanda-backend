@@ -55,6 +55,13 @@ class ProdutoViewSet(BaseModelViewSet):
     def alterar_campos_unicos(self, instance):
         instance.pr_codigo_cardapio = gerar_codigo_cardapio()
 
+    @action(methods=["put"], detail=True)
+    def upload_imagem(self, request):
+        produto = self.get_object()
+        imagem = request.FILES.get("pr_imagem")
+        Produto.upload(produto, imagem)
+        return Response()
+
 
 class RelatorioViewSet(ViewSet):
     hoje = date.today()
