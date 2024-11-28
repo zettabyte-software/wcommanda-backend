@@ -27,10 +27,7 @@ class CuponDesconto(Base):
 
     def get_valor_com_desconto(self, valor):
         if self.cp_valor_minimo > valor:
-            msg = "O valor %s não atende ao valor mínimo de %s" % (
-                valor,
-                self.cp_valor_minimo,
-            )
+            msg = f"O valor {valor} não atende ao valor mínimo de {self.cp_valor_minimo}"
             raise ValueError(msg)
 
         match self.cp_tipo:

@@ -1,10 +1,9 @@
-from django.utils import timezone, timesince
+from django.utils import timezone
 
 from rest_framework import serializers
 
 from apps.clientes.models import Cliente
 from apps.system.base.serializers import (
-    BaseModelSerializer,
     BaseModelSerializer,
 )
 

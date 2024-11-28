@@ -5,8 +5,8 @@ from apps.system.base.views import BaseModelViewSet
 
 from .serializers import (
     CuponDesconto,
-    CuponDescontoVisualizacaoSerializer,
     CuponDescontoAlteracaoSerializer,
+    CuponDescontoVisualizacaoSerializer,
     GerarCuponAniversarioSerializer,
 )
 
