@@ -1,9 +1,7 @@
-import os
 import json
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-from django.core.signing import Signer, BadSignature
 from django.db import connection
 from django.template.loader import get_template
 
@@ -11,10 +9,6 @@ from utils.env import get_env_var
 
 
 class SingletonMeta(type):
-    """
-    Metaclass paras Singleton
-    """
-
     _instances = {}
 
     def __new__(cls, *args, **kwargs):
@@ -24,10 +18,6 @@ class SingletonMeta(type):
 
 
 class DinamicAttrs:
-    """Objeto de utilidade para acessar atributos via `.` ao invés
-    da inteface de `[<chave>]`
-    """
-
     def __init__(self, dados):
         self.raw = dados
         for chave, valor in dados.items():
@@ -37,19 +27,12 @@ class DinamicAttrs:
 
 
 class JSONDinamicAttrs(DinamicAttrs):
-    """Adaptação da classe `DinamicAttrs` para utilizar um arquivo JSON"""
-
     def __init__(self, path):
         dados = json.loads(open(path).read())
         super().__init__(dados)
 
 
 class CachedFile:
-    """Singleton para cachear um arquivo. Sempre que for necessário
-    abrir um arquivo, se o seu path já tiver sido utilizado, irá
-    retornar uma instância no cache em vez de abrir o arquivo novamente.
-    """
-
     __files = {}
 
     def __new__(cls, path, **kwargs):
@@ -109,20 +92,6 @@ class Email:
 
         email.send()
 
-
-class Encryptor(metaclass=SingletonMeta):
-    def __init__(self) -> None:
-        self._secret_key = os.environ.get("DJANGO_SECRET_KEY")
-        self._signer = Signer(self._secret_key)
-
-    def encrypt(self, value):
-        return self._signer.sign(value)
-
-    def decrypt(self, value):
-        try:
-            return self._signer.unsign(value)
-        except BadSignature:
-            return None
 
 class DatabasesLoader:
     def __init__(self):
