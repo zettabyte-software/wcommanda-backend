@@ -8,6 +8,7 @@ from dataplane import s3_download, s3_upload
 from apps.system.core.classes import SingletonMeta
 from utils.env import get_env_var
 
+DEFAULT_BUCKET = get_env_var("CLOUDFLARE_R2_BUCKET")
 
 class R2CloudflareHandler(metaclass=SingletonMeta):
     def __init__(self):
@@ -24,9 +25,9 @@ class R2CloudflareHandler(metaclass=SingletonMeta):
             region_name="us-east-1",
         )
 
-    def upload(self, file, path):
+    def upload(self, file, path, bucket=DEFAULT_BUCKET):
         upload = s3_upload(
-            Bucket=get_env_var("CLOUDFLARE_R2_BUCKET"),
+            Bucket=bucket,
             S3Client=self.client,
             TargetFilePath=path,
             UploadObject=file.read(),
