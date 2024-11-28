@@ -14,9 +14,8 @@ class Filial(Base):
     fl_nome = models.CharField(_("nome"), max_length=120)
 
     fl_cep = models.CharField(_("cep"), max_length=8, blank=True, default="")
-    fl_estado = models.CharField(
+    fl_estado = models.PositiveSmallIntegerField(
         _("estado"),
-        max_length=3,
         choices=EstadosChoices.choices,
         default=EstadosChoices.EM_BRANCO,
     )
