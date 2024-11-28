@@ -16,7 +16,7 @@ class Cliente(Base):
 
     # endereço
     cl_cep = models.CharField(_("cep"), max_length=8, blank=True, default="")
-    cl_estado = models.CharField(_("estado"), max_length=2  , choices=EstadosChoices.choices, default=EstadosChoices.EM_BRANCO)
+    cl_estado = models.PositiveSmallIntegerField(_("estado"), choices=EstadosChoices.choices, default=EstadosChoices.EM_BRANCO)
     cl_cidade = models.CharField(_("cidade"), max_length=50, blank=True, default="")
     cl_bairro = models.CharField(_("bairro"), max_length=40, blank=True, default="")
     cl_rua = models.CharField(_("rua"), max_length=30, blank=True, default="")
