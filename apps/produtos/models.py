@@ -16,7 +16,7 @@ from utils.env import get_env_var
 class TiposChoices(models.IntegerChoices):
     PREPARAVEL = 1, _("Preparável")
     CONSUMIVEL = 2, _("Consumível")
-    ADICIONAL = 3, _("ADICIONAL")
+    ADICIONAL = 3, _("Adicional")
 
 
 class Produto(Base):
@@ -40,7 +40,7 @@ class Produto(Base):
         default=StatusComandaItemChoices.ABERTO,
     )
 
-    pr_imagem = models.URLField(_("foto"), blank=True)
+    pr_imagem = models.URLField(_("foto"), blank=True, default="")
 
     bucket_client = R2CloudflareHandler()
 
