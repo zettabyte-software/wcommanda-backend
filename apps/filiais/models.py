@@ -29,6 +29,8 @@ class Filial(Base):
     fl_telefone = models.CharField(_("telefone"), max_length=10, blank=True)
     fl_email = models.EmailField(_("email"), blank=True)
 
+    fl_merchat_id_ifood = models.CharField(_("id do merchant no iFood"), max_length=50, blank=True)
+
     def make_upload_path(self, filename):
         file_extension = filename.split(".")[-1]
         new_file_name = random.randint(1000000, 9999999)
