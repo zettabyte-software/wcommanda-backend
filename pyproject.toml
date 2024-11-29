@@ -79,7 +79,7 @@ line-length = 120
 
   [tool.ruff.lint.isort.sections]
   django = ["django"]
-  rest-framework = ["rest-framework"]
+  rest-framework = ["rest_framework"]
 
   [tool.ruff.lint.isort]
   known-first-party = ["apps"]
