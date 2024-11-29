@@ -14,8 +14,6 @@ from apps.system.conf.models import Configuracao
 from apps.system.tenants.models import Ambiente
 from apps.users.models import Usuario
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
-
 dotenv.load_dotenv()
 
 
@@ -78,4 +76,4 @@ def api_client():
 
 @pytest.fixture
 def mesa():
-    return Mesa.objects.create(ms_nome="Mesa Teste")
+    return Mesa.objects.create(ms_codigo=1, ms_quantidade_lugares=4)
