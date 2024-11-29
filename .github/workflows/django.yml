@@ -28,16 +28,6 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
-      redis:
-        image: redis:6
-        ports:
-          - 6379:6379
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     env:
       # django
       DJANGO_SECRET_KEY: '0%_nx-59f-y+jkfx&)yu6ly)!uty)s-c6o+jqzhp39&l1v%4)y'
