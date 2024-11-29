@@ -1,10 +1,13 @@
 import json
 
+from rest_framework.test import APIClient
+
 import dotenv
 import pytest
 from django_multitenant.utils import set_current_tenant
 from threadlocals.threadlocals import set_current_user
 
+from apps.mesas.models import Mesa
 from apps.produtos.models import Produto
 from apps.system.conf.models import Configuracao
 from apps.system.tenants.models import Ambiente
@@ -63,3 +66,13 @@ def produto():
         pr_preco=85,
         pr_tempo_preparo=15,
     )
+
+
+@pytest.fixture
+def api_client():
+    return APIClient()
+
+
+@pytest.fixture
+def mesa(db):
+    return Mesa.objects.create(ms_nome="Mesa Teste")
