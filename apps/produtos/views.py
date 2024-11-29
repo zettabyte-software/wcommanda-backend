@@ -11,6 +11,12 @@ from apps.comandas.models import ComandaItem, StatusComandaChoices
 from apps.system.base.views import BaseModelViewSet
 
 from .serializers import (
+    Acrescimo,
+    AcrescimoAlteracaoSerializer,
+    AcrescimoProduto,
+    AcrescimoProdutoAlteracaoSerializer,
+    AcrescimoProdutoVisualizacaoSerializer,
+    AcrescimoVisualizacaoSerializer,
     CategoriaProduto,
     CategoriaProdutoSerializer,
     Produto,
@@ -18,11 +24,6 @@ from .serializers import (
     ProdutoVisualizacaoSerializer,
 )
 from .services import gerar_codigo_cardapio
-
-
-class CategoriaProdutoViewSet(BaseModelViewSet):
-    queryset = CategoriaProduto.objects.all()
-    serializer_class = CategoriaProdutoSerializer
 
 
 class ProdutoViewSet(BaseModelViewSet):
@@ -61,6 +62,37 @@ class ProdutoViewSet(BaseModelViewSet):
         imagem = request.FILES.get("pr_imagem")
         Produto.upload(produto, imagem)
         return Response()
+
+
+class CategoriaProdutoViewSet(BaseModelViewSet):
+    queryset = CategoriaProduto.objects.all()
+    serializer_class = CategoriaProdutoSerializer
+
+
+class AcrescimoViewSet(BaseModelViewSet):
+    queryset = Acrescimo.objects.all()
+    serializer_classes = {
+        "list": AcrescimoVisualizacaoSerializer,
+        "retrieve": AcrescimoVisualizacaoSerializer,
+        "create": AcrescimoAlteracaoSerializer,
+        "update": AcrescimoAlteracaoSerializer,
+        "partial_update": AcrescimoAlteracaoSerializer,
+        "bulk_create": AcrescimoAlteracaoSerializer,
+        "clonar": AcrescimoAlteracaoSerializer,
+    }
+
+
+class AcrescimoProdutoViewSet(BaseModelViewSet):
+    queryset = AcrescimoProduto.objects.all()
+    serializer_classes = {
+        "list": AcrescimoProdutoVisualizacaoSerializer,
+        "retrieve": AcrescimoProdutoVisualizacaoSerializer,
+        "create": AcrescimoProdutoAlteracaoSerializer,
+        "update": AcrescimoProdutoAlteracaoSerializer,
+        "partial_update": AcrescimoProdutoAlteracaoSerializer,
+        "bulk_create": AcrescimoProdutoAlteracaoSerializer,
+        "clonar": AcrescimoProdutoAlteracaoSerializer,
+    }
 
 
 class RelatorioViewSet(ViewSet):

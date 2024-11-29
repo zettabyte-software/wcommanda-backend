@@ -80,8 +80,44 @@ class ImagemProduto:
     class Meta:
         db_table = "imagem_produto"
         ordering = ["-id"]
-        verbose_name = _("Produto")
-        verbose_name_plural = _("Produtos")
+        verbose_name = _("Imagem do Produto")
+        verbose_name_plural = _("Imagens dos Produtos")
+
+
+class Acrescimo(Base):
+    cs_nome = models.CharField(_("nome"), max_length=40)
+    cs_preco = models.FloatField(_("preço"), default=0)
+    cs_descricao = models.CharField(_("descrição"), max_length=50, blank=True)
+
+    class Meta:
+        db_table = "acresimo"
+        ordering = ["-id"]
+        verbose_name = _("Acréscimo")
+        verbose_name_plural = _("Acréscimos")
+
+
+class AcrescimoProduto(Base):
+    cp_produto = TenantForeignKey(
+        verbose_name=_("produto"),
+        to="produtos.Produto",
+        on_delete=models.CASCADE,
+        related_name="acrescimos",
+    )
+
+    cp_acrescimo = TenantForeignKey(
+        verbose_name=_("acréscimo"),
+        to="produtos.Acrescimo",
+        on_delete=models.CASCADE,
+    )
+
+    def __str__(self) -> str:
+        return f"{self.cp_produto.pr_nome} - {self.cp_acrescimo.cs_nome}"
+
+    class Meta:
+        db_table = "acresimo_produto"
+        ordering = ["-id"]
+        verbose_name = _("Acréscimo do Produto")
+        verbose_name_plural = _("Acréscimos dos Produtos")
 
 
 class CategoriaProduto(Base):
