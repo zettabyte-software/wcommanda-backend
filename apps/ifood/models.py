@@ -6,20 +6,6 @@ from django_multitenant.fields import TenantForeignKey
 from apps.system.base.models import Base
 
 
-class TipoEventoIfood(models.IntegerChoices):
-    ORDER_STATUS = 1, "ORDER_STATUS"
-    CANCELLATION_REQUEST = 2, "CANCELLATION_REQUEST"
-    HANDSHAKE_PLATFORM = 3, "HANDSHAKE_PLATFORM"
-    ORDER_TAKEOUT = 4, "ORDER_TAKEOUT"
-    DELIVERY = 5, "DELIVERY"
-    DELIVERY_ADDRESS = 6, "DELIVERY_ADDRESS"
-    DELIVERY_GROUP = 7, "DELIVERY_GROUP"
-    DELIVERY_ONDEMAND = 8, "DELIVERY_ONDEMAND"
-    DELIVERY_COMPLEMENT = 9, "DELIVERY_COMPLEMENT"
-    ORDER_MODIFIER = 10, "ORDER_MODIFIER"
-    OUTROS = 99, "OUTROS"
-
-
 class ProdutoIfood:
     fd_ifood_id = models.UUIDField(_("id do produto no iFood"))
     fd_produto = TenantForeignKey(
@@ -39,6 +25,16 @@ class ProdutoIfood:
 
 class PedidoIfood:
     fd_ifood_id = models.UUIDField(_("id do pedido no iFood"))
+    fd_teste = models.BooleanField(_("é pedido de teste"), default=False)
+    fd_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
+
+    fd_cep = models.CharField(_("cep"), max_length=8)
+    fd_estado = models.CharField(_("estado"), max_length=2)
+    fd_cidade = models.CharField(_("cidade"), max_length=40)
+    fd_bairro = models.CharField(_("bairro"), max_length=30)
+    fd_rua = models.CharField(_("rua"), max_length=15)
+    fd_numero = models.CharField(_("número"), max_length=8)
+    fd_complemento = models.CharField(_("complemento"), max_length=50, blank=True, default="")
 
     class Meta:
         db_table = "pedido_ifood"
@@ -47,11 +43,27 @@ class PedidoIfood:
         verbose_name_plural = _("Pedidos do iFood")
 
 
-class EventoIfood:
-    vf_dados = models.JSONField(_("dados do evento"))
+class PedidoItemIfood:
+    ft_ifood_id = models.UUIDField(_("id do pedido no iFood"))
+    ft_nome_produto = models.CharField(_("nome do produto"), max_length=80)
+    ft_unidade = models.CharField(_("unidade"), max_length=2)
+    ft_pedido = models.UUIDField(_("id do pedido no iFood"))
+    ft_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
+    ft_preco_unitario = models.FloatField(_("preço unitário"))
+    ft_quantidade = models.PositiveSmallIntegerField(_("quantidade"))
+    ft_preco_total = models.FloatField(_("preço total"))
+    ft_observacao = models.CharField(_("observação"), max_length=100, blank=True, default="")
 
     class Meta:
-        db_table = "evento_ifood"
+        db_table = "pedido_item_ifood"
         ordering = ["-id"]
-        verbose_name = _("Evento do iFood")
-        verbose_name_plural = _("Eventos do iFood")
+        verbose_name = _("Item do Pedido do iFood")
+        verbose_name_plural = _("Itens dos Pedidos do iFood")
+
+
+class PedidoItemCustomizacaoIfood:
+    class Meta:
+        db_table = "pedido_item_customizacao_ifood"
+        ordering = ["-id"]
+        verbose_name = _("Item do Pedido do iFood")
+        verbose_name_plural = _("Itens dos Pedidos do iFood")
