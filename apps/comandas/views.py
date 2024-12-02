@@ -1,7 +1,6 @@
 from django.db.models import Count, F
 from django.forms import model_to_dict
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
