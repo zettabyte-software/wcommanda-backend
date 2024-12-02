@@ -69,8 +69,10 @@ def produto():
 
 
 @pytest.fixture
-def api_client():
-    return APIClient()
+def api_client(usuario):
+    client =  APIClient()
+    client.force_authenticate(user=usuario)
+    return client
 
 
 @pytest.fixture
