@@ -6,14 +6,14 @@ from apps.comandas.models import Comanda, ComandaItem
 from apps.comandas.services import gerar_comissao_garcom
 from apps.system.conf.services import get_configuracao
 
-QUANTIDADE_PRODUTOS = random.randint(1, 99)
+QUANTIDADE_ITENS = random.randint(1, 99)
 
 
 @pytest.fixture
 def comanda_com_comissao(usuario, produto):
     comanda = Comanda.objects.create(cm_cliente="Teste", cm_garcom=usuario)
     itens = []
-    for _ in range(QUANTIDADE_PRODUTOS):
+    for _ in range(QUANTIDADE_ITENS):
         item = ComandaItem()
         item.ct_comanda = comanda
         item.ct_produto = produto
