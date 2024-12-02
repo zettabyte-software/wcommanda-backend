@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.clientes.serializers import ClienteVisualizacaoSerializer
 from apps.descontos.models import CuponDesconto
+from apps.produtos.serializers import ProdutoVisualizacaoSerializer
 from apps.system.base.serializers import BaseModelSerializer
 from apps.system.conf.models import Configuracao
 
@@ -10,7 +11,6 @@ from .services import baixar_estoque, vincular_num_pedido
 
 
 class ComandaItemVisualizacaoSerializer(BaseModelSerializer):
-    from apps.produtos.serializers import ProdutoVisualizacaoSerializer
 
     ct_produto = ProdutoVisualizacaoSerializer()
     ct_quantidade_total_produto = serializers.SerializerMethodField()
