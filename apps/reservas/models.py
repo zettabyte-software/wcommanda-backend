@@ -9,6 +9,7 @@ from apps.system.base.models import Base
 
 
 class Reserva(Base):
+    rs_codigo = models.UUIDField(_("código da reserva"), default=uuid.uuid4)
     rs_mesa = TenantForeignKey(
         "mesas.Mesa",
         related_name="reservas",
