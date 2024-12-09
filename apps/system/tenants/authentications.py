@@ -2,6 +2,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.exceptions import AuthenticationFailed
+
 from rest_framework_simplejwt.authentication import JWTAuthentication as SimpleJWTAuthentication
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.settings import api_settings
