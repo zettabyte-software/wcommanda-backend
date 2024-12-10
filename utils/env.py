@@ -24,6 +24,7 @@ EnviromentVar = Literal[
     "IFOOD_CLIENT_ID",
     "IFOOD_CLIENT_SECRET",
     "SENTRY_DSN",
+    "STRIPE_SECRET_KEY",
 ]
 
 
