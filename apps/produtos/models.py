@@ -46,21 +46,7 @@ class Produto(Base):
 
     @classmethod
     def upload(cls, produto: "Produto", image: InMemoryUploadedFile):
-        tenant = get_current_tenant()
-        file_extension = image.name.split(".")[-1]
-        new_file_name = random.randint(1000000, 9999999)
-
-        path = f"{tenant.pk}/img/produtos/{produto.pk}/{new_file_name}.{file_extension}"
-
-        cls.bucket_client.upload(image, path)
-
-        url = get_env_var("CLOUDFLARE_R2_BUCKET_URL")
-        bucket = get_env_var("CLOUDFLARE_R2_BUCKET")
-
-        full_url = f"{url}/{bucket}/{path}"
-
-        produto.pr_imagem = full_url
-        produto.save()
+        raise Exception
 
     class Meta:
         db_table = "produto"
