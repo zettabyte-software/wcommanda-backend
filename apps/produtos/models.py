@@ -1,16 +1,11 @@
-import random
-
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from django_multitenant.fields import TenantForeignKey
-from django_multitenant.utils import get_current_tenant
 
 from apps.comandas.models import StatusComandaItemChoices
 from apps.system.base.models import Base
-from lib.cloudflare.bucket import R2CloudflareHandler
-from utils.env import get_env_var
 
 
 class TiposChoices(models.IntegerChoices):
@@ -41,8 +36,6 @@ class Produto(Base):
     )
 
     pr_imagem = models.URLField(_("foto"), blank=True, default="")
-
-    bucket_client = R2CloudflareHandler()
 
     @classmethod
     def upload(cls, produto: "Produto", image: InMemoryUploadedFile):
