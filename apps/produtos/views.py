@@ -13,12 +13,12 @@ from apps.system.base.views import BaseModelViewSet
 from .serializers import (
     Acrescimo,
     AcrescimoAlteracaoSerializer,
-    AcrescimoProduto,
-    AcrescimoProdutoAlteracaoSerializer,
-    AcrescimoProdutoVisualizacaoSerializer,
     AcrescimoVisualizacaoSerializer,
     CategoriaProduto,
     CategoriaProdutoSerializer,
+    GrupoAcrescimoProduto,
+    GrupoAcrescimoProdutoAlteracaoSerializer,
+    GrupoAcrescimoProdutoVisualizacaoSerializer,
     Produto,
     ProdutoAlteracaoSerializer,
     ProdutoVisualizacaoSerializer,
@@ -82,16 +82,16 @@ class AcrescimoViewSet(BaseModelViewSet):
     }
 
 
-class AcrescimoProdutoViewSet(BaseModelViewSet):
-    queryset = AcrescimoProduto.objects.all()
+class GrupoAcrescimoProdutoViewSet(BaseModelViewSet):
+    queryset = GrupoAcrescimoProduto.objects.all()
     serializer_classes = {
-        "list": AcrescimoProdutoVisualizacaoSerializer,
-        "retrieve": AcrescimoProdutoVisualizacaoSerializer,
-        "create": AcrescimoProdutoAlteracaoSerializer,
-        "update": AcrescimoProdutoAlteracaoSerializer,
-        "partial_update": AcrescimoProdutoAlteracaoSerializer,
-        "bulk_create": AcrescimoProdutoAlteracaoSerializer,
-        "clonar": AcrescimoProdutoAlteracaoSerializer,
+        "list": GrupoAcrescimoProdutoVisualizacaoSerializer,
+        "retrieve": GrupoAcrescimoProdutoVisualizacaoSerializer,
+        "create": GrupoAcrescimoProdutoAlteracaoSerializer,
+        "update": GrupoAcrescimoProdutoAlteracaoSerializer,
+        "partial_update": GrupoAcrescimoProdutoAlteracaoSerializer,
+        "bulk_create": GrupoAcrescimoProdutoAlteracaoSerializer,
+        "clonar": GrupoAcrescimoProdutoAlteracaoSerializer,
     }
 
 

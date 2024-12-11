@@ -1,6 +1,6 @@
 from apps.system.base.serializers import BaseModelSerializer
 
-from .models import Acrescimo, AcrescimoProduto, CategoriaProduto, Produto
+from .models import Acrescimo, CategoriaProduto, GrupoAcrescimoProduto, Produto
 
 
 class CategoriaProdutoSerializer(BaseModelSerializer):
@@ -41,16 +41,13 @@ class AcrescimoAlteracaoSerializer(BaseModelSerializer):
         fields = "__all__"
 
 
-class AcrescimoProdutoVisualizacaoSerializer(BaseModelSerializer):
-    cp_produto = ProdutoVisualizacaoSerializer()
-    cp_acrescimo = AcrescimoVisualizacaoSerializer()
-
+class GrupoAcrescimoProdutoVisualizacaoSerializer(BaseModelSerializer):
     class Meta:
-        model = AcrescimoProduto
+        model = GrupoAcrescimoProduto
         fields = "__all__"
 
 
-class AcrescimoProdutoAlteracaoSerializer(BaseModelSerializer):
+class GrupoAcrescimoProdutoAlteracaoSerializer(BaseModelSerializer):
     class Meta:
-        model = AcrescimoProduto
+        model = GrupoAcrescimoProduto
         fields = "__all__"

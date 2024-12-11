@@ -11,7 +11,7 @@ from apps.system.base.models import Base
 class TiposChoices(models.IntegerChoices):
     PREPARAVEL = 1, _("Preparável")
     CONSUMIVEL = 2, _("Consumível")
-    ADICIONAL = 3, _("Adicional")
+    # ADICIONAL = 3, _("Adicional")
 
 
 class Produto(Base):
@@ -37,6 +37,25 @@ class Produto(Base):
 
     pr_imagem = models.URLField(_("foto"), blank=True, default="")
 
+    # pr_url_imagem = models.URLField(_("foto"), blank=True, default="")
+
+    # restrições alimentares
+    pr_vegano = models.BooleanField(_("vegano"), default=False)
+    pr_vegetariano = models.BooleanField(_("vegetariano"), default=False)
+    pr_organico = models.BooleanField(_("orgânico"), default=False)
+    pr_sem_gluten = models.BooleanField(_("sem glúten"), default=False)
+    pr_sem_acucar = models.BooleanField(_("sem açúcar"), default=False)
+    pr_zero_lactose = models.BooleanField(_("zero lactose"), default=False)
+
+    # acréscimos
+    pr_grupo_acrescimo = TenantForeignKey(
+        verbose_name=_("garçom"),
+        to="produtos.GrupoAcrescimoProduto",
+        on_delete=models.PROTECT,
+        null=True,
+        related_name="produtos",
+    )
+
     @classmethod
     def upload(cls, produto: "Produto", image: InMemoryUploadedFile):
         raise Exception
@@ -46,57 +65,6 @@ class Produto(Base):
         ordering = ["-id"]
         verbose_name = _("Produto")
         verbose_name_plural = _("Produtos")
-
-
-class ImagemProduto:
-    mg_produto = TenantForeignKey(
-        verbose_name=_("produto"),
-        to="produtos.Produto",
-        on_delete=models.CASCADE,
-    )
-    mg_imagem = models.ImageField(_("imagem"))
-
-    class Meta:
-        db_table = "imagem_produto"
-        ordering = ["-id"]
-        verbose_name = _("Imagem do Produto")
-        verbose_name_plural = _("Imagens dos Produtos")
-
-
-class Acrescimo(Base):
-    cs_nome = models.CharField(_("nome"), max_length=40)
-    cs_preco = models.FloatField(_("preço"), default=0)
-    cs_descricao = models.CharField(_("descrição"), max_length=50, blank=True)
-
-    class Meta:
-        db_table = "acresimo"
-        ordering = ["-id"]
-        verbose_name = _("Acréscimo")
-        verbose_name_plural = _("Acréscimos")
-
-
-class AcrescimoProduto(Base):
-    cp_produto = TenantForeignKey(
-        verbose_name=_("produto"),
-        to="produtos.Produto",
-        on_delete=models.CASCADE,
-        related_name="acrescimos",
-    )
-
-    cp_acrescimo = TenantForeignKey(
-        verbose_name=_("acréscimo"),
-        to="produtos.Acrescimo",
-        on_delete=models.CASCADE,
-    )
-
-    def __str__(self) -> str:
-        return f"{self.cp_produto.pr_nome} - {self.cp_acrescimo.cs_nome}"
-
-    class Meta:
-        db_table = "acresimo_produto"
-        ordering = ["-id"]
-        verbose_name = _("Acréscimo do Produto")
-        verbose_name_plural = _("Acréscimos dos Produtos")
 
 
 class CategoriaProduto(Base):
@@ -110,14 +78,32 @@ class CategoriaProduto(Base):
         verbose_name_plural = _("Categorias")
 
 
-class Ingrediente:
-    ng_nome = models.CharField(_("nome"), max_length=50)
-    ng_preco = models.FloatField(_("preço"), default=0)
-    ng_descricao = models.CharField(_("descrição"), max_length=700, blank=True)
-    ng_quantidade = models.FloatField(verbose_name=_("quantidade"))
+class GrupoAcrescimoProduto(Base):
+    gr_nome = models.CharField(_("nome"), max_length=30)
 
     class Meta:
-        db_table = "ingrediente_produto"
+        db_table = "grupo_acrescimo_produto"
         ordering = ["-id"]
-        verbose_name = _("Ingrediente")
-        verbose_name_plural = _("Ingredientes")
+        verbose_name = _("Grupo de Acréscimo do Produto")
+        verbose_name_plural = _("Grupos de Acréscimos dos Produtos")
+
+
+class Acrescimo(Base):
+    cs_grupo_acrescimo = TenantForeignKey(
+        verbose_name=_("grupo"),
+        to="produtos.GrupoAcrescimoProduto",
+        on_delete=models.CASCADE,
+        related_name="acrescimos",
+    )
+    cs_nome = models.CharField(_("nome"), max_length=40)
+    cs_preco = models.FloatField(_("preço"), default=0)
+    cs_quantidade_minima = models.FloatField(_("quantidade máxima"), default=1)
+    cs_quantidade_maxima = models.FloatField(_("quantidade máxima"), default=1)
+    cs_descricao = models.CharField(_("descrição"), max_length=50, blank=True)
+    cs_obrigatorio = models.BooleanField(_("obrigatório"), default=False)
+
+    class Meta:
+        db_table = "acresimo_produto"
+        ordering = ["-id"]
+        verbose_name = _("Acréscimo do Produto")
+        verbose_name_plural = _("Acréscimos dos Produtos")
