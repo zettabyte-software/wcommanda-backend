@@ -1,10 +1,12 @@
+import logging
+
 from apps.produtos.models import Produto
 from apps.produtos.services import gerar_codigo_cardapio
 
+from ..models import ProdutoIfood
 from .base import BaseIntegradorIfood
 
-# https://merchant-api.ifood.com.br/catalog/v2.0/merchants/6b487a27-c4fc-4f26-b05e-3967c2331882/inventory
-d = {"productId": "ec16fb62-7bdd-43e4-940c-10b5a2845f13", "amount": 10}
+logger = logging.getLogger(__name__)
 
 LIMITE_REGISTROS = 100
 
@@ -46,4 +48,15 @@ class ImportadorProdutosIfoodMixin(BaseIntegradorIfood):
 
 class IntegradorProdutoIfood(BaseIntegradorIfood):
     def sincronizar_alteracoes(self, produto: Produto):
-        pass
+        logger.info("Sincronizando alterações do produto %s no ifood", produto.pr_nome)
+        logger.info("Alterações sincronizadas com sucesso para o produto %s", produto.pr_nome)
+
+    def atualizar_inventario(self, produto: Produto, nova_quantidade: int):
+        dados_ifood, _ = ProdutoIfood.objects.get_or_create(
+            fd_produto=produto,
+            defaults={
+                "fd_produto": produto,
+            }
+        )
+        dados = {"productId": dados_ifood.fd_ifood_id, "amount": nova_quantidade}
+        response = self.client.get(f"/catalog/v2.0/merchants/{self.merchant}/inventory")

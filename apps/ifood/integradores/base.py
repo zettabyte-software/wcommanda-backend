@@ -3,9 +3,13 @@ import urllib.parse
 
 from django.core.cache import cache
 
+from rest_framework.exceptions import ValidationError
+
 import httpx
 import sentry_sdk
 from django_multitenant.utils import get_current_tenant
+
+from apps.system.conf.models import Configuracao
 
 _BASE_URL_API_IFOOD = "https://merchant-api.ifood.com.br"
 _BASE_HEADERS_IFOOD = {
@@ -18,12 +22,18 @@ logger = logging.getLogger(__name__)
 
 
 class BaseIntegradorIfood:
-    def __init__(self, client_id: str, client_secret: str, merchant: str):
+    def __init__(self, merchant: str):
+        client_id = Configuracao.get_configuracao("WCM_CLIENT_ID_IFOOD")
+        client_secret = Configuracao.get_configuracao("WCM_CLIENT_SECRET_IFOOD")
+
+        if not client_id or not client_secret:
+            raise ValidationError({"mensagem": "As credenciais do iFood não foram configuradas"})
+
+        self.merchant = merchant
         self.client_id = client_id
         self.client_secret = client_secret
-        self.merchant = "85330304-7ee6-4182-b40d-6c65cca35a65"
 
-        self.client = httpx.Client(
+        self._client = httpx.Client(
             base_url=_BASE_URL_API_IFOOD,
             headers=_BASE_HEADERS_IFOOD,
         )
@@ -31,6 +41,10 @@ class BaseIntegradorIfood:
         token = self.get_token_ifood()
 
         self.client.headers["Authorization"] = f"Bearer {token}"
+
+    @property
+    def client(self):
+        return self._client
 
     def get_token_ifood(self) -> str | None:
         logger.info("Obtendo token do iFood do tenant %s", get_current_tenant())
