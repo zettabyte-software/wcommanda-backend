@@ -90,6 +90,7 @@ WCOMMANDA_APPS = [
     "apps.descontos",
     "apps.estoque",
     "apps.fidelidade",
+    "apps.filas",
     "apps.filiais",
     "apps.financeiro",
     "apps.garcons",
