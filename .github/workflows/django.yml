@@ -41,7 +41,7 @@ jobs:
 
     env:
       # django
-      DJANGO_DEBUG: "True"
+      DJANGO_DEBUG: 'True'
       DJANGO_MODE: development
       DJANGO_EXECUTION_MODE: safety
       DJANGO_LOG_LEVE: INFO
