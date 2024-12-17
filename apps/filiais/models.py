@@ -29,7 +29,9 @@ class Filial(Base):
     fl_telefone = models.CharField(_("telefone"), max_length=10, blank=True)
     fl_email = models.EmailField(_("email"), blank=True)
 
-    fl_merchat_id_ifood = models.CharField(_("id do merchant no iFood"), max_length=50, blank=True)
+    fl_merchat_id_ifood = models.UUIDField(_("id do merchant do iFood"), null=True, default=None)
+    fl_catalog_id = models.UUIDField(_("id do catálogo digital do iFood"), null=True, default=None)
+    fl_delivery_catalog_id = models.UUIDField(_("id do catálogo de delivery do iFood"), null=True, default=None)
 
     def make_upload_path(self, filename):
         file_extension = filename.split(".")[-1]
