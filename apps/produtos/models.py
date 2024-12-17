@@ -69,7 +69,7 @@ class Produto(Base):
 
 class CategoriaProduto(Base):
     cg_nome = models.CharField(_("nome"), max_length=30)
-    cg_descricao = models.CharField(_("descrição"), max_length=100, blank=True)
+    cg_descricao = models.CharField(_("descrição"), max_length=100, blank=True, default="")
 
     class Meta:
         db_table = "categoria_produto"
