@@ -21,9 +21,16 @@ class Base(TenantModel):
     hora_criacao = models.TimeField(_("hora de criação"), auto_now_add=True)
     data_ultima_alteracao = models.DateField(_("data da última alteração"), auto_now=True)
     hora_ultima_alteracao = models.TimeField(_("hora da última alteração"), auto_now=True)
-    filial = TenantForeignKey(verbose_name=_("filial"), to="filiais.Filial", on_delete=models.PROTECT, null=True,)
-    owner = TenantForeignKey(verbose_name=_("owner"), to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True,)
-    ambiente = models.ForeignKey(verbose_name=_("tenant"), to="tenants.Ambiente", on_delete=models.PROTECT, null=True,blank=True)
+    filial = TenantForeignKey(verbose_name=_("filial"), to="filiais.Filial", on_delete=models.PROTECT, null=True)
+    owner = TenantForeignKey(
+        verbose_name=_("owner"),
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        null=True,
+    )
+    ambiente = models.ForeignKey(
+        verbose_name=_("tenant"), to="tenants.Ambiente", on_delete=models.PROTECT, null=True, blank=True
+    )
 
     history = AuditlogHistoryField()
 
