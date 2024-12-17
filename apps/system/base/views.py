@@ -93,7 +93,10 @@ class BaseModelViewSet(ModelViewSet):
         return self.get_host().split(".")[0]
 
     def perform_create(self, serializer, **overwrite):
-        serializer.save(owner=self.request.user, **overwrite)
+        return serializer.save(owner=self.request.user, **overwrite)
+
+    def perform_update(self, serializer, **overwrite):
+        return serializer.save(**overwrite)
 
     def destroy(self, request, *args, **kwargs):
         try:
