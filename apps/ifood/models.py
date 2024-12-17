@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django_multitenant.fields import TenantForeignKey, TenantOneToOneField
+from django_multitenant.fields import TenantOneToOneField
 
 from apps.system.base.models import Base
 
@@ -16,8 +16,8 @@ class TemplatesCategoriaIfood(models.TextChoices):
     DEFAULT = "DEFAULT"
 
 
-class CatalogoIfood:
-    _ifood_id = models.UUIDField(_("id do iFood"), null=True)
+class CatalogoIfood(Base):
+    cc_ifood_id = models.UUIDField(_("id do iFood"), null=True)
 
     class Meta:
         db_table = "catalogo_ifood"
@@ -45,7 +45,7 @@ class ProdutoIfood(Base):
         related_name="integracao_ifood",
         unique=True,
     )
-    fd_pizza = models.BooleanField(_("eh pizza"), default=False)
+    fd_pizza = models.BooleanField(_("é pizza"), default=False)
 
     def __str__(self):
         return self.fd_ifood_id
@@ -78,7 +78,7 @@ class CategoriaIfood(Base):
             "sequence": self.cd_index,
             "index": self.cd_sequence,
         }
-        
+
         if id:
             dados["id"] = str(self.cd_ifood_id)
 
