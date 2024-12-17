@@ -1,26 +1,101 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django_multitenant.fields import TenantForeignKey
+from django_multitenant.fields import TenantForeignKey, TenantOneToOneField
 
 from apps.system.base.models import Base
 
 
-class ProdutoIfood:
-    fd_ifood_id = models.UUIDField(_("id do produto no iFood"))
-    fd_produto = TenantForeignKey(
+class StatusCategoriaIfood(models.TextChoices):
+    AVAILABLE = "AVAILABLE"
+    UNAVAILABLE = "UNAVAILABLE"
+
+
+class TemplatesCategoriaIfood(models.TextChoices):
+    PIZZA = "PIZZA"
+    DEFAULT = "DEFAULT"
+
+
+class CatalogoIfood:
+    _ifood_id = models.UUIDField(_("id do iFood"), null=True)
+
+    class Meta:
+        db_table = "catalogo_ifood"
+        ordering = ["-id"]
+        verbose_name = _("Catálogo do iFood")
+        verbose_name_plural = _("Catálogos do iFood")
+
+
+class MerchantIfood:
+    md_ifood_id = models.UUIDField(_("id do iFood"), null=True)
+
+    class Meta:
+        db_table = "catalogo_ifood"
+        ordering = ["-id"]
+        verbose_name = _("Catálogo do iFood")
+        verbose_name_plural = _("Catálogos do iFood")
+
+
+class ProdutoIfood(Base):
+    fd_ifood_id = models.UUIDField(_("id iFood"), null=True)
+    fd_produto = TenantOneToOneField(
         verbose_name=_("produto"),
         to="produtos.Produto",
         on_delete=models.CASCADE,
-        null=True,
         related_name="integracao_ifood",
+        unique=True,
     )
+    fd_pizza = models.BooleanField(_("eh pizza"), default=False)
+
+    def __str__(self):
+        return self.fd_ifood_id
 
     class Meta:
-        db_table = "produto_ifood"
+        db_table = "dados_produto_ifood"
         ordering = ["-id"]
-        verbose_name = _("Produto do iFood")
-        verbose_name_plural = _("Produtos do iFood")
+        verbose_name = _("Dados do Produto no iFood")
+        verbose_name_plural = _("Dados dos Produtos no iFood")
+
+
+class CategoriaIfood(Base):
+    cd_ifood_id = models.UUIDField(_("id iFood"), null=True)
+    cd_categoria = TenantOneToOneField(
+        verbose_name=_("categoria"),
+        to="produtos.CategoriaProduto",
+        on_delete=models.CASCADE,
+        related_name="integracao_ifood",
+        unique=True,
+    )
+    cd_template = models.CharField(_("template"), max_length=7, default=TemplatesCategoriaIfood.DEFAULT)
+    cd_index = models.PositiveSmallIntegerField(_("index"), default=1)
+    cd_sequence = models.PositiveSmallIntegerField(_("sequência"), default=1)
+
+    def gerar_dados_ifood(self, id=False):
+        dados = {
+            "name": self.cd_categoria.cg_nome,
+            "status": "AVAILABLE" if self.cd_categoria.ativo else "UNAVAILABLE",
+            "template": self.cd_template,
+            "sequence": self.cd_index,
+            "index": self.cd_sequence,
+        }
+        
+        if id:
+            dados["id"] = str(self.cd_ifood_id)
+
+        return dados
+
+    def __str__(self):
+        return str(self.cd_ifood_id)
+
+    class Meta:
+        db_table = "dados_categoria_ifood"
+        ordering = ["-id"]
+        verbose_name = _("Dados da Categoria do Produto do iFood")
+        verbose_name_plural = _("Dados das Categoria dos Produtos do iFood")
+
+
+class CustomizacaoCategoriaIfood:
+    pass
 
 
 class PedidoIfood:
