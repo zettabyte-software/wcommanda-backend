@@ -93,3 +93,4 @@ jobs:
           script: |
             cd ${{ secrets.WORK_DIR }}
             git pull https://${{ secrets.GIT_TOKEN }}@github.com/zettabyte-software/wcommanda-backend.git
+            docker compose up --build -d api
