@@ -91,7 +91,7 @@ jobs:
 
       - name: Deploy
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git pull && cd ../ && docker compose up --build -d api criar_ambiente_server"
+          ssh -A ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git pull && cd ../ && docker compose up --build -d api criar_ambiente_server"
 
       - name: Cleanup
         run: rm -rf ~/.ssh
