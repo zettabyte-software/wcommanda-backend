@@ -79,9 +79,9 @@ jobs:
         run: |
           python manage.py migrate
 
-      # - name: Testes
-      #   run: |
-      #     pytest
+      - name: Testes
+        run: |
+          pytest
 
       - name: Deploy
         uses: appleboy/ssh-action@v0.1.8
