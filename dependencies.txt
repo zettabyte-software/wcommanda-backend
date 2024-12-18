@@ -1,0 +1,1 @@
+pip install django django-auditlog django-cors-headers django-axes django-cachalot django-cors django-filter django-multitenant django-redis django-threadlocals pika djangorestframework djangorestframework-simplejwt Pillow psycopg2-binary httpx pytest-django python-dotenv sentry_sdk twilio
