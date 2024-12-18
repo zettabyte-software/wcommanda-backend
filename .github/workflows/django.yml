@@ -11,7 +11,7 @@ on:
       - main
 
 jobs:
-  test:
+  Deploy:
     runs-on: ubuntu-latest
 
     services:
