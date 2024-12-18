@@ -83,15 +83,13 @@ jobs:
       #   run: |
       #     pytest
 
-      - name: Instalar ssh keys
-        run: |
-          install -m 600 -D /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
-
       - name: Deploy
-        run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "eval '$(ssh-agent -s)' && ssh-add ${{ secrets.GIT_CREDENTIAL_PATH }} && cd ${{ secrets.WORK_DIR }} && git pull && cd ../ && docker compose up --build -d api criar_ambiente_server"
-
-      - name: Cleanup
-        run: rm -rf ~/.ssh
+        uses: appleboy/ssh-action@v0.1.8
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ${{ secrets.WORK_DIR }}
+            git pull
