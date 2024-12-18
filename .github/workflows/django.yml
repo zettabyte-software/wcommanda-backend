@@ -92,6 +92,4 @@ jobs:
           port: 22
           script: |
             cd ${{ secrets.WORK_DIR }}
-            git pull
-            eval '$(ssh-agent -s)'
-            ssh-add ${{ secrets.GIT_CREDENTIAL_PATH }}
+            git pull https://${{ secrets.GIT_TOKEN }}@github.com/zettabyte-software/wcommanda-backend.git
