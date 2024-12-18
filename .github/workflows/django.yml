@@ -93,3 +93,5 @@ jobs:
           script: |
             cd ${{ secrets.WORK_DIR }}
             git pull
+            eval '$(ssh-agent -s)'
+            ssh-add ${{ secrets.GIT_CREDENTIAL_PATH }}
