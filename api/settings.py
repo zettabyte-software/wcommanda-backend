@@ -350,6 +350,11 @@ LOGGING = {
             "level": "WARNING",
             "propagate": False,
         },
+        "twilio": {
+            "handlers": [],
+            "level": "WARNING",
+            "propagate": False,
+        },
     },
     "root": {
         "handlers": ["console", "api_activity", "api_errors"],
