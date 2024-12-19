@@ -1,3 +1,4 @@
+import copy
 import json
 
 from django.conf import settings
@@ -22,29 +23,28 @@ class Base(TenantModel):
     data_ultima_alteracao = models.DateField(_("data da última alteração"), auto_now=True)
     hora_ultima_alteracao = models.TimeField(_("hora da última alteração"), auto_now=True)
     filial = TenantForeignKey(verbose_name=_("filial"), to="filiais.Filial", on_delete=models.PROTECT, null=True)
-    owner = TenantForeignKey(
-        verbose_name=_("owner"),
-        to=settings.AUTH_USER_MODEL,
-        on_delete=models.PROTECT,
-        null=True,
-    )
-    ambiente = models.ForeignKey(
-        verbose_name=_("tenant"), to="tenants.Ambiente", on_delete=models.PROTECT, null=True, blank=True
-    )
+    owner = TenantForeignKey(verbose_name=_("owner"), to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
+    ambiente = models.ForeignKey(verbose_name=_("tenant"), to="tenants.Ambiente", on_delete=models.PROTECT, null=True, blank=True)
 
     history = AuditlogHistoryField()
+
+    all_objects = models.Manager()
 
     @property
     def json(self):
         data = model_to_dict(self)
         return json.dumps(data, default=str)
 
-    @property
-    def historico_alteracoes(self):
+    def get_historico_alteracoes(self):
         content_type = ContentType.objects.get_for_model(self)
         return LogEntry.objects.filter(content_type=content_type, object_id=self.pk).order_by("-timestamp")
 
-    all_objects = models.Manager()
+    def clonar(self, commit=True, **fields):
+        clone = copy.copy(self)
+        for chave, valor in fields.items():
+            setattr(clone, chave, valor)
+        clone.save(commit=commit)
+        return clone
 
     def save(self, *args, **kwargs):
         if not hasattr(self, "owner"):
