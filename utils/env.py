@@ -25,6 +25,9 @@ EnviromentVar = Literal[
     "IFOOD_CLIENT_SECRET",
     "SENTRY_DSN",
     "STRIPE_SECRET_KEY",
+    "TWILLIO_ACCOUNT_SID",
+    "TWILLIO_AUTH_TOKEN",
+    "TWILLIO_PHONE_NUMBER",
 ]
 
 
