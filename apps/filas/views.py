@@ -6,13 +6,12 @@ from rest_framework.response import Response
 from apps.system.base.views import BaseModelViewSet
 from lib.twilio.sms import TwilioSmsHandler
 
+from .mixins import MENSAGEM_PADRAO_FIM_ESPERA
 from .serializers import (
     Fila,
     FilaAlteracaoSerializer,
     FilaVisualizacaoSerializer,
 )
-
-MENSAGEM_PADRAO_FIM_ESPERA = _("ATENÇÂO: SUA VEZ NA FILA DE ESPERA DO NOME_RESTAURANTE CHEGOU")
 
 
 class FilaViewSet(BaseModelViewSet):
