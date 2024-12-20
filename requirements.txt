@@ -15,6 +15,7 @@ django-cachalot==2.7.0
 django-cors==0.1
 django-cors-headers==4.6.0
 django-filter==24.3
+django-lifecycle==1.2.4
 django-multitenant==4.1.1
 django-redis==5.4.0
 django-threadlocals==0.10
