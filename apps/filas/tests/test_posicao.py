@@ -59,8 +59,6 @@ def test_mudar_posicao_para_cima(fila_factory):
 
     Fila.mudar_posicao(terceiro.pk, 1)
 
-    # filas = Fila.objects.order_by("ff_posicao").values_list("id", "ff_posicao", flat=True)
-
     primeiro.refresh_from_db()
     segundo.refresh_from_db()
     terceiro.refresh_from_db()
@@ -78,7 +76,6 @@ def test_mudar_posicao_para_baixo(fila_factory):
 
     Fila.mudar_posicao(primeiro.pk, 3)
 
-    # filas = Fila.objects.order_by("ff_posicao").values_list("id", "ff_posicao", flat=True)
     primeiro.refresh_from_db()
     segundo.refresh_from_db()
     terceiro.refresh_from_db()
