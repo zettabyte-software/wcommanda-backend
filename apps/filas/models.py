@@ -8,7 +8,7 @@ class Fila(Base):
     ff_posicao = models.PositiveSmallIntegerField(_("posição"), default=1)
     ff_cliente = models.CharField(_("cliente"), max_length=40)
     ff_telefone = models.CharField(_("cliente"), max_length=11)
-    ff_observacao = models.CharField(_("cliente"), max_length=60)
+    ff_observacao = models.CharField(_("cliente"), max_length=60, blank=True, default="")
 
     class Meta:
         db_table = "fila"
