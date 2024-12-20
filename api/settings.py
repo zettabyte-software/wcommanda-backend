@@ -248,7 +248,7 @@ LOGGING_ROOT = os.path.join(BASE_DIR, "logs/")
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": False,
+    "disable_existing_loggers": True,
     "formatters": {
         "api_formatter": {
             "format": "[%(asctime)s] %(name)s [%(levelname)s] %(message)s",
@@ -355,10 +355,15 @@ LOGGING = {
             "level": "WARNING",
             "propagate": False,
         },
+        "django_lifecycle": {
+            "handlers": [],
+            "level": "WARNING",
+            "propagate": False,
+        },
     },
     "root": {
         "handlers": ["console", "api_activity", "api_errors"],
-        "level": "DEBUG",
+        "level": "INFO",
         "propagate": True,
         "formatter": "simple",
     },
