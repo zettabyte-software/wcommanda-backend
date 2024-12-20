@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 
 import dotenv
 import pytest
+from auditlog.registry import auditlog
 from django_multitenant.utils import set_current_tenant
 from threadlocals.threadlocals import set_current_user
 
@@ -19,6 +20,12 @@ dotenv.load_dotenv()
 @pytest.fixture(autouse=True)
 def _use_test_database(settings):
     settings.DATABASES["default"]["NAME"] = "test_wcommanda"
+
+
+@pytest.fixture(autouse=True)
+def disable_auditlog_fixture():
+    for model in auditlog.get_models():
+        auditlog.unregister(model)
 
 
 @pytest.fixture(autouse=True)
@@ -70,7 +77,7 @@ def produto():
 
 @pytest.fixture
 def api_client(usuario):
-    client =  APIClient()
+    client = APIClient()
     client.force_authenticate(user=usuario)
     return client
 
