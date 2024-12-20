@@ -18,22 +18,23 @@ class Fila(Base):
 
     @classmethod
     def remover_pessoa(cls, fila_id):
-        pessoa_removida = cls.objects.filter(id=fila_id).first()
-        if not pessoa_removida:
-            raise ValueError(_("Pessoa não encontrada na fila."))
+        pesosa = cls.objects.filter(id=fila_id).first()
+        if not pesosa:
+            raise ValueError(_("Pessoa não encontrada"))
 
-        pessoa_removida.delete()
+        pesosa.delete()
 
-        filas_restantes = cls.objects.all().order_by("ff_posicao")
-        for index, fila in enumerate(filas_restantes, start=1):
+        pessoas_restantes = cls.objects.all().order_by("ff_posicao")
+        for index, fila in enumerate(pessoas_restantes, start=1):
             fila.ff_posicao = index
             fila.save()
 
     @classmethod
     def mudar_posicao(cls, fila_id, nova_posicao):
         pessoa = cls.objects.filter(id=fila_id).first()
+
         if not pessoa:
-            raise ValueError(_("Pessoa não encontrada na fila."))
+            raise ValueError(_("Pessoa não encontrada"))
 
         total_pessoas = cls.objects.count()
         if nova_posicao < 1 or nova_posicao > total_pessoas:
