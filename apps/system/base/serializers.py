@@ -1,10 +1,8 @@
 from rest_framework import serializers
 
-from apps.users.serializers import OnwerSerializer
-
 
 class BaseModelSerializer(serializers.ModelSerializer):
-    owner = OnwerSerializer(read_only=True)
+    # owner = OnwerSerializer(read_only=True)
 
     def __init__(self, instance=None, data=serializers.empty, **kwargs):
         exclude_fields = kwargs.pop("exclude_fields", None)
@@ -17,6 +15,9 @@ class BaseModelSerializer(serializers.ModelSerializer):
         if exclude_fields is not None:
             for field_name in exclude_fields:
                 self.fields.pop(field_name, None)
+
+        self.fields.pop("ambiente")
+        self.fields.pop("owner")
 
     def get_field_verbose_name(self, field_name):
         return self.Meta.model._meta.get_field(field_name).verbose_name  # type: ignore
