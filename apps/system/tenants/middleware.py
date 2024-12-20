@@ -17,21 +17,22 @@ class TenantMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: WSGIRequest):
+        tenant, host = self.get_tenant(request)
+        if tenant is None:
+            return self.get_response(request)
+
+        request.tenant = tenant
+        request.host = host
+
+        set_current_tenant(tenant)
+
         try:
             user, _ = self.authenticator.authenticate(request)
             set_current_user(user)
         except (AuthenticationFailed, TypeError) as exc:
             return self.get_response(request)
 
-        tenant, host = self.get_tenant(request)
-        if tenant is None:
-            return self.get_response(request)
-
         request.user = user
-        request.tenant = tenant
-        request.host = host
-
-        set_current_tenant(tenant)
 
         return self.get_response(request)
 
