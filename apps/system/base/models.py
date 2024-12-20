@@ -8,13 +8,13 @@ from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
 
 from auditlog.models import AuditlogHistoryField, LogEntry
-from django_lifecycle import LifecycleModelMixin
+from django_lifecycle import LifecycleModel
 from django_multitenant.fields import TenantForeignKey
 from django_multitenant.models import TenantModel
 from threadlocals.threadlocals import get_current_user
 
 
-class Base(TenantModel, LifecycleModelMixin):
+class Base(TenantModel, LifecycleModel):
     tenant_id = "ambiente_id"
 
     ativo = models.BooleanField(_("ativo"), default=True)
