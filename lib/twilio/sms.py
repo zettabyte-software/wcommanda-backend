@@ -13,7 +13,7 @@ class TwilioSmsHandler:
 
     def enviar_sms(self, numero: str, mensagem: str):
         message = self.client.messages.create(
-            to=f"+{numero}",
+            to=f"+55{numero}",
             from_=self.phone_number,
             body=mensagem,
         )
