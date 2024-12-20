@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from apps.system.base.views import BaseModelViewSet
 from lib.twilio.sms import TwilioSmsHandler
 
-from .mixins import MENSAGEM_PADRAO_FIM_ESPERA
+from .mixins import MENSAGEM_ENTRADA_FILA_ESPERA
 from .serializers import (
     Fila,
     FilaAlteracaoSerializer,
@@ -29,7 +29,7 @@ class FilaViewSet(BaseModelViewSet):
     def enviar_sms_liberacao(self, request):
         instance = self.get_object()
         handler = TwilioSmsHandler()
-        handler.enviar_sms(instance.ff_telefone, MENSAGEM_PADRAO_FIM_ESPERA)
+        handler.enviar_sms(instance.ff_telefone, MENSAGEM_ENTRADA_FILA_ESPERA)
         return Response()
 
     @action(detail=True, methods=["post"])

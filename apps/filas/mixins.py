@@ -7,10 +7,9 @@ from django_lifecycle import AFTER_CREATE, AFTER_SAVE, BEFORE_CREATE, hook
 
 from lib.twilio.sms import TwilioSmsHandler
 
-logger = logging.getLogger(__name__)
+from .messages import MENSAGEM_ENTRADA_FILA_ESPERA
 
-# MENSAGEM_PADRAO_FIM_ESPERA = _("ATENÇÂO: SUA VEZ NA FILA DE ESPERA DO NOME_RESTAURANTE CHEGOU")
-MENSAGEM_PADRAO_FIM_ESPERA = "ATENÇÂO: SUA VEZ NA FILA DE ESPERA DO NOME_RESTAURANTE CHEGOU"
+logger = logging.getLogger(__name__)
 
 
 class FilaHooksMixin:
@@ -23,14 +22,12 @@ class FilaHooksMixin:
 
     @hook(AFTER_CREATE)
     def enviar_sms_confirmacao(self):
-        telefone = f"{self.ff_telefone}"
         logger.info("Enviando sms de confirmação para")
         handler = TwilioSmsHandler()
-        handler.enviar_sms(telefone, MENSAGEM_PADRAO_FIM_ESPERA)
+        handler.enviar_sms(self.ff_telefone, MENSAGEM_ENTRADA_FILA_ESPERA)
 
     @hook(AFTER_SAVE)
     def enviar_sms_confirmacao_atualizacao(self):
-        telefone = f"{self.ff_telefone}"
         logger.info("Enviando sms de confirmação para")
         handler = TwilioSmsHandler()
-        handler.enviar_sms(telefone, MENSAGEM_PADRAO_FIM_ESPERA)
+        handler.enviar_sms(self.ff_telefone, MENSAGEM_ENTRADA_FILA_ESPERA)
