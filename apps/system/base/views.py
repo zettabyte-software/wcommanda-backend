@@ -121,10 +121,10 @@ class BaseModelViewSet(ModelViewSet):
     @action(methods=["get"], detail=True)
     def clonar(self, request, pk):
         instance = self.get_object()
-        instance.pk = None
-        self.alterar_campos_unicos(instance)
-        instance.save()
-        serializer = self.get_serializer(instance)
+        clone = instance.clonar()
+        self.alterar_campos_unicos(clone)
+        clone.save()
+        serializer = self.get_serializer(clone)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=["get"])
@@ -139,6 +139,6 @@ class BaseModelViewSet(ModelViewSet):
         return self.get_paginated_response(page)
 
     def alterar_campos_unicos(self, instance):
-        """Alterar campos com `unique=True` na clonagem"""
+        """Alterar campos com `unique=True` na clonagem."""
 
         pass
