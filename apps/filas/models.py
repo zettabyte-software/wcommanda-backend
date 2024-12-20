@@ -3,8 +3,10 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.system.base.models import Base
 
+from .mixins import FilaHooksMixin
 
-class Fila(Base):
+
+class Fila(Base, FilaHooksMixin):
     ff_posicao = models.PositiveSmallIntegerField(_("posição"), default=1)
     ff_cliente = models.CharField(_("cliente"), max_length=40)
     ff_telefone = models.CharField(_("telefone"), max_length=11)
