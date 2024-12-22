@@ -8,7 +8,7 @@ from rest_framework.viewsets import GenericViewSet
 from apps.system.base.views import BaseModelViewSet
 from lib.twilio.sms import TwilioSmsHandler
 
-from .mixins import MENSAGEM_ENTRADA_FILA_ESPERA
+from .messages import MENSAGEM_FILA_ESPERA
 from .serializers import (
     Fila,
     FilaAlteracaoSerializer,
@@ -28,20 +28,20 @@ class FilaViewSet(BaseModelViewSet):
     }
 
     @action(detail=True, methods=["post"])
-    def enviar_sms_liberacao(self, request):
+    def enviar_sms_liberacao(self, request, pk):
         instance = self.get_object()
         handler = TwilioSmsHandler()
-        handler.enviar_sms(instance.ff_telefone, MENSAGEM_ENTRADA_FILA_ESPERA)
+        handler.enviar_sms(instance.ff_telefone, MENSAGEM_FILA_ESPERA)
         return Response()
 
     @action(detail=True, methods=["post"])
-    def confirmar_entrada(self, request):
+    def confirmar_entrada(self, request, pk):
         instance = self.get_object()
         Fila.receber_pessoas(instance.ff_posicao)
         return Response()
 
     @action(detail=True, methods=["post"])
-    def remover_pessoa(self, request):
+    def remover_pessoa(self, request, pk):
         instance = self.get_object()
         Fila.remover_pessoa(instance.pk)
         return Response()
