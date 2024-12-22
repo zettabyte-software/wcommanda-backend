@@ -1,4 +1,5 @@
 import json
+import os
 
 from rest_framework.test import APIClient
 
@@ -15,6 +16,8 @@ from apps.system.tenants.models import Ambiente
 from apps.users.models import Usuario
 
 dotenv.load_dotenv()
+
+os.environ["DJANGO_MODE"] = "testing"
 
 
 @pytest.fixture(autouse=True)
