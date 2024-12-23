@@ -17,7 +17,7 @@ from .serializers import (
 
 
 class FilaViewSet(BaseModelViewSet):
-    queryset = Fila.objects.all()
+    queryset = Fila.objects.all().order_by("ff_posicao")
     serializer_classes = {
         "list": FilaVisualizacaoSerializer,
         "retrieve": FilaVisualizacaoSerializer,
