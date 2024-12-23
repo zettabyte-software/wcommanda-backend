@@ -15,10 +15,17 @@ class ImportadorProdutosIfoodMixin(BaseIntegradorIfood):
     def importar_produtos(self):
         produtos_ifood = self.get_produtos_ifood()
         for produto_ifood in produtos_ifood:
+            restricoes_alimentares = produto_ifood["dietaryRestrictions"]
             produto_wcommanda = Produto.objects.create(
                 pr_nome=produto_ifood["name"],
                 pr_descricao=produto_ifood.get("description", "Produto integrado via iFood"),
                 pr_codigo_cardapio=gerar_codigo_cardapio(),
+                pr_vegano="VEGAN" in restricoes_alimentares,
+                pr_vegetariano="VEGETARIAN" in restricoes_alimentares,
+                pr_organico="ORGANIC" in restricoes_alimentares,
+                pr_sem_gluten="GLUTEN_FREE" in restricoes_alimentares,
+                pr_sem_acucar="SUGAR_FREE" in restricoes_alimentares,
+                pr_zero_lactose="LACTOSE_FREE" in restricoes_alimentares,
             )
 
     def get_produtos_ifood(self):
@@ -56,7 +63,7 @@ class IntegradorProdutoIfood(BaseIntegradorIfood):
             fd_produto=produto,
             defaults={
                 "fd_produto": produto,
-            }
+            },
         )
         dados = {"productId": dados_ifood.fd_ifood_id, "amount": nova_quantidade}
         response = self.client.get(f"/catalog/v2.0/merchants/{self.merchant}/inventory")
