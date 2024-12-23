@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
@@ -34,8 +35,9 @@ class FilaViewSet(BaseModelViewSet):
     @action(detail=True, methods=["post"])
     def enviar_sms_liberacao(self, request, pk):
         instance = self.get_object()
-        handler = TwilioSmsHandler()
-        handler.enviar_sms(instance.ff_celular, MENSAGEM_FILA_ESPERA)
+        if settings.IN_PRODUCTION:
+            handler = TwilioSmsHandler()
+            handler.enviar_sms(instance.ff_celular, MENSAGEM_FILA_ESPERA)
         return Response()
 
     @action(detail=True, methods=["post"])
