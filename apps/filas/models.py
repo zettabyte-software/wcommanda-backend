@@ -10,6 +10,7 @@ class Fila(Base, FilaHooksMixin):
     ff_posicao = models.PositiveSmallIntegerField(_("posição"), default=1)
     ff_cliente = models.CharField(_("cliente"), max_length=40)
     ff_telefone = models.CharField(_("telefone"), max_length=11)
+    ff_quantidade_pessoas = models.PositiveSmallIntegerField(_("n° de pessoas"), default=1)
     ff_observacao = models.CharField(_("observação"), max_length=60, blank=True, default="")
 
     @classmethod
