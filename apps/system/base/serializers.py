@@ -14,8 +14,11 @@ class BaseModelSerializer(serializers.ModelSerializer):
             for field_name in exclude_fields:
                 self.fields.pop(field_name, None)
 
-        self.fields.pop("ambiente")
-        self.fields.pop("owner")
+        if "ambiente" in self.fields.keys():
+            del self.fields["ambiente"]
+
+        if "owner" in self.fields.keys():
+            del self.fields["owner"]
 
     def get_field_verbose_name(self, field_name):
         return self.Meta.model._meta.get_field(field_name).verbose_name  # type: ignore
