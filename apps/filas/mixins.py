@@ -27,22 +27,10 @@ class FilaHooksMixin:
 
         request = get_current_request()
         host = request.headers.get(settings.TENANT_HOST_HEADER)
-        link = f"https://{host}/espaco-do-cliente/fila-de-espera/{self.pk}/"
+        link = f"https://{host}/espaco-do-cliente/fila-de-espera/{self.ff_uuid}/"
         mensagem = MENSAGEM_ENTRADA_FILA_ESPERA % link
 
         logger.info("Enviando sms de confirmação para")
 
         handler = TwilioSmsHandler()
         handler.enviar_sms(self.ff_celular, mensagem)
-
-    """ @hook(AFTER_SAVE)
-    def enviar_sms_confirmacao_atualizacao(self):
-        request = get_current_request()
-        host = request.headers.get(settings.TENANT_HOST_HEADER)
-        link = f"https://{host}/espaco-do-cliente/fila-de-espera/{self.pk}/"
-        mensagem = MENSAGEM_ENTRADA_FILA_ESPERA % link
-
-        logger.info("Enviando sms de confirmação para")
-
-        handler = TwilioSmsHandler()
-        handler.enviar_sms(self.ff_celular, mensagem) """

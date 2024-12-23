@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -7,6 +9,7 @@ from .mixins import FilaHooksMixin
 
 
 class Fila(Base, FilaHooksMixin):
+    ff_uuid = models.UUIDField(_("uuid"), default=uuid.uuid4)
     ff_posicao = models.PositiveSmallIntegerField(_("posição"), default=1)
     ff_cliente = models.CharField(_("cliente"), max_length=40)
     ff_celular = models.CharField(_("telefone"), max_length=11)
