@@ -50,6 +50,6 @@ class FilaEsperaClienteViewSet(GenericViewSet):
     permission_classes = []
 
     def retrieve(self, request, pk):
-        posicao_fila = get_object_or_404(Fila, pk=pk)
+        posicao_fila = get_object_or_404(Fila, ff_uuid=pk)
         serializer = FilaVisualizacaoSerializer(posicao_fila)
         return Response(serializer.data)
