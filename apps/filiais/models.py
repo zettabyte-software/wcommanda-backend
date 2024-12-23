@@ -33,6 +33,28 @@ class Filial(Base):
     fl_catalog_id = models.UUIDField(_("id do catálogo digital do iFood"), null=True, default=None)
     fl_delivery_catalog_id = models.UUIDField(_("id do catálogo de delivery do iFood"), null=True, default=None)
 
+    fl_hora_inicio_funcionamento_domingo = models.TimeField(_("horário de início no domingo"), null=True)
+    fl_hora_fim_funcionamento_domingo = models.TimeField(_("horário de encerramento no domingo"), null=True)
+
+    fl_hora_inicio_funcionamento_segunda = models.TimeField(_("horário de início na segunda-feira"), null=True)
+    fl_hora_fim_funcionamento_segunda = models.TimeField(_("horário de encerramento na segunda-feira"), null=True)
+
+    fl_hora_inicio_funcionamento_terca = models.TimeField(_("horário de início na terca-feira"), null=True)
+    fl_hora_fim_funcionamento_terca = models.TimeField(_("horário de encerramento na terca-feira"), null=True)
+
+    fl_hora_inicio_funcionamento_quarta = models.TimeField(_("horário de início na quarta-feira"), null=True)
+    fl_hora_fim_funcionamento_quarta = models.TimeField(_("horário de encerramento na quarta-feira"), null=True)
+
+    fl_hora_inicio_funcionamento_quinta = models.TimeField(_("horário de início na quinta-feira"), null=True)
+    fl_hora_fim_funcionamento_quinta = models.TimeField(_("horário de encerramento na quinta-feira"), null=True)
+
+    fl_hora_inicio_funcionamento_sexta = models.TimeField(_("horário de início na sexta-feira"), null=True)
+    fl_hora_fim_funcionamento_sexta = models.TimeField(_("horário de encerramento na sexta-feira"), null=True)
+
+    fl_hora_inicio_funcionamento_sabado = models.TimeField(_("horário de início no sabado"), null=True)
+    fl_hora_fim_funcionamento_sabado = models.TimeField(_("horário de encerramento no sabado"), null=True)
+
+
     def make_upload_path(self, filename):
         file_extension = filename.split(".")[-1]
         new_file_name = random.randint(1000000, 9999999)
