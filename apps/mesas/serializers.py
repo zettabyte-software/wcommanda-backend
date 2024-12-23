@@ -1,6 +1,5 @@
-from apps.system.base.serializers import (
-    BaseModelSerializer,
-)
+from apps.system.base.serializers import BaseModelSerializer
+
 from .models import Mesa
 
 
