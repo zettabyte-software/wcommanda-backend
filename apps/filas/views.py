@@ -27,6 +27,10 @@ class FilaViewSet(BaseModelViewSet):
         "bulk_create": FilaAlteracaoSerializer,
     }
 
+    def perform_destroy(self, instance):
+        Fila.remover_pessoa(instance.pk)
+        return super().perform_destroy(instance)
+
     @action(detail=True, methods=["post"])
     def enviar_sms_liberacao(self, request, pk):
         instance = self.get_object()
@@ -38,12 +42,6 @@ class FilaViewSet(BaseModelViewSet):
     def confirmar_entrada(self, request, pk):
         instance = self.get_object()
         Fila.receber_pessoas(instance.ff_posicao)
-        return Response()
-
-    @action(detail=True, methods=["post"])
-    def remover_pessoa(self, request, pk):
-        instance = self.get_object()
-        Fila.remover_pessoa(instance.pk)
         return Response()
 
 
