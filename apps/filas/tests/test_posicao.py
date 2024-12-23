@@ -5,11 +5,11 @@ from apps.filas.models import Fila
 
 @pytest.fixture
 def fila_factory(db):
-    def create_fila(ff_posicao, ff_cliente="Cliente", ff_telefone="12345678901", ff_observacao=""):
+    def create_fila(ff_posicao, ff_cliente="Cliente", ff_celular="12345678901", ff_observacao=""):
         return Fila.objects.create(
             ff_posicao=ff_posicao,
             ff_cliente=ff_cliente,
-            ff_telefone=ff_telefone,
+            ff_celular=ff_celular,
             ff_observacao=ff_observacao,
         )
 

@@ -9,7 +9,7 @@ from .mixins import FilaHooksMixin
 class Fila(Base, FilaHooksMixin):
     ff_posicao = models.PositiveSmallIntegerField(_("posição"), default=1)
     ff_cliente = models.CharField(_("cliente"), max_length=40)
-    ff_telefone = models.CharField(_("telefone"), max_length=11)
+    ff_celular = models.CharField(_("telefone"), max_length=11)
     ff_quantidade_pessoas = models.PositiveSmallIntegerField(_("n° de pessoas"), default=1)
     ff_observacao = models.CharField(_("observação"), max_length=60, blank=True, default="")
 
@@ -80,3 +80,18 @@ class Fila(Base, FilaHooksMixin):
         ordering = ["-id"]
         verbose_name = _("Fila")
         verbose_name_plural = _("Filas")
+
+
+
+class ProdutosSelecionadosFila:
+    pd_fila = None
+    pd_produto = None
+    pd_quantidade = None
+    pd_comanda = None
+    pd_observacao = models.CharField(_("observação"), max_length=60, blank=True, default="")
+
+    class Meta:
+        db_table = "produtos_fila"
+        ordering = ["-id"]
+        verbose_name = _("Produto Selecinado na Fila")
+        verbose_name_plural = _("Produtos Selecinados nas Filas")

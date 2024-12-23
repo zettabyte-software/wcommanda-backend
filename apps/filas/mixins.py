@@ -33,7 +33,7 @@ class FilaHooksMixin:
         logger.info("Enviando sms de confirmação para")
 
         handler = TwilioSmsHandler()
-        handler.enviar_sms(self.ff_telefone, mensagem)
+        handler.enviar_sms(self.ff_celular, mensagem)
 
     """ @hook(AFTER_SAVE)
     def enviar_sms_confirmacao_atualizacao(self):
@@ -45,4 +45,4 @@ class FilaHooksMixin:
         logger.info("Enviando sms de confirmação para")
 
         handler = TwilioSmsHandler()
-        handler.enviar_sms(self.ff_telefone, mensagem) """
+        handler.enviar_sms(self.ff_celular, mensagem) """

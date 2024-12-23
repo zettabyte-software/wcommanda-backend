@@ -31,7 +31,7 @@ class FilaViewSet(BaseModelViewSet):
     def enviar_sms_liberacao(self, request, pk):
         instance = self.get_object()
         handler = TwilioSmsHandler()
-        handler.enviar_sms(instance.ff_telefone, MENSAGEM_FILA_ESPERA)
+        handler.enviar_sms(instance.ff_celular, MENSAGEM_FILA_ESPERA)
         return Response()
 
     @action(detail=True, methods=["post"])
