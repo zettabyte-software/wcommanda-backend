@@ -1,0 +1,70 @@
+{
+    "itemId": "6715b5d2-61b9-4ab0-9e4c-64065749bdb8",
+    "categoryId": "86cb472f-dbb2-4850-8776-470f2a1e6e5e",
+    "itemExternalCode": "PARM001",
+    "categoryName": "Teste bendas",
+    "categoryIndex": 1,
+    "itemName": "Parmegiana de Frango",
+    "itemDescription": "Desfrute de uma experiência irresistível com a nossa Parmegiana de Frango, uma criação clássica e reconfortante que combina sabores autênticos com uma apresentação deliciosamente indulgente.\n\nNossos peitos de frango tenros são cuidadosamente preparados e empanados com uma mistura especial de farinha de rosca, queijo parmesão ralado e uma seleção de temperos que elevam cada mordida. Cada pedaço é então delicadamente frito até atingir uma crosta dourada e crocante, garantindo uma textura perfeita em cada garfada.",
+    "logosUrls": [],
+    "itemIndex": 1,
+    "itemPrice": {
+        "value": 4590,
+        "originalValue": 4590
+    },
+    "itemMinSalePrice": 4590,
+    "itemSchedules": [
+        {
+            "dayOfWeek": "FRIDAY",
+            "beginHour": "11:00",
+            "endHour": "22:00"
+        },
+        {
+            "dayOfWeek": "MONDAY",
+            "beginHour": "11:00",
+            "endHour": "22:00"
+        },
+        {
+            "dayOfWeek": "SATURDAY",
+            "beginHour": "11:00",
+            "endHour": "22:00"
+        },
+        {
+            "dayOfWeek": "SUNDAY",
+            "beginHour": "11:00",
+            "endHour": "22:00"
+        },
+        {
+            "dayOfWeek": "THURSDAY",
+            "beginHour": "11:00",
+            "endHour": "22:00"
+        },
+        {
+            "dayOfWeek": "TUESDAY",
+            "beginHour": "11:00",
+            "endHour": "22:00"
+        },
+        {
+            "dayOfWeek": "WEDNESDAY",
+            "beginHour": "11:00",
+            "endHour": "22:00"
+        }
+    ],
+    "itemQuantity": 0,
+    "itemUnit": "g",
+    "itemOptionGroups": [],
+    "itemSellingOption": {
+        "minimum": 0,
+        "incremental": 0,
+        "availableUnits": ["UNIT"]
+    },
+    "itemGeneralTags": [],
+    "itemProductTags": [
+        {
+            "group": "PORTION_SIZE",
+            "tags": [
+                "NOT_APPLICABLE"
+            ]
+        }
+    ]
+}
