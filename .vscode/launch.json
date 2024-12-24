@@ -27,6 +27,19 @@
             "autoStartBrowser": false,
             "program": "${workspaceFolder}/manage.py",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Debugando a importação de produtos do iFood",
+            "type": "debugpy",
+            "request": "launch",
+            "args": [
+                "debug_importar_produtos_ifood"
+            ],
+            "django": true,
+            "autoStartBrowser": false,
+            "program": "${workspaceFolder}/manage.py",
+            "envFile": "${workspaceFolder}/.env"
         }
+
     ]
 }
