@@ -37,7 +37,7 @@ class MerchantIfood:
 
 
 class ProdutoIfood(Base):
-    fd_ifood_id = models.UUIDField(_("id iFood"), null=True)
+    fd_ifood_id = models.UUIDField(_("id ifood"), null=True)
     fd_produto = TenantOneToOneField(
         verbose_name=_("produto"),
         to="produtos.Produto",
@@ -46,6 +46,10 @@ class ProdutoIfood(Base):
         unique=True,
     )
     fd_pizza = models.BooleanField(_("é pizza"), default=False)
+    fd_categoria_id = models.UUIDField(_("id do grupo do catálogo ifood"), null=True)
+    fd_grupo_catalogo_id = models.UUIDField(_("id do grupo do catálogo ifood"), null=True)
+    fd_item_catalog_id = models.UUIDField(_("id do item no catálogo ifood"), null=True)
+    fd_index = models.PositiveSmallIntegerField(_("posição no cardápio"), default=1)
 
     def __str__(self):
         return self.fd_ifood_id
