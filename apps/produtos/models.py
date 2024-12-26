@@ -14,6 +14,17 @@ class TiposChoices(models.IntegerChoices):
     CONSUMIVEL = 2, _("Consumível")
 
 
+class UnidadesProdutoChoices(models.IntegerChoices):
+    GRAMA = 1, _("Grama")
+    QUILO = 2, _("Quilo")
+    MILILITRO = 3, _("Mililitro")
+    LITRO = 4, _("Litro")
+    UNIDADE = 5, _("Unidade")
+    FATIA = 6, _("Fatia")
+    PORCAO = 7, _("Porção")
+    OUTRO = 99, _("Outra")
+
+
 class Produto(Base):
     pr_tipo = models.PositiveSmallIntegerField(_("tipo"), choices=TiposChoices.choices, default=TiposChoices.CONSUMIVEL)
     pr_nome = models.CharField(_("nome"), max_length=100)
@@ -38,12 +49,6 @@ class Produto(Base):
     pr_imagem = models.URLField(_("foto"), blank=True, default="")
     # pr_url_imagem = models.URLField(_("foto"), blank=True, default="")
 
-    pr_serve_pessoas = models.PositiveSmallIntegerField(
-        _("n° de pessoas que a comida serve"),
-        validators=[MaxValueValidator(4)],
-        null=True
-    )
-
     # restrições alimentares
     pr_vegano = models.BooleanField(_("vegano"), default=False)
     pr_vegetariano = models.BooleanField(_("vegetariano"), default=False)
@@ -60,6 +65,12 @@ class Produto(Base):
         null=True,
         related_name="produtos",
     )
+
+
+    # porção da comida
+    pr_serve_pessoas = models.PositiveSmallIntegerField(_("n° de pessoas que a comida serve"), validators=[MaxValueValidator(4)], null=True)
+    pr_unidade = models.PositiveSmallIntegerField(_("tipo"), choices=UnidadesProdutoChoices.choices, null=True)
+    pr_quantidade = models.IntegerField(_("tipo"), default=0)
 
     @classmethod
     def upload(cls, produto: "Produto", image: InMemoryUploadedFile):
