@@ -12,7 +12,6 @@ from apps.system.base.models import Base
 class TiposChoices(models.IntegerChoices):
     PREPARAVEL = 1, _("Preparável")
     CONSUMIVEL = 2, _("Consumível")
-    # ADICIONAL = 3, _("Adicional")
 
 
 class Produto(Base):
@@ -37,8 +36,13 @@ class Produto(Base):
     )
 
     pr_imagem = models.URLField(_("foto"), blank=True, default="")
-
     # pr_url_imagem = models.URLField(_("foto"), blank=True, default="")
+
+    pr_serve_pessoas = models.PositiveSmallIntegerField(
+        _("n° de pessoas que a comida serve"),
+        validators=[MaxValueValidator(4)],
+        null=True
+    )
 
     # restrições alimentares
     pr_vegano = models.BooleanField(_("vegano"), default=False)
