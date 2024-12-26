@@ -1,4 +1,5 @@
 from django.core.files.uploadedfile import InMemoryUploadedFile
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -47,7 +48,7 @@ class Produto(Base):
     pr_sem_acucar = models.BooleanField(_("sem açúcar"), default=False)
     pr_zero_lactose = models.BooleanField(_("zero lactose"), default=False)
 
-    # acréscimos
+    # complemento
     pr_grupo_complementos = TenantForeignKey(
         verbose_name=_("grupo de complementos"),
         to="produtos.GrupoComplementoProduto",
@@ -82,28 +83,28 @@ class GrupoComplementoProduto(Base):
     gr_nome = models.CharField(_("nome"), max_length=30)
 
     class Meta:
-        db_table = "grupo_acrescimo_produto"
+        db_table = "grupo_complemento_produto"
         ordering = ["-id"]
         verbose_name = _("Grupo de Acréscimo do Produto")
         verbose_name_plural = _("Grupos de Acréscimos dos Produtos")
 
 
-class Acrescimo(Base):
-    cs_grupo_acrescimo = TenantForeignKey(
-        verbose_name=_("grupo"),
+class ComplementoProduto(Base):
+    pc_grupo_complemento = TenantForeignKey(
+        verbose_name=_("grupo de complemento"),
         to="produtos.GrupoComplementoProduto",
         on_delete=models.CASCADE,
-        related_name="acrescimos",
+        related_name="complementos",
     )
-    cs_nome = models.CharField(_("nome"), max_length=40)
-    cs_preco = models.FloatField(_("preço"), default=0)
-    cs_quantidade_minima = models.FloatField(_("quantidade máxima"), default=1)
-    cs_quantidade_maxima = models.FloatField(_("quantidade máxima"), default=1)
-    cs_descricao = models.CharField(_("descrição"), max_length=50, blank=True)
-    cs_obrigatorio = models.BooleanField(_("obrigatório"), default=False)
+    pc_nome = models.CharField(_("nome"), max_length=40)
+    pc_preco = models.FloatField(_("preço"), default=0)
+    pc_quantidade_minima = models.FloatField(_("quantidade máxima"), default=1)
+    pc_quantidade_maxima = models.FloatField(_("quantidade máxima"), default=1)
+    pc_descricao = models.CharField(_("descrição"), max_length=50, blank=True)
+    pc_obrigatorio = models.BooleanField(_("obrigatório"), default=False)
 
     class Meta:
-        db_table = "acresimo_produto"
+        db_table = "complemento_produto"
         ordering = ["-id"]
-        verbose_name = _("Acréscimo do Produto")
-        verbose_name_plural = _("Acréscimos dos Produtos")
+        verbose_name = _("Complemento do Produto")
+        verbose_name_plural = _("Complementos dos Produtos")

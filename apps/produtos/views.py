@@ -5,11 +5,11 @@ from apps.ifood.integradores.categorias import IntegradorCategoriasIfood
 from apps.system.base.views import BaseModelViewSet
 
 from .serializers import (
-    Acrescimo,
-    AcrescimoAlteracaoSerializer,
-    AcrescimoVisualizacaoSerializer,
     CategoriaProduto,
     CategoriaProdutoSerializer,
+    ComplementoProduto,
+    ComplementoProdutoAlteracaoSerializer,
+    ComplementoProdutoVisualizacaoSerializer,
     GrupoComplementoProduto,
     GrupoComplementoProdutoAlteracaoSerializer,
     GrupoComplementoProdutoVisualizacaoSerializer,
@@ -85,16 +85,16 @@ class CategoriaProdutoViewSet(BaseModelViewSet):
         integrador.deletar_categoria(instance)
         return super().perform_destroy(instance)
 
-class AcrescimoViewSet(BaseModelViewSet):
-    queryset = Acrescimo.objects.all()
+class ComplementoProdutoViewSet(BaseModelViewSet):
+    queryset = ComplementoProduto.objects.all()
     serializer_classes = {
-        "list": AcrescimoVisualizacaoSerializer,
-        "retrieve": AcrescimoVisualizacaoSerializer,
-        "create": AcrescimoAlteracaoSerializer,
-        "update": AcrescimoAlteracaoSerializer,
-        "partial_update": AcrescimoAlteracaoSerializer,
-        "bulk_create": AcrescimoAlteracaoSerializer,
-        "clonar": AcrescimoAlteracaoSerializer,
+        "list": ComplementoProdutoVisualizacaoSerializer,
+        "retrieve": ComplementoProdutoVisualizacaoSerializer,
+        "create": ComplementoProdutoAlteracaoSerializer,
+        "update": ComplementoProdutoAlteracaoSerializer,
+        "partial_update": ComplementoProdutoAlteracaoSerializer,
+        "bulk_create": ComplementoProdutoAlteracaoSerializer,
+        "clonar": ComplementoProdutoAlteracaoSerializer,
     }
 
 
