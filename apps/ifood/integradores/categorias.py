@@ -40,11 +40,14 @@ class IntegradorCategoriasIfood(BaseIntegradorIfood):
         return self._atualizar_categoria(str(id_ifood), dados)
 
     def deletar_categoria(self, categoria: CategoriaProduto):
-        id_ifood = CategoriaIfood.objects.get(cd_categoria=categoria)
-        url = f"catalog/v2.0/merchants/{self.merchant}/categories/{id_ifood}"
-        response = self.client.delete(url)
-        response.raise_for_status()
-        return True
+        try:
+            id_ifood = CategoriaIfood.objects.get(cd_categoria=categoria)
+            url = f"catalog/v2.0/merchants/{self.merchant}/categories/{id_ifood}"
+            response = self.client.delete(url)
+            response.raise_for_status()
+            return True
+        except CategoriaIfood.DoesNotExist:
+            return False
 
     # rever os 2 métodos abaixo
     def _criar_categoria(self, categoria_ifood: CategoriaIfood):
