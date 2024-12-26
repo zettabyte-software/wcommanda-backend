@@ -1,6 +1,8 @@
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from threadlocals.threadlocals import get_request_variable
+
 from apps.ifood.integradores.categorias import IntegradorCategoriasIfood
 from apps.system.base.views import BaseModelViewSet
 
@@ -58,6 +60,8 @@ class ProdutoViewSet(BaseModelViewSet):
         return Response()
 
 
+# TODO todas as alterações via api para o ifood refatorar para que
+# sejam serviços em background
 class CategoriaProdutoViewSet(BaseModelViewSet):
     queryset = CategoriaProduto.objects.all()
     serializer_class = CategoriaProdutoSerializer
@@ -65,25 +69,45 @@ class CategoriaProdutoViewSet(BaseModelViewSet):
     def perform_create(self, serializer, **overwrite):
         instance = super().perform_create(serializer, **overwrite)
 
-        catalog_id = ""
-        merchant_id = ""
+        filial = get_request_variable("filial")
+
+        if filial is None:
+            return
+
+        merchant_id = filial.fl_merchat_id_ifood
+        catalog_id = filial.fl_catalogo_id
+
         integrador = IntegradorCategoriasIfood(merchant_id, catalog_id)
         integrador.sincronizar_alteracoes_ifood(instance)
 
     def perform_update(self, serializer, **overwrite):
         instance = super().perform_update(serializer, **overwrite)
 
-        catalog_id = ""
-        merchant_id = ""
+        filial = get_request_variable("filial")
+
+        if filial is None:
+            return
+
+        merchant_id = filial.fl_merchat_id_ifood
+        catalog_id = filial.fl_catalogo_id
+
         integrador = IntegradorCategoriasIfood(merchant_id, catalog_id)
         integrador.sincronizar_alteracoes_ifood(instance)
 
     def perform_destroy(self, instance):
-        catalog_id = ""
-        merchant_id = ""
+        filial = get_request_variable("filial")
+
+        if filial is None:
+            return super().perform_destroy(instance)
+
+        merchant_id = filial.fl_merchat_id_ifood
+        catalog_id = filial.fl_catalogo_id
+
         integrador = IntegradorCategoriasIfood(merchant_id, catalog_id)
         integrador.deletar_categoria(instance)
+
         return super().perform_destroy(instance)
+
 
 class ComplementoProdutoViewSet(BaseModelViewSet):
     queryset = ComplementoProduto.objects.all()
