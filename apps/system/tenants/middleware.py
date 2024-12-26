@@ -3,9 +3,11 @@ from django.core.handlers.wsgi import WSGIRequest
 
 from django_multitenant.utils import set_current_tenant
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
-from threadlocals.threadlocals import set_current_user
+from threadlocals.threadlocals import set_current_user, set_request_variable
 
+from apps.filiais.models import Filial
 from apps.system.tenants.authentications import JWTAuthentication
+from utils.jwt import decode_jwt
 
 from .models import Ambiente
 
@@ -21,13 +23,18 @@ class TenantMiddleware:
         if tenant is None:
             return self.get_response(request)
 
-        request.tenant = tenant
-        request.host = host
+        request.tenant = tenant  # type: ignore
+        request.host = host  # type: ignore
 
         set_current_tenant(tenant)
+        set_request_variable("host", host)
+
+        filial = self.get_filial(request)
+
+        set_request_variable("filial", filial)
 
         try:
-            user, _ = self.authenticator.authenticate(request)
+            user, _ = self.authenticator.authenticate(request)  # type: ignore
             set_current_user(user)
         except (AuthenticationFailed, TypeError) as exc:
             return self.get_response(request)
@@ -45,3 +52,15 @@ class TenantMiddleware:
         if settings.IN_DEVELOPMENT:
             return "zettabyte.wcommanda.com.br"
         return request.headers.get(settings.TENANT_HOST_HEADER, "")
+
+    def get_filial(self, request: WSGIRequest) -> None | Filial:
+        token = request.headers.get("Authorization", None)
+        if token is None:
+            return None
+
+        host = self.get_host(request)
+        token = token.split(" ")[1]
+        id_filial = decode_jwt(token, host).get("branch", 0)
+
+        filial = Filial.objects.filter(pk=id_filial).first()
+        return filial
