@@ -27,16 +27,21 @@ class ImportadorProdutosIfood(BaseIntegradorIfood):
                 pr_preco=dados["itemPrice"]["value"],
             )
 
-            dados_complementares_produto = list(filter(
-                lambda prod_comp: prod_comp["name"] == dados["itemName"],
-                dados_produtos_ifood_complementares,
-            ))
+            dados_complementares_produto = list(
+                filter(
+                    lambda prod_comp: prod_comp["name"] == dados["itemName"],
+                    dados_produtos_ifood_complementares,
+                )
+            )
+
+            id_ifood = None
 
             if len(dados_complementares_produto) > 0:
                 dados_complementares_produto = dados_complementares_produto[0]
-                restricoes_alimentares = dados_complementares_produto["dietaryRestrictions"]
 
                 if dados_complementares_produto:
+                    restricoes_alimentares = dados_complementares_produto["dietaryRestrictions"]
+
                     produto_wcommanda.pr_vegano = "VEGAN" in restricoes_alimentares
                     produto_wcommanda.pr_vegetariano = "VEGETARIAN" in restricoes_alimentares
                     produto_wcommanda.pr_organico = "ORGANIC" in restricoes_alimentares
@@ -44,10 +49,12 @@ class ImportadorProdutosIfood(BaseIntegradorIfood):
                     produto_wcommanda.pr_sem_acucar = "SUGAR_FREE" in restricoes_alimentares
                     produto_wcommanda.pr_zero_lactose = "LACTOSE_FREE" in restricoes_alimentares
 
+                    id_ifood = dados_complementares_produto["id"]
+
             produto_wcommanda.save()
 
-            ProdutoIfood.objects.create(
-                fd_ifood_id=None,
+            ProdutoIfood(
+                fd_ifood_id=id_ifood,
                 fd_produto=produto_wcommanda,
                 fd_pizza=False,
                 fd_categoria_id=dados["categoryId"],
@@ -112,12 +119,36 @@ class IntegradorProdutoIfood(BaseIntegradorIfood):
         logger.info("Sincronizando alterações do produto %s no ifood", produto.pr_nome)
         logger.info("Alterações sincronizadas com sucesso para o produto %s", produto.pr_nome)
 
-    def atualizar_inventario(self, produto: Produto, nova_quantidade: int):
-        dados_ifood, _ = ProdutoIfood.objects.get_or_create(
-            fd_produto=produto,
-            defaults={
-                "fd_produto": produto,
+    def gerar_dados_produto(self, produto: Produto):
+        restricoes_alimentares = []
+        if produto.pr_vegano:
+            restricoes_alimentares.append("VEGAN")
+
+        if produto.pr_vegetariano:
+            restricoes_alimentares.append("VEGETARIAN")
+
+        if produto.pr_organico:
+            restricoes_alimentares.append("ORGANIC")
+
+        if produto.pr_sem_gluten:
+            restricoes_alimentares.append("GLUTEN_FREE")
+
+        if produto.pr_sem_acucar:
+            restricoes_alimentares.append("SUGAR_FREE")
+
+        if produto.pr_zero_lactose:
+            restricoes_alimentares.append("LACTOSE_FREE")
+
+        return {
+            "name": produto.pr_nome,
+            "description": produto.pr_descricao,
+            "image": produto.pr_descricao,
+            "shifts": [],
+            "serving": f"SERVES_{produto.pr_serve_pessoas}" if produto.pr_serve_pessoas else "NOT_APPLICABLE",
+            "dietaryRestrictions": restricoes_alimentares,
+            "weight": {
+                "quantity": produto.pr_quantidade if produto.pr_quantidade else 0,
+                "unit": produto.pr_unidade if produto.pr_unidade else "g"
             },
-        )
-        dados = {"productId": dados_ifood.fd_ifood_id, "amount": nova_quantidade}
-        response = self.client.get(f"/catalog/v2.0/merchants/{self.merchant}/inventory")
+            "optionGroups": [],
+        }
