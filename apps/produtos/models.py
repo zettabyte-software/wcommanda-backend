@@ -48,9 +48,9 @@ class Produto(Base):
     pr_zero_lactose = models.BooleanField(_("zero lactose"), default=False)
 
     # acréscimos
-    pr_grupo_acrescimo = TenantForeignKey(
-        verbose_name=_("garçom"),
-        to="produtos.GrupoAcrescimoProduto",
+    pr_grupo_complementos = TenantForeignKey(
+        verbose_name=_("grupo de complementos"),
+        to="produtos.GrupoComplementoProduto",
         on_delete=models.PROTECT,
         null=True,
         related_name="produtos",
@@ -78,7 +78,7 @@ class CategoriaProduto(Base):
         verbose_name_plural = _("Categorias")
 
 
-class GrupoAcrescimoProduto(Base):
+class GrupoComplementoProduto(Base):
     gr_nome = models.CharField(_("nome"), max_length=30)
 
     class Meta:
@@ -91,7 +91,7 @@ class GrupoAcrescimoProduto(Base):
 class Acrescimo(Base):
     cs_grupo_acrescimo = TenantForeignKey(
         verbose_name=_("grupo"),
-        to="produtos.GrupoAcrescimoProduto",
+        to="produtos.GrupoComplementoProduto",
         on_delete=models.CASCADE,
         related_name="acrescimos",
     )
