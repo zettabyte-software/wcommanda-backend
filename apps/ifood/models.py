@@ -48,11 +48,11 @@ class ProdutoIfood(Base):
     fd_pizza = models.BooleanField(_("é pizza"), default=False)
     fd_categoria_id = models.UUIDField(_("id do grupo do catálogo ifood"), null=True)
     fd_grupo_catalogo_id = models.UUIDField(_("id do grupo do catálogo ifood"), null=True)
-    fd_item_catalog_id = models.UUIDField(_("id do item no catálogo ifood"), null=True)
+    fd_item_catalogo_id = models.UUIDField(_("id do item no catálogo ifood"), null=True)
     fd_index = models.PositiveSmallIntegerField(_("posição no cardápio"), default=1)
 
     def __str__(self):
-        return self.fd_ifood_id
+        return str(self.fd_ifood_id)
 
     class Meta:
         db_table = "dados_produto_ifood"
