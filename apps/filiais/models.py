@@ -1,8 +1,10 @@
 import random
 
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from django_multitenant.fields import TenantForeignKey
 from django_multitenant.utils import get_current_tenant
 
 from apps.system.base.models import Base, EstadosChoices
@@ -54,6 +56,7 @@ class Filial(Base):
     fl_hora_inicio_funcionamento_sabado = models.TimeField(_("horário de início no sabado"), null=True)
     fl_hora_fim_funcionamento_sabado = models.TimeField(_("horário de encerramento no sabado"), null=True)
 
+    owner = TenantForeignKey(verbose_name=_("owner"), to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, related_name="filiais")
 
     def make_upload_path(self, filename):
         file_extension = filename.split(".")[-1]

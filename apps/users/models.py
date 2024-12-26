@@ -37,7 +37,6 @@ class Usuario(Base, AbstractUser):
     username = None
     ativo = None
     owner = None
-    filial = None
 
     WCOMMANDA_USER_EMAIL = "bot@wcommanda.com.br"
 
