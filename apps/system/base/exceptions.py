@@ -1,0 +1,2 @@
+class WcommandaError(Exception):
+    pass
