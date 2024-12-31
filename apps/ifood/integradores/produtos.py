@@ -1,3 +1,4 @@
+import dataclasses
 import logging
 
 from django.db import transaction
@@ -6,11 +7,22 @@ from apps.produtos.models import Produto
 from apps.produtos.services import gerar_codigo_cardapio
 
 from ..models import ProdutoIfood
-from .base import BaseIntegradorIfood
+from .base import BaseIntegradorIfood, IntegradorCadastroIfood
 
 logger = logging.getLogger(__name__)
 
 LIMITE_REGISTROS = 100
+
+
+@dataclasses.dataclass
+class ProdutoIfoodDataclass:
+    id: str
+    name: str
+    image: str
+    shifts: list
+    serving: str
+    dietaryRestrictions: list
+    weight: dict
 
 
 class ImportadorProdutosIfood(BaseIntegradorIfood):
@@ -114,41 +126,74 @@ class ImportadorProdutosIfood(BaseIntegradorIfood):
         return dados["count"] // LIMITE_REGISTROS + 1
 
 
-class IntegradorProdutoIfood(BaseIntegradorIfood):
-    def sincronizar_alteracoes(self, produto: Produto):
-        logger.info("Sincronizando alterações do produto %s no ifood", produto.pr_nome)
-        logger.info("Alterações sincronizadas com sucesso para o produto %s", produto.pr_nome)
+class IntegradorProdutoIfood(IntegradorCadastroIfood):
+    def criar_registro_ifood(self, instance, dados):
+        url = f"catalog/v2.0/merchants/{self.merchant}/products"
+        response = self.client.post(url, json=dados)
+        response.raise_for_status()
+        dados_ifood = ProdutoIfoodDataclass(**response.json())
+        self.atualizar_dados_internos(instance, dados_ifood)
+        return response
 
-    def gerar_dados_produto(self, produto: Produto):
+    def atualizar_registro_ifood(self, instance, dados, id_ifood):
+        url = f"catalog/v2.0/merchants/{self.merchant}/products/{id_ifood}"
+        response = self.client.post(url, json=dados)
+        response.raise_for_status()
+        dados_ifood = ProdutoIfoodDataclass(**response.json())
+        self.atualizar_dados_internos(instance, dados_ifood)
+        return response
+
+    def excluir_registro_ifood(self, instance, id_ifood):
+        url = f"catalog/v2.0/merchants/{self.merchant}/products/{id_ifood}"
+        response = self.client.post(url)
+        response.raise_for_status()
+        instance = self.create_or_update_dados_registro_ifood(instance)
+        instance.delete()
+        return response
+
+    def atualizar_dados_internos(self, instance, dados):
+        instance = self.create_or_update_dados_registro_ifood(instance)
+
+    def create_or_update_dados_registro_ifood(self, instance):
+        instance, _ = ProdutoIfood.objects.update_or_create(
+            fd_produto=instance,
+            defaults={"fd_produto": instance}
+        )
+        return instance
+
+    def get_id_ifood(self, instance):
+        raise NotImplementedError
+
+    def gerar_dados_ifood(self, instance: Produto):
         restricoes_alimentares = []
-        if produto.pr_vegano:
+        if instance.pr_vegano:
             restricoes_alimentares.append("VEGAN")
 
-        if produto.pr_vegetariano:
+        if instance.pr_vegetariano:
             restricoes_alimentares.append("VEGETARIAN")
 
-        if produto.pr_organico:
+        if instance.pr_organico:
             restricoes_alimentares.append("ORGANIC")
 
-        if produto.pr_sem_gluten:
+        if instance.pr_sem_gluten:
             restricoes_alimentares.append("GLUTEN_FREE")
 
-        if produto.pr_sem_acucar:
+        if instance.pr_sem_acucar:
             restricoes_alimentares.append("SUGAR_FREE")
 
-        if produto.pr_zero_lactose:
+        if instance.pr_zero_lactose:
             restricoes_alimentares.append("LACTOSE_FREE")
 
         return {
-            "name": produto.pr_nome,
-            "description": produto.pr_descricao,
-            "image": produto.pr_descricao,
+            "name": instance.pr_nome,
+            "description": instance.pr_descricao,
+            "image": instance.pr_descricao,
             "shifts": [],
-            "serving": f"SERVES_{produto.pr_serve_pessoas}" if produto.pr_serve_pessoas else "NOT_APPLICABLE",
+            "serving": f"SERVES_{instance.pr_serve_pessoas}" if instance.pr_serve_pessoas else "NOT_APPLICABLE",
             "dietaryRestrictions": restricoes_alimentares,
             "weight": {
-                "quantity": produto.pr_quantidade if produto.pr_quantidade else 0,
-                "unit": produto.pr_unidade if produto.pr_unidade else "g"
+                "quantity": instance.pr_quantidade if instance.pr_quantidade else 0,
+                "unit": instance.pr_unidade if instance.pr_unidade else "g",
             },
             "optionGroups": [],
         }
