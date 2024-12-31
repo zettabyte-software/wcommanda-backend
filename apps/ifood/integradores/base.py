@@ -2,6 +2,7 @@ import logging
 import urllib.parse
 
 from django.core.cache import cache
+from django.db import transaction
 
 from rest_framework.exceptions import ValidationError
 
@@ -32,14 +33,9 @@ class BaseIntegradorIfood:
         self.merchant = merchant
         self.client_id = client_id
         self.client_secret = client_secret
-
-        self._client = httpx.Client(
-            base_url=_BASE_URL_API_IFOOD,
-            headers=_BASE_HEADERS_IFOOD,
-        )
-
         token = self.get_token_ifood()
 
+        self._client = httpx.Client(base_url=_BASE_URL_API_IFOOD, headers=_BASE_HEADERS_IFOOD)
         self.client.headers["Authorization"] = f"Bearer {token}"
 
     @property
@@ -75,7 +71,7 @@ class BaseIntegradorIfood:
             response = httpx.post(
                 "https://merchant-api.ifood.com.br/authentication/v1.0/oauth/token",
                 headers={"Content-Type": "application/x-www-form-urlencoded"},
-                data=urllib.parse.urlencode(data),
+                data=urllib.parse.urlencode(data),  # type: ignore
             )
 
             logger.info(response.text)
@@ -86,3 +82,54 @@ class BaseIntegradorIfood:
             logger.error("Erro ao realizar login no iFood: %s", e)
             sentry_sdk.capture_exception(e)
             raise e
+
+
+class IntegradorCadastroIfood(BaseIntegradorIfood):
+    @transaction.atomic
+    def sincronizar_alteracoes(self, instance):
+        savepoint = transaction.savepoint()
+
+        try:
+            registro_ifood = self.create_or_update_dados_registro_ifood(instance)
+            dados_envio_ifood = self.gerar_dados_ifood(instance)
+            id_ifood = self.get_id_ifood(registro_ifood)
+
+            response = None
+            if id_ifood:
+                response = self.atualizar_registro_ifood(dados_envio_ifood, id_ifood=id_ifood)
+            else:
+                response = self.criar_registro_ifood(dados_envio_ifood)
+
+            response.raise_for_status()
+
+        except Exception:
+           transaction.savepoint_rollback(savepoint)
+
+    def criar_registro_ifood(self, dados):
+        raise NotImplementedError
+
+    def atualizar_registro_ifood(self, dados, id_ifood=None):
+        raise NotImplementedError
+
+    def excluir_registro_ifood(self, instance):
+        raise NotImplementedError
+
+    def atualizar_dados_internos(self, dados):
+        raise NotImplementedError
+
+    def gerar_dados_ifood(self, instance):
+        raise NotImplementedError
+
+    def create_or_update_dados_registro_ifood(self, instance):
+        raise NotImplementedError
+
+    def get_id_ifood(self, instance):
+        raise NotImplementedError
+
+
+class ImportadorRegistrosIfood(BaseIntegradorIfood):
+    def importar_registros(self):
+        raise NotImplementedError
+
+    def create_or_update_dados_registro_ifood(self):
+        raise NotImplementedError
