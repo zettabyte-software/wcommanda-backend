@@ -3,16 +3,18 @@ from django.utils import timezone
 
 from apps.system.tenants.models import Ambiente
 
-RATING_CACHE_KEY = "ifood-requests-rate-%s"
+RATING_CACHE_KEY = "ifood-requests-rate-%s-%s"
 
 
 class IfoodRequestsLimit:
-    def __init__(self, tenant: Ambiente, limite: int):
+    def __init__(self, tenant: Ambiente, limite: int, modulo: str):
         self.tenant = tenant
+        self.modulo = modulo
         self.limite_requests = limite
 
     def atingiu_limite(self):
-        quantidade_atual_requests = cache.get(RATING_CACHE_KEY % self.tenant.pk, 0)
+        cache_key = RATING_CACHE_KEY % (self.modulo, self.tenant.pk)
+        quantidade_atual_requests = cache.get(cache_key, 0)
         return quantidade_atual_requests >= self.limite_requests
 
     def calcular_segundos_ate_virada_mes(self):
@@ -27,12 +29,14 @@ class IfoodRequestsLimit:
         return int(delta.total_seconds())
 
     def resetar_limite(self):
-        cache.set(RATING_CACHE_KEY % self.tenant.pk, 0, timeout=self.calcular_segundos_ate_virada_mes())
+        cache_key = RATING_CACHE_KEY % (self.modulo, self.tenant.pk)
+        cache.set(cache_key, 0, timeout=self.calcular_segundos_ate_virada_mes())
 
     def incrementar_integracao(self):
-        quantidade_atual_requests = cache.get(RATING_CACHE_KEY % self.tenant.pk, 0)
+        cache_key = RATING_CACHE_KEY % (self.modulo, self.tenant.pk)
+        quantidade_atual_requests = cache.get(cache_key, 0)
         cache.set(
-            RATING_CACHE_KEY % self.tenant.pk,
+            cache_key,
             quantidade_atual_requests + 1,
             timeout=self.calcular_segundos_ate_virada_mes(),
         )
