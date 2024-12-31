@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from threadlocals.threadlocals import get_request_variable
 
 from apps.ifood.integradores.categorias import IntegradorCategoriasIfood
+from apps.ifood.integradores.produtos import IntegradorProdutoIfood
 from apps.system.base.views import BaseModelViewSet
 
 from .serializers import (
@@ -44,6 +45,45 @@ class ProdutoViewSet(BaseModelViewSet):
     }
     search_fields = ["pr_nome", "pr_codigo_cardapio"]
 
+    def perform_create(self, serializer, **overwrite):
+        instance = super().perform_create(serializer, **overwrite)
+
+        filial = get_request_variable("filial")
+
+        if filial is None:
+            return
+
+        merchant_id = filial.fl_merchat_id_ifood
+
+        integrador = IntegradorProdutoIfood(merchant_id)
+        integrador.sincronizar_alteracoes(instance)
+
+    def perform_update(self, serializer, **overwrite):
+        instance = super().perform_update(serializer, **overwrite)
+
+        filial = get_request_variable("filial")
+
+        if filial is None:
+            return
+
+        merchant_id = filial.fl_merchat_id_ifood
+
+        integrador = IntegradorProdutoIfood(merchant_id)
+        integrador.sincronizar_alteracoes(instance)
+
+    def perform_destroy(self, instance):
+        filial = get_request_variable("filial")
+
+        if filial is None:
+            return super().perform_destroy(instance)
+
+        merchant_id = filial.fl_merchat_id_ifood
+
+        integrador = IntegradorProdutoIfood(merchant_id)
+        integrador.excluir_registro_ifood(instance)
+
+        return super().perform_destroy(instance)
+
     def alterar_campos_unicos(self, instance):
         instance.pr_codigo_cardapio = gerar_codigo_cardapio()
 
@@ -60,8 +100,6 @@ class ProdutoViewSet(BaseModelViewSet):
         return Response()
 
 
-# TODO todas as alterações via api para o ifood refatorar para que
-# sejam serviços em background
 class CategoriaProdutoViewSet(BaseModelViewSet):
     queryset = CategoriaProduto.objects.all()
     serializer_class = CategoriaProdutoSerializer

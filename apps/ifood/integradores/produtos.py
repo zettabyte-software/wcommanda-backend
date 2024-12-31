@@ -143,8 +143,12 @@ class IntegradorProdutoIfood(IntegradorCadastroIfood):
         self.atualizar_dados_internos(instance, dados_ifood)
         return response
 
-    def excluir_registro_ifood(self, instance, id_ifood):
-        url = f"catalog/v2.0/merchants/{self.merchant}/products/{id_ifood}"
+    def excluir_registro_ifood(self, instance):
+        dados_ifood = self.create_or_update_dados_registro_ifood(instance)
+        if dados_ifood.fd_ifood_id is None:
+            return None
+
+        url = f"catalog/v2.0/merchants/{self.merchant}/products/{dados_ifood.fd_ifood_id}"
         response = self.client.post(url)
         response.raise_for_status()
         instance = self.create_or_update_dados_registro_ifood(instance)
@@ -152,7 +156,7 @@ class IntegradorProdutoIfood(IntegradorCadastroIfood):
         return response
 
     def atualizar_dados_internos(self, instance, dados):
-        instance = self.create_or_update_dados_registro_ifood(instance)
+        dados_ifood = self.create_or_update_dados_registro_ifood(instance)
 
     def create_or_update_dados_registro_ifood(self, instance):
         instance, _ = ProdutoIfood.objects.update_or_create(fd_produto=instance, defaults={"fd_produto": instance})
