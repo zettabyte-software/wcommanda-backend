@@ -47,7 +47,7 @@ class IfoodViewSet(ViewSet):
         if not client_id or not client_secret:
             return Response({"mensagem": "As credenciais do iFood não foram configuradas"}, status=status.HTTP_400_BAD_REQUEST)
 
-        integrador = IntegradorCategoriasIfood(client_id, client_secret, merchant="85330304-7ee6-4182-b40d-6c65cca35a65", catalog_id="23786d4c-46da-49fe-8f77-234951725fd4")
+        integrador = IntegradorCategoriasIfood(client_id, client_secret, merchant="", catalog_id="")
 
         response = integrador.importar_categorias()
 
