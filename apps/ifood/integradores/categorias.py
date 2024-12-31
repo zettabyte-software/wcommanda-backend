@@ -35,9 +35,31 @@ class IntegradorCategoriasIfood(BaseIntegradorIfood):
         id_ifood = dados.cd_ifood_id
 
         if id_ifood is None:
-            return self._criar_categoria(dados)
+            return self._criar_categoria_ifood(dados)
 
-        return self._atualizar_categoria(str(id_ifood), dados)
+        return self._atualizar_categoria_ifood(str(id_ifood), dados)
+
+    # rever os 2 métodos abaixo
+    def _criar_categoria_ifood(self, categoria_ifood: CategoriaIfood):
+        url = f"catalog/v2.0/merchants/{self.merchant}/catalogs/{self.catalog_id}/categories"
+        response = self.client.post(url, json=categoria_ifood.gerar_dados_ifood())
+        response.raise_for_status()
+        dados = CategoriaIfoodDataClass(**response.json())
+        self._atualizar_cadastro_ifood_interno(categoria_ifood, dados)
+        return response
+
+    def _atualizar_categoria_ifood(self, id_ifood: str, categoria_ifood: CategoriaIfood):
+        url = f"catalog/v2.0/merchants/{self.merchant}/catalogs/{self.catalog_id}/categories/{id_ifood}"
+        response = self.client.patch(url, json=categoria_ifood.gerar_dados_ifood(id=True))
+        response.raise_for_status()
+        return response
+
+    def _atualizar_cadastro_ifood_interno(self, categoria_ifood: CategoriaIfood, dados: CategoriaIfoodDataClass):
+        categoria_ifood.cd_ifood_id = dados.id
+        categoria_ifood.cd_template = dados.template
+        categoria_ifood.cd_index = dados.index
+        categoria_ifood.cd_sequence = dados.sequence
+        categoria_ifood.save()
 
     def deletar_categoria(self, categoria: CategoriaProduto):
         try:
@@ -48,28 +70,6 @@ class IntegradorCategoriasIfood(BaseIntegradorIfood):
             return True
         except CategoriaIfood.DoesNotExist:
             return False
-
-    # rever os 2 métodos abaixo
-    def _criar_categoria(self, categoria_ifood: CategoriaIfood):
-        url = f"catalog/v2.0/merchants/{self.merchant}/catalogs/{self.catalog_id}/categories"
-        response = self.client.post(url, json=categoria_ifood.gerar_dados_ifood())
-        response.raise_for_status()
-        dados = CategoriaIfoodDataClass(**response.json())
-        self._atualizar_cadastro_ifood(categoria_ifood, dados)
-        return response
-
-    def _atualizar_categoria(self, id_ifood: str, categoria_ifood: CategoriaIfood):
-        url = f"catalog/v2.0/merchants/{self.merchant}/catalogs/{self.catalog_id}/categories/{id_ifood}"
-        response = self.client.patch(url, json=categoria_ifood.gerar_dados_ifood(id=True))
-        response.raise_for_status()
-        return response
-
-    def _atualizar_cadastro_ifood(self, categoria_ifood: CategoriaIfood, dados: CategoriaIfoodDataClass):
-        categoria_ifood.cd_ifood_id = dados.id
-        categoria_ifood.cd_template = dados.template
-        categoria_ifood.cd_index = dados.index
-        categoria_ifood.cd_sequence = dados.sequence
-        categoria_ifood.save()
 
     def importar_categorias(self, filial: Filial = None):
         try:
