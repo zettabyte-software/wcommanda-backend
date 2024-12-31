@@ -155,14 +155,12 @@ class IntegradorProdutoIfood(IntegradorCadastroIfood):
         instance = self.create_or_update_dados_registro_ifood(instance)
 
     def create_or_update_dados_registro_ifood(self, instance):
-        instance, _ = ProdutoIfood.objects.update_or_create(
-            fd_produto=instance,
-            defaults={"fd_produto": instance}
-        )
+        instance, _ = ProdutoIfood.objects.update_or_create(fd_produto=instance, defaults={"fd_produto": instance})
         return instance
 
     def get_id_ifood(self, instance):
-        raise NotImplementedError
+        dados_ifood = self.create_or_update_dados_registro_ifood(instance)
+        return dados_ifood.fd_produto
 
     def gerar_dados_ifood(self, instance: Produto):
         restricoes_alimentares = []
