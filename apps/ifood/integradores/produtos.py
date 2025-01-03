@@ -65,13 +65,13 @@ class ImportadorProdutosIfood(BaseIntegradorIfood):
 
             produto_wcommanda.save()
 
-            ProdutoIfood(
+            ProdutoIfood.objects.create(
                 fd_ifood_id=id_ifood,
                 fd_produto=produto_wcommanda,
                 fd_pizza=False,
                 fd_categoria_id=dados["categoryId"],
                 fd_grupo_catalogo_id=dados["catalogId"],
-                fd_item_catalog_id=dados["itemId"],
+                fd_item_catalogo_id=dados["itemId"],
                 fd_index=dados["categoryIndex"],
             )
 
@@ -113,7 +113,7 @@ class ImportadorProdutosIfood(BaseIntegradorIfood):
 
         return produtos
 
-    def fetch_produtos_ifood(self, page):
+    def fetch_produtos_ifood(self, page: int):
         response = self.client.get(
             f"catalog/v2.0/merchants/{self.merchant}/products?limit={LIMITE_REGISTROS}&page={page}"
         )
@@ -144,26 +144,26 @@ class IntegradorProdutoIfood(IntegradorCadastroIfood):
         return response
 
     def excluir_registro_ifood(self, instance):
-        dados_ifood = self.create_or_update_dados_registro_ifood(instance)
+        dados_ifood = self.get_dados_registro_ifood(instance)
         if dados_ifood.fd_ifood_id is None:
             return None
 
         url = f"catalog/v2.0/merchants/{self.merchant}/products/{dados_ifood.fd_ifood_id}"
         response = self.client.post(url)
         response.raise_for_status()
-        instance = self.create_or_update_dados_registro_ifood(instance)
+        instance = self.get_dados_registro_ifood(instance)
         instance.delete()
         return response
 
     def atualizar_dados_internos(self, instance, dados):
-        dados_ifood = self.create_or_update_dados_registro_ifood(instance)
+        dados_ifood = self.get_dados_registro_ifood(instance)
 
-    def create_or_update_dados_registro_ifood(self, instance):
-        instance, _ = ProdutoIfood.objects.update_or_create(fd_produto=instance, defaults={"fd_produto": instance})
+    def get_dados_registro_ifood(self, instance):
+        instance, _ = ProdutoIfood.objects.get_or_create(fd_produto=instance, defaults={"fd_produto": instance})
         return instance
 
     def get_id_ifood(self, instance):
-        dados_ifood = self.create_or_update_dados_registro_ifood(instance)
+        dados_ifood = self.get_dados_registro_ifood(instance)
         return dados_ifood.fd_produto
 
     def gerar_dados_ifood(self, instance: Produto):

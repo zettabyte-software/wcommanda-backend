@@ -15,8 +15,9 @@ class PedidoIfood:
 class EventoIfood:
     id: str
     code: str
-    createdAt: str
     fullCode: str
-    merchantId: str
     orderId: str
-
+    merchantId: str
+    createdAt: str
+    salesChannel: str
+    # metadata: dict

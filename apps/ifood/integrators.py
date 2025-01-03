@@ -30,7 +30,7 @@ class BaseIntegradorIfood:
     def __init__(self, client_id: str, client_secret: str, merchant: str):
         self.client_id = client_id
         self.client_secret = client_secret
-        self.merchant = "85330304-7ee6-4182-b40d-6c65cca35a65"
+        self.merchant = merchant
 
         self.client = httpx.Client(
             base_url=_BASE_URL_API_IFOOD,

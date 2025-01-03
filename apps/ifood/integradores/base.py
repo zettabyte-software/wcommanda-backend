@@ -90,7 +90,7 @@ class IntegradorCadastroIfood(BaseIntegradorIfood):
         savepoint = transaction.savepoint()
 
         try:
-            registro_ifood = self.create_or_update_dados_registro_ifood(instance)
+            registro_ifood = self.get_dados_registro_ifood(instance)
             dados_envio_ifood = self.gerar_dados_ifood(instance)
             id_ifood = self.get_id_ifood(registro_ifood)
 
@@ -102,8 +102,9 @@ class IntegradorCadastroIfood(BaseIntegradorIfood):
 
             response.raise_for_status()
 
-        except Exception:
+        except Exception as e:
            transaction.savepoint_rollback(savepoint)
+           raise e
 
     def criar_registro_ifood(self, dados):
         raise NotImplementedError
@@ -120,7 +121,7 @@ class IntegradorCadastroIfood(BaseIntegradorIfood):
     def gerar_dados_ifood(self, instance):
         raise NotImplementedError
 
-    def create_or_update_dados_registro_ifood(self, instance):
+    def get_dados_registro_ifood(self, instance):
         raise NotImplementedError
 
     def get_id_ifood(self, instance):
