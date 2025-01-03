@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from django_multitenant.fields import TenantOneToOneField
+from django_multitenant.fields import TenantForeignKey, TenantOneToOneField
 
 from apps.system.base.models import Base
 
@@ -61,7 +61,7 @@ class ProdutoIfood(Base):
         verbose_name_plural = _("Dados dos Produtos no iFood")
 
 
-class CategoriaIfood(Base):
+class CategoriaIfood(Base):  # DadosCategoriaIfood
     cd_ifood_id = models.UUIDField(_("id iFood"), null=True)
     cd_categoria = TenantOneToOneField(
         verbose_name=_("categoria"),
@@ -102,11 +102,10 @@ class CustomizacaoCategoriaIfood:
     pass
 
 
-class PedidoIfood:
+class PedidoIfood(Base):
     fd_ifood_id = models.UUIDField(_("id do pedido no iFood"))
     fd_teste = models.BooleanField(_("é pedido de teste"), default=False)
     fd_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
-
     fd_cep = models.CharField(_("cep"), max_length=8)
     fd_estado = models.CharField(_("estado"), max_length=2)
     fd_cidade = models.CharField(_("cidade"), max_length=40)
@@ -122,11 +121,13 @@ class PedidoIfood:
         verbose_name_plural = _("Pedidos do iFood")
 
 
-class PedidoItemIfood:
-    ft_ifood_id = models.UUIDField(_("id do pedido no iFood"))
+class PedidoItemIfood(Base):
+    ft_pedido = TenantForeignKey(verbose_name=_("id interno"), to="ifood.PedidoIfood", on_delete=models.PROTECT, related_name="itens")
+    ft_ifood_id = models.UUIDField(_("id do item do pedido no iFood"))
     ft_nome_produto = models.CharField(_("nome do produto"), max_length=80)
+    fd_imagem_produto = models.CharField(_("complemento"), max_length=50, blank=True, default="")
     ft_unidade = models.CharField(_("unidade"), max_length=2)
-    ft_pedido = models.UUIDField(_("id do pedido no iFood"))
+    ft_pedido_ifood = models.UUIDField(_("id do pedido no iFood"))
     ft_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
     ft_preco_unitario = models.FloatField(_("preço unitário"))
     ft_quantidade = models.PositiveSmallIntegerField(_("quantidade"))
@@ -140,9 +141,16 @@ class PedidoItemIfood:
         verbose_name_plural = _("Itens dos Pedidos do iFood")
 
 
-class PedidoItemCustomizacaoIfood:
+class PedidoItemComplementoIfood(Base):
+    pf_item_pedido = TenantForeignKey(verbose_name=_("id interno"), to="ifood.PedidoItemIfood", on_delete=models.PROTECT, related_name="complementos")
+    pf_ifood_id = models.UUIDField(_("id do complemento do item no iFood"))
+    pf_quantidade = models.PositiveSmallIntegerField(_("quantidade"))
+    pf_unidade = models.CharField(_("unidade"), max_length=3)
+    pf_preco = models.FloatField(_("preço total"))
+    pf_preco_unitario = models.FloatField(_("preço unitário"))
+
     class Meta:
         db_table = "pedido_item_customizacao_ifood"
         ordering = ["-id"]
-        verbose_name = _("Item do Pedido do iFood")
-        verbose_name_plural = _("Itens dos Pedidos do iFood")
+        verbose_name = _("Customização do Item do Pedido do iFood")
+        verbose_name_plural = _("Customizações dos Itens dos Pedidos do iFood")
