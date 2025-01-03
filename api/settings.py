@@ -248,7 +248,7 @@ LOGGING_ROOT = os.path.join(BASE_DIR, "logs/")
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": True,
+    "disable_existing_loggers": False,
     "formatters": {
         "api_formatter": {
             "format": "[%(asctime)s] %(name)s [%(levelname)s] %(message)s",
