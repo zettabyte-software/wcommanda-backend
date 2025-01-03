@@ -72,6 +72,8 @@ class Produto(Base):
     pr_unidade = models.PositiveSmallIntegerField(_("tipo"), choices=UnidadesProdutoChoices.choices, null=True)
     pr_quantidade = models.IntegerField(_("tipo"), default=0)
 
+    # pr_integra_ifood = models.BooleanField(_("integra com o ifood"), default=False)
+
     @classmethod
     def upload(cls, produto: "Produto", image: InMemoryUploadedFile):
         raise Exception
@@ -86,6 +88,7 @@ class Produto(Base):
 class CategoriaProduto(Base):
     cg_nome = models.CharField(_("nome"), max_length=30)
     cg_descricao = models.CharField(_("descrição"), max_length=100, blank=True, default="")
+    # cg_integra_ifood = models.BooleanField(_("integra com o ifood"), default=False)
 
     class Meta:
         db_table = "categoria_produto"
