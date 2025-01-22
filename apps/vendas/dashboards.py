@@ -1,9 +1,10 @@
+from calendar import month_name
 from collections import defaultdict
 
 from django.db.models import F, Sum
-from django.db.models.functions import TruncDate
+from django.db.models.functions import ExtractMonth, TruncDate
 
-from .models import VendaItem
+from .models import Venda, VendaItem
 
 
 def vendas_por_periodo(data_inicio, data_fim):
@@ -52,3 +53,40 @@ def vendas_por_periodo(data_inicio, data_fim):
     vendas = [vendas_por_dia[str(data)] for data in sorted(vendas_por_dia.keys())]
 
     return vendas
+
+
+def totais_vendas_mensais_ano_atual(ano: int):
+    totais_mensais = (
+        Venda.objects.filter(data_criacao__year=ano)
+        .annotate(mes=ExtractMonth("data_criacao"))
+        .values("mes")
+        .annotate(valor_total=Sum("vn_valor_total"))
+        .order_by("mes")
+    )
+
+    resultado = [{"mes": mes, "nome_mes": month_name[mes], "valor_total": 0} for mes in range(1, 13)]
+
+    for total in totais_mensais:
+        mes_index = total["mes"] - 1
+        resultado[mes_index]["valor_total"] = float(total["valor_total"] or 0)
+
+    return resultado
+
+
+def top_5_produtos_mais_vendidos(data_inicio, data_fim):
+    top_produtos = (
+        VendaItem.objects.filter(data_criacao__range=[data_inicio, data_fim])
+        .values("vd_produto_id", "vd_produto__pr_nome")
+        .annotate(quantidade_total=Sum("vd_quantidade"), valor_total=Sum("vd_valor_total"))
+        .order_by("-quantidade_total")
+        .values("vd_produto__pr_nome", "quantidade_total", "valor_total")[:5]
+    )
+
+    return [
+        {
+            "produto": item["vd_produto__pr_nome"],
+            "quantidade_total": float(item["quantidade_total"] or 0),
+            "valor_total": float(item["valor_total"] or 0),
+        }
+        for item in top_produtos
+    ]
