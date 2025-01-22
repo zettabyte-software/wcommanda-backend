@@ -373,16 +373,19 @@ if IN_PRODUCTION:
     LOGGING["root"]["handlers"] += ["api_cloud_log", "api_errors_mail"]
 
 
+# wcommanda
 AUTH_QUERY_PARAM_NAME = "jwt"
 
 TENANT_HOST_HEADER = "X-Zettabyte-Host"
 
 
+# corsheaders
 CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_HEADERS = list(default_headers) + [TENANT_HOST_HEADER]
 
 
+# rest framework
 REST_FRAMEWORK = {
     "PAGE_SIZE": 30,
     "DEFAULT_PAGINATION_CLASS": "apps.system.core.pagination.CustomPagination",
@@ -398,9 +401,11 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
+    "TEST_REQUEST_DEFAULT_FORMAT": "json",
+    "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
 }
 
-
+# drf simple jwt
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ["Bearer"],
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=365 if IN_DEVELOPMENT else 1),
