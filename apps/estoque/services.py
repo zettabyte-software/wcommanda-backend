@@ -3,7 +3,7 @@ from django.utils import timezone
 from apps.comandas.models import ComandaItem, StatusComandaItemChoices
 from apps.produtos.serializers import Produto
 
-from .models import MovimentacaoEstoque
+from .models import MovimentacaoEstoque, TiposMovimentacaoEstoqueChoices
 
 
 class EstoqueProduto:
@@ -95,3 +95,33 @@ class EstoqueProduto:
             )
 
         return dados_estoque
+
+
+def criar_movimentacao(comanda_item, produto, quantidade, tipo):
+    ultima_movimentacao = (
+        MovimentacaoEstoque.objects.filter(mv_produto=produto)
+        .order_by("-id")
+        .first()
+    )
+
+    quantidade_anterior = 0
+    quantidade_atual = quantidade
+    if ultima_movimentacao is not None:
+        quantidade_anterior = ultima_movimentacao.mv_quantidade_anterior
+
+        if (tipo == TiposMovimentacaoEstoqueChoices.ENTRADA):
+            quantidade_atual = ultima_movimentacao.mv_quantidade_atual + quantidade
+
+        elif (tipo == TiposMovimentacaoEstoqueChoices.SAIDA):
+            quantidade_atual = ultima_movimentacao.mv_quantidade_atual - quantidade
+
+    movimentacao = MovimentacaoEstoque.objects.create(
+        mv_comanda_item=comanda_item,
+        mv_tipo=tipo,
+        mv_produto=produto,
+        mv_quantidade=quantidade,
+        mv_quantidade_anterior=quantidade_anterior,
+        mv_quantidade_atual=quantidade_atual,
+    )
+
+    return movimentacao
