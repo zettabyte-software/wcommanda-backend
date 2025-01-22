@@ -1,7 +1,8 @@
 import os
-import dotenv
 
 from django.core.wsgi import get_wsgi_application
+
+import dotenv
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'api.settings')
 

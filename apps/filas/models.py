@@ -85,7 +85,6 @@ class Fila(Base, FilaHooksMixin):
         verbose_name_plural = _("Filas")
 
 
-
 class ProdutosSelecionadosFila:
     pd_fila = None
     pd_produto = None
