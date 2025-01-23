@@ -64,7 +64,7 @@ class DefaultRecord:
 
 
 class DefaultRecordsManger:
-    default_records_path = "data/default/records/"
+    default_records_path = "data/records/default/"
 
     def __init__(self):
         self.__cached_models = {}
