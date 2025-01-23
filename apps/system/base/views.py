@@ -1,11 +1,12 @@
 from django.conf import settings
 from django.db.models import ProtectedError
 
-from django_multitenant.utils import get_current_tenant
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
+
+from django_multitenant.utils import get_current_tenant
 
 
 class BaseViewSet(GenericViewSet):
@@ -16,14 +17,14 @@ class BaseViewSet(GenericViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        distinct_fields = self.request.query_params.get("distinct", None)  # type: ignore
+        distinct_fields = self.request.query_params.get("distinct", None)
         if distinct_fields is not None:
             return queryset.distinct(*distinct_fields)
         return queryset.filter(ambiente=get_current_tenant())
 
     def get_serializer_class(self):
         assert self.serializer_classes != {} or self.serializer_class is not None, (
-            "'%s' deve implementar o 'serializer_class' ou  'serializer_classes'." % self.__class__.__name__
+            f"'{self.__class__.__name__}' deve implementar o 'serializer_class' ou  'serializer_classes'."
         )
 
         if self.serializer_class:
@@ -62,9 +63,9 @@ class BaseModelViewSet(ModelViewSet):
         return queryset
 
     def get_serializer_class(self):
-        assert (
-            self.serializer_classes != {} or self.serializer_class is not None
-        ), "'{}' deve implementar o 'serializer_class' ou  'serializer_classes'.".format(self.__class__.__name__)
+        assert self.serializer_classes != {} or self.serializer_class is not None, (
+            f"'{self.__class__.__name__}' deve implementar o 'serializer_class' ou  'serializer_classes'."
+        )
 
         if self.serializer_class:
             return self.serializer_class
@@ -110,6 +111,19 @@ class BaseModelViewSet(ModelViewSet):
                 status=status.HTTP_409_CONFLICT,
             )
 
+    def alterar_campos_unicos(self, instance):
+        """Alterar campos antes da clonagem."""
+
+        raise NotImplementedError
+
+    def generic_action(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        response_status = kwargs.get("status", status.HTTP_200_OK)
+        response_data = kwargs.get("data", None)
+        return Response(response_data, status=response_status)
+
     @action(methods=["post"], detail=False)
     def bulk_create(self, request):
         serializer = self.get_serializer(data=request.data, many=True)
@@ -138,7 +152,3 @@ class BaseModelViewSet(ModelViewSet):
         page = self.paginate_queryset(queryset)
         return self.get_paginated_response(page)
 
-    def alterar_campos_unicos(self, instance):
-        """Alterar campos com `unique=True` na clonagem."""
-
-        pass
