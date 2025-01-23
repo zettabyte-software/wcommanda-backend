@@ -4,42 +4,38 @@ import os
 
 from django.utils.module_loading import import_string
 
+from django_multitenant.utils import set_current_tenant
+
+from apps.system.tenants.models import Ambiente
+
 logger = logging.getLogger(__name__)
 
 
 class DefaultRecord:
-    """Representação de um registro padrão do sistema."""
-
-    def __init__(
-        self,
-        model,
-        id_fields,
-        active,
-        raw_data,
-        database_alias="default",
-    ):
+    def __init__(self, model, id_fields, active, raw_data):
         if isinstance(model, str):
-            model = import_string(model)
+            self.model = import_string(model)
+        else:
+            self.model = model
 
-        self.active = active
-        self.database_alias = database_alias
         self.id_fields = id_fields
-        self.data = raw_data
-        self.made_first_database_fetch = False
-        self.model = model
+        self.active = active
+        self.raw = raw_data
         self._model_instance = None
+
+        for chave, valor in raw_data.items():
+            setattr(self, chave, valor)
+
         self.identifiers = {pk: raw_data[pk] for pk in id_fields}
 
     @property
     def model_instance(self):
-        if self.made_first_database_fetch is False:
-            self.made_first_database_fetch = True
-            try:
-                self._model_instance = self.model.objects.using(self.database_alias).get(**self.identifiers)
-            except self.model.DoesNotExist:
-                pass
-
-        return self._model_instance
+        try:
+            if self._model_instance is None:
+                self._model_instance = self.model.objects.get(**self.identifiers)
+            return self._model_instance
+        except self.model.DoesNotExist:
+            return None
 
     @property
     def exists(self):
@@ -50,7 +46,8 @@ class DefaultRecord:
         return not self.active
 
     def create(self, **save_kwargs):
-        instance = self.model.objects.using(self.database_alias).create(**self.data)
+        instance = self.model(**self.raw)
+        instance.save(**save_kwargs)
         self._model_instance = instance
         return instance
 
@@ -67,23 +64,28 @@ class DefaultRecord:
 
 
 class DefaultRecordsManger:
-    default_records_path = "data/records/default/"
+    default_records_path = "data/default/records/"
 
-    def __init__(self, database_alias="default"):
-        self.database_alias = database_alias
+    def __init__(self):
         self.__cached_models = {}
+
+    def multitenant_apply_updates(self):
+        ambientes = Ambiente.objects.all()
+        for ambiente in ambientes:
+            set_current_tenant(ambiente)
+            self.apply_updates()
 
     def apply_updates(self):
         records = self.get_records()
-        for record in records:
-            logger.info("verificando registro %s", record)
-            if record.active and not record.exists:
-                logger.info("criando registro %s", record)
-                record.create()
+        try:
+            for record in records:
+                if record.active and not record.exists:
+                    record.create()
 
-            elif not record.active and record.exists:
-                logger.info("deletando registro %s", record)
-                record.delete()
+                elif not record.active and record.exists:
+                    record.delete()
+        except Exception:
+            logger.error("Erro ao criar registro do sistema!")
 
     def get_records(self):
         files = self.get_files()
@@ -101,11 +103,9 @@ class DefaultRecordsManger:
                     id_fields=id_fields_map,
                     active=active,
                     raw_data=data,
-                    database_alias=self.database_alias,
                 )
 
                 records.append(default_record)
-
         return tuple(records)
 
     def get_files(self):
@@ -114,7 +114,6 @@ class DefaultRecordsManger:
             path = self.default_records_path + file_name
             file = open(path)
             files.append(file)
-
         return tuple(files)
 
     def delete_inactives(self):
