@@ -1,0 +1,12 @@
+{
+    "ambiente": {
+        "mb_subdominio": "zettabyte-tech",
+        "mb_nome": "Zettabyte Tech"
+    },
+    "usuario": {
+        "password": "dsrafacho!123",
+        "first_name": "Davi",
+        "last_name": "Silva Rafacho",
+        "email": "davi.s.rafacho.dev@gmail.com"
+    }
+}
