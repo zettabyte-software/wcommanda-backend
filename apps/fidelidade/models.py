@@ -6,10 +6,9 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from django_multitenant.fields import TenantForeignKey
-from threadlocals.threadlocals import get_current_request
+from threadlocals.threadlocals import get_current_request, get_request_variable
 
 from apps.system.base.models import Base
-from apps.system.tenants.services import get_current_token
 
 
 def gerar_codigo_cupon_aleatorio(*args):
@@ -79,7 +78,7 @@ class CartaoFidelidade(Base):
     def cr_link(self):
         request = get_current_request()
         host = request.headers.get(settings.TENANT_HOST_HEADER)
-        token = get_current_token()
+        token = get_request_variable("token")
         link = f"https://{host}/espaco-do-cliente/cartoes-fidelidade/{self.pk}/?jwt={token}"
         return link
 
