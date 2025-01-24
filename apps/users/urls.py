@@ -1,11 +1,10 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from rest_framework.routers import DefaultRouter
 
-from .views import UsuarioViewSet, CadastroViewSet
+from .views import UsuarioViewSet
 
 router_auth = DefaultRouter()
-router_auth.register("cadastro", CadastroViewSet, "cadastro")
 
 router_v1 = DefaultRouter()
 router_v1.register("usuarios", UsuarioViewSet, "usuarios")
