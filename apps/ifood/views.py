@@ -12,6 +12,10 @@ from .integradores.produtos import ImportadorProdutosIfood
 
 class IfoodViewSet(ViewSet):
     @action(methods=["post"], detail=False)
+    def pedidos_integrados(self, request):
+        return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+    @action(methods=["post"], detail=False)
     def webhook(self, request):
         filial = get_request_variable("filial")
 
