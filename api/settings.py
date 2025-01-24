@@ -96,6 +96,7 @@ WCOMMANDA_APPS = [
     "apps.garcons",
     "apps.ifood",
     "apps.mesas",
+    "apps.notificacoes",
     "apps.pedidos",
     "apps.produtos",
     "apps.reservas",
