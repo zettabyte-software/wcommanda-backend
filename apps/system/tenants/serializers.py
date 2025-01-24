@@ -3,10 +3,10 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from apps.system.base.serializers import BaseModelSerializer
-from apps.users.serializers import Usuario, UsuarioSerializer
+from apps.users.serializers import UsuarioSerializer
 
 from .models import Ambiente
-from .services import TenantManager, convidar_usuario_sistema
+from .services import TenantManager
 
 
 class AmbienteVisualizacaoSerializer(BaseModelSerializer):
