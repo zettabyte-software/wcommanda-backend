@@ -33,8 +33,32 @@ class BaseViewSet(GenericViewSet):
 
         return self.serializer_classes[self.action]
 
+    def get_aditional_serializer_context(self):
+        return {}
 
-class BaseModelViewSet(ModelViewSet):
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        aditional_context = self.get_aditional_serializer_context()
+        return {"action": self.action, "token": get_request_variable("token"), **context, **aditional_context}
+
+    def get_host(self):
+        if settings.IN_DEVELOPMENT:
+            return "zettabyte.wcommanda.com.br"
+        return self.request.get_host()
+
+    def get_subdominio(self):
+        return self.get_host().split(".")[0]
+
+    def generic_action(self, *args, **kwargs):
+        serializer = self.get_serializer(data=self.request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        response_status = kwargs.get("status", status.HTTP_200_OK)
+        response_data = kwargs.get("data", None)
+        return Response(response_data, status=response_status)
+
+
+class BaseModelViewSet(BaseViewSet, ModelViewSet):
     tenant_view = True
     model = None
     serializer_classes = {}
@@ -100,30 +124,27 @@ class BaseModelViewSet(ModelViewSet):
     def perform_update(self, serializer, **overwrite):
         return serializer.save(**overwrite)
 
-    def destroy(self, request, *args, **kwargs):
-        try:
-            instance = self.get_object()
-            self.perform_destroy(instance)
-            return Response(status=status.HTTP_204_NO_CONTENT)
-
-        except ProtectedError:
-            return Response(
-                {"mensagem": "Esse registro já foi utilizado pelo sistema"},
-                status=status.HTTP_409_CONFLICT,
-            )
-
     def alterar_campos_unicos(self, instance):
         """Alterar campos antes da clonagem."""
 
-        raise NotImplementedError
-
-    def generic_action(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+    def generic_action(self, *args, **kwargs):
+        serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         response_status = kwargs.get("status", status.HTTP_200_OK)
         response_data = kwargs.get("data", None)
         return Response(response_data, status=response_status)
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            instance = self.get_object()
+            self.perform_destroy(instance)
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ProtectedError:
+            return Response(
+                {"mensagem": "Esse registro já foi utilizado pelo sistema"},
+                status=status.HTTP_409_CONFLICT,
+            )
 
     @action(methods=["post"], detail=False)
     def bulk_create(self, request):
