@@ -1,16 +1,19 @@
 from django.core.cache import cache
 from django.utils import timezone
 
-from apps.system.tenants.models import Ambiente
+from django_multitenant.utils import get_current_tenant
 
 RATING_CACHE_KEY = "ifood-requests-rate-%s-%s"
 
 
 class IfoodRequestsLimit:
-    def __init__(self, tenant: Ambiente, limite: int, modulo: str):
-        self.tenant = tenant
+    # modulos que limitam as integrações
+    PEDIDOS = "orders"
+
+    def __init__(self, modulo: str):
+        self.tenant = get_current_tenant()
         self.modulo = modulo
-        self.limite_requests = limite
+        self.limite_requests = self.get_limite_integracoes_plano()
 
     def atingiu_limite(self):
         cache_key = RATING_CACHE_KEY % (self.modulo, self.tenant.pk)
@@ -40,3 +43,6 @@ class IfoodRequestsLimit:
             quantidade_atual_requests + 1,
             timeout=self.calcular_segundos_ate_virada_mes(),
         )
+
+    def get_limite_integracoes_plano(self):
+        return 5

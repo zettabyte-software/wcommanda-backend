@@ -6,6 +6,7 @@ import sentry_sdk
 from apps.system.core.classes import DinamicAttrs
 
 from ..dataclasses import EventoIfood
+from ..limiter import IfoodRequestsLimit
 from ..models import PedidoIfood
 from .base import BaseIntegradorIfood
 
@@ -37,6 +38,8 @@ class IntegradorPedidosIfood(BaseIntegradorIfood):
 
         dados_endereco = dados_pedido.delivery.dadosAddress  # type: ignore
 
+        limiter = IfoodRequestsLimit(IfoodRequestsLimit.PEDIDOS)
+
         pedido = PedidoIfood.objects.create(
             fd_ifood_id=dados_pedido.id,  # type: ignore
             fd_teste=dados_pedido,
@@ -48,6 +51,7 @@ class IntegradorPedidosIfood(BaseIntegradorIfood):
             fd_rua=dados_endereco.streetName,
             fd_numero=dados_endereco.streetNumber,
             fd_complemento=dados_endereco.complement,
+            ativo=limiter.atingiu_limite()
         )
 
         return pedido
