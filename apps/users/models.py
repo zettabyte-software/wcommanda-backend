@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
@@ -6,6 +8,12 @@ from django.utils.translation import gettext_lazy as _
 from auditlog.registry import auditlog
 
 from apps.system.base.models import Base
+
+
+class StatusSolicitacaoChoices(models.IntegerChoices):
+    PENDENTE = 1, _("Pendente")
+    ACEITO = 2, _("Aceito")
+    RECUSADO = 3, _("Recusado")
 
 
 class UsuarioManager(UserManager):
@@ -40,6 +48,7 @@ class Usuario(Base, AbstractUser):
 
     WCOMMANDA_USER_EMAIL = "bot@wcommanda.com.br"
 
+    status = models.PositiveSmallIntegerField(_("status"), choices=StatusSolicitacaoChoices.choices, default=StatusSolicitacaoChoices.PENDENTE)
     first_name = models.CharField(_("nome"), max_length=30)
     last_name = models.CharField(_("sobrenome"), max_length=60)
     email = models.EmailField(_("email"), unique=True)
@@ -51,6 +60,24 @@ class Usuario(Base, AbstractUser):
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
     objects = UsuarioManager()
+
+    @staticmethod
+    def get_instacia_bot_wcommanda():
+        bot, _ = Usuario.objects.get_or_create(
+            email=Usuario.WCOMMANDA_USER_EMAIL,
+            defaults={
+                "first_name": "Bot",
+                "last_name": "wCommanda",
+                "email": Usuario.WCOMMANDA_USER_EMAIL,
+                "password": make_password(str(random.randint(10000, 100000))),
+            },
+        )
+
+        return bot
+
+    @staticmethod
+    def get_id_bot_wcommanda():
+        return Usuario.get_instacia_bot_wcommanda().pk
 
     def __str__(self) -> str:
         return self.email

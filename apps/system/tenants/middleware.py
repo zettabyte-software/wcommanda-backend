@@ -25,21 +25,22 @@ class TenantMiddleware:
 
         request.tenant = tenant  # type: ignore
         request.host = host  # type: ignore
+        filial = self.get_filial(request)
 
         set_current_tenant(tenant)
         set_request_variable("host", host)
-
-        filial = self.get_filial(request)
-
         set_request_variable("filial", filial)
 
         try:
             user, _ = self.authenticator.authenticate(request)  # type: ignore
             set_current_user(user)
-        except (AuthenticationFailed, TypeError) as exc:
+        except (AuthenticationFailed, TypeError):
             return self.get_response(request)
 
         request.user = user
+
+        token = request.headers.get("Authentication")
+        set_request_variable("token", token.split(" ")[1] if token else None)
 
         return self.get_response(request)
 
