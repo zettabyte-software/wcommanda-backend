@@ -2,8 +2,8 @@ from apps.system.base.views import BaseModelViewSet
 
 from .serializers import (
     Filial,
-    FilialVisualizacaoSerializer,
     FilialAlteracaoSerializer,
+    FilialVisualizacaoSerializer,
 )
 
 
