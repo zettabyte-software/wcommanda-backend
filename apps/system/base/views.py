@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
 
 from django_multitenant.utils import get_current_tenant
+from threadlocals.threadlocals import get_request_variable
 
 
 class BaseViewSet(GenericViewSet):
@@ -83,7 +84,7 @@ class BaseModelViewSet(ModelViewSet):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         aditional_context = self.get_aditional_serializer_context()
-        return {"action": self.action, **context, **aditional_context}
+        return {"action": self.action, "token": get_request_variable("token"), **context, **aditional_context}
 
     def get_host(self):
         if settings.IN_DEVELOPMENT:
