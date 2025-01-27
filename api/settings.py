@@ -103,6 +103,7 @@ WCOMMANDA_APPS = [
     "apps.users",
     "apps.vendas",
     # system
+    "apps.system.assinaturas",
     "apps.system.autenticacao",
     "apps.system.base",
     "apps.system.core",
