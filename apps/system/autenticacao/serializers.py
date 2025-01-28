@@ -58,7 +58,7 @@ class LoginSerializer(TokenObtainPairSerializer):
             )
 
         data = {}
-        token = self.get_token(self.user)
+        token = self.get_token(self.user, self.context["host"])
         data["access"] = str(token.access_token)  # type: ignore
 
         if settings.SIMPLE_JWT["UPDATE_LAST_LOGIN"]:
@@ -67,12 +67,14 @@ class LoginSerializer(TokenObtainPairSerializer):
         return data
 
     @classmethod
-    def get_token(cls, user):
+    def get_token(cls, user, aud):
         token = super().get_token(user)
+        token["aud"] = aud
         token["user_name"] = user.first_name
         token["user_last_name"] = user.last_name
         token["user_full_name"] = user.get_full_name()
         token["user_enviroment"] = user.ambiente.pk
+        token["branch"] = user.filial.pk
         return token
 
 

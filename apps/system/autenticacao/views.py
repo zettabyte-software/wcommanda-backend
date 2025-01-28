@@ -34,6 +34,7 @@ class LoginView(TokenObtainPairView):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context["subdominio"] = self.get_subdominio()
+        context["host"] = self.get_host()
         return context
 
 
