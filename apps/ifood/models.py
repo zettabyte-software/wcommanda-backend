@@ -105,7 +105,9 @@ class CustomizacaoCategoriaIfood:
 class PedidoIfood(Base):
     fd_ifood_id = models.UUIDField(_("id do pedido no iFood"))
     fd_teste = models.BooleanField(_("é pedido de teste"), default=False)
-    fd_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
+    # fd_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
+
+    # endereço
     fd_cep = models.CharField(_("cep"), max_length=8)
     fd_estado = models.CharField(_("estado"), max_length=2)
     fd_cidade = models.CharField(_("cidade"), max_length=40)
@@ -113,6 +115,11 @@ class PedidoIfood(Base):
     fd_rua = models.CharField(_("rua"), max_length=15)
     fd_numero = models.CharField(_("número"), max_length=8)
     fd_complemento = models.CharField(_("complemento"), max_length=50, blank=True, default="")
+
+    # daods do cliente
+    fd_nome_cliente = models.CharField(_("nome do cliente"), max_length=120, blank=True, default="")
+    fd_documento_cliente = models.CharField(_("documento do cliente"), max_length=20, blank=True, default="")
+    fd_telefone_cliente = models.CharField(_("telefone do cliente"), max_length=15, blank=True, default="")
 
     class Meta:
         db_table = "pedido_ifood"
@@ -124,13 +131,15 @@ class PedidoIfood(Base):
 class PedidoItemIfood(Base):
     ft_pedido = TenantForeignKey(verbose_name=_("id interno"), to="ifood.PedidoIfood", on_delete=models.PROTECT, related_name="itens")
     ft_ifood_id = models.UUIDField(_("id do item do pedido no iFood"))
+    ft_index = models.PositiveSmallIntegerField(_("index do item do pedido no iFood"), default=0)
+    ft_pedido_ifood = models.UUIDField(_("id do pedido no iFood"))
+    # ft_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
+
     ft_nome_produto = models.CharField(_("nome do produto"), max_length=80)
     fd_imagem_produto = models.CharField(_("complemento"), max_length=50, blank=True, default="")
     ft_unidade = models.CharField(_("unidade"), max_length=2)
-    ft_pedido_ifood = models.UUIDField(_("id do pedido no iFood"))
-    ft_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
-    ft_preco_unitario = models.FloatField(_("preço unitário"))
-    ft_quantidade = models.PositiveSmallIntegerField(_("quantidade"))
+    ft_preco_unitario = models.FloatField(_("preço unitário"), default=0)
+    ft_quantidade = models.PositiveSmallIntegerField(_("quantidade"), default=0)
     ft_preco_total = models.FloatField(_("preço total"))
     ft_observacao = models.CharField(_("observação"), max_length=100, blank=True, default="")
 

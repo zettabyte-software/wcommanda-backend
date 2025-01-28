@@ -1,20 +1,26 @@
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
 
 from threadlocals.threadlocals import get_request_variable
+
+from apps.system.base.views import BaseViewSet
 
 from .integradores.categorias import IntegradorCategoriasIfood
 from .integradores.pedidos import IntegradorPedidosIfood
 from .integradores.produtos import ImportadorProdutosIfood
-from .limiter import LimitadorIntegracaoPedidosIfood
+from .serializers import PedidoIfood, PedidoIfoodVisualizacaoSerializer
 
 
-class IfoodViewSet(ViewSet):
-    @action(methods=["post"], detail=False)
+class IfoodViewSet(BaseViewSet):
+    queryset = PedidoIfood.objects.filter(ativo=True)
+
+    @action(methods=["get"], detail=False)
     def pedidos_integrados(self, request):
-        return Response(status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = PedidoIfoodVisualizacaoSerializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
 
     @action(methods=["post"], detail=False)
     def webhook(self, request):

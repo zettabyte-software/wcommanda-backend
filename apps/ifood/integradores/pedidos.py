@@ -3,11 +3,12 @@ import logging
 import httpx
 import sentry_sdk
 
+from apps.filiais.models import Filial
 from apps.system.core.classes import DinamicAttrs
 
 from ..dataclasses import EventoIfood
 from ..limiter import LimitadorIntegracaoPedidosIfood
-from ..models import PedidoIfood
+from ..models import PedidoIfood, PedidoItemIfood
 from .base import BaseIntegradorIfood
 
 """ TABELA DE TIPOS DE EVENTOS DO IFOOD
@@ -36,14 +37,15 @@ class IntegradorPedidosIfood(BaseIntegradorIfood):
         if dados_pedido is None:
             return None
 
-        dados_endereco = dados_pedido.delivery.dadosAddress  # type: ignore
+        dados_endereco = dados_pedido.delivery.deliveryAddress  # type: ignore
 
         limiter = LimitadorIntegracaoPedidosIfood()
 
+        filial = Filial.objects.filter(fl_merchat_id_ifood=dados_pedido.merchant.id).first()
+
         pedido = PedidoIfood.objects.create(
-            fd_ifood_id=dados_pedido.id,  # type: ignore
-            fd_teste=dados_pedido,
-            fd_tipo_pedido=dados_pedido,
+            fd_ifood_id=dados_pedido.id,
+            fd_teste=dados_pedido.isTest,
             fd_cep=dados_endereco.postalCode,
             fd_estado=dados_endereco.state,
             fd_cidade=dados_endereco.city,
@@ -51,6 +53,7 @@ class IntegradorPedidosIfood(BaseIntegradorIfood):
             fd_rua=dados_endereco.streetName,
             fd_numero=dados_endereco.streetNumber,
             fd_complemento=dados_endereco.complement,
+            filial=filial,
             ativo=limiter.atingiu_limite_pedidos
         )
 
@@ -65,3 +68,21 @@ class IntegradorPedidosIfood(BaseIntegradorIfood):
             logger.error("Erro ao realizar login no iFood: %s", e)
             sentry_sdk.capture_exception(e)
             return None
+
+    def criar_itens(self, pedido: PedidoIfood, itens: list[dict]):
+        for item_pedido in itens:
+            item_pedido = DinamicAttrs(**item_pedido)
+            PedidoItemIfood.objects.create(
+                ft_pedido = pedido,
+                ft_ifood_id = id,
+                ft_index = item_pedido.index,
+                ft_pedido_ifood = pedido.fd_ifood_id,
+                ft_nome_produto = item_pedido.name,
+                fd_imagem_produto = item_pedido.imageUrl,
+                ft_unidade = item_pedido.unit,
+                ft_preco_unitario = item_pedido.price,
+                ft_quantidade = item_pedido.quantity,
+                ft_preco_total = item_pedido.totalPrice,
+                ft_observacao = item_pedido.observations,
+                filial=pedido.filial,
+            )
