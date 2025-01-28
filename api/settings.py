@@ -195,11 +195,6 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = "users.Usuario"
 
 
-AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",
-]
-
-
 DATE_FORMAT = "d/m/Y"
 
 LANGUAGE_CODE = "pt-br"
@@ -413,8 +408,11 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ["Bearer"],
     "ACCESS_TOKEN_LIFETIME": datetime.timedelta(days=365 if IN_DEVELOPMENT else 1),
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=365 if IN_DEVELOPMENT else 3),
+    "TOKEN_OBTAIN_SERIALIZER": "apps.system.autenticacao.serializers.LoginSerializer",
+    "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
     "AUTH_TOKEN_CLASSES": ["apps.system.tenants.tokens.AccessToken"],
+    "UPDATE_LAST_LOGIN": True,
     "USER_ID_FIELD": "email",
     "USER_ID_CLAIM": "sub",
-    "ISSUER": "id.zettabyte.tech",
+    "ISSUER": "api.wcommanda.com.br",
 }

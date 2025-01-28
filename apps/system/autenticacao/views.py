@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -17,9 +19,22 @@ from .serializers import (
 )
 
 
-class LoginViewSet(TokenObtainPairView):
+class LoginView(TokenObtainPairView):
     authentication_classes = []
     permission_classes = [AllowAny]
+
+    def get_host(self):
+        if settings.IN_DEVELOPMENT:
+            return "zettabyte.wcommanda.com.br"
+        return self.request.get_host()
+
+    def get_subdominio(self):
+        return self.get_host().split(".")[0]
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["subdominio"] = self.get_subdominio()
+        return context
 
 
 class CadastroViewSet(BaseViewSet):

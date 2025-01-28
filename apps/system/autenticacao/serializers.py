@@ -72,6 +72,7 @@ class LoginSerializer(TokenObtainPairSerializer):
         token["user_name"] = user.first_name
         token["user_last_name"] = user.last_name
         token["user_full_name"] = user.get_full_name()
+        token["user_enviroment"] = user.ambiente.pk
         return token
 
 
