@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from auditlog.registry import auditlog
+from django_multitenant.models import TenantManager
 
 from apps.system.base.models import Base
 
@@ -41,6 +42,10 @@ class UsuarioManager(UserManager):
         return self._create_user(email, password, **extra_fields)
 
 
+class MultitenantUsuarioManager(UsuarioManager, TenantManager):
+    pass
+
+
 class Usuario(Base, AbstractUser):
     username = None
     ativo = None
@@ -59,7 +64,8 @@ class Usuario(Base, AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
-    objects = UsuarioManager()
+    objects = MultitenantUsuarioManager()
+    all_objects = UsuarioManager()
 
     @staticmethod
     def get_instacia_bot_wcommanda():
