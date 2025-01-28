@@ -74,7 +74,8 @@ line-length = 120
     "E501", # Line too long
     "PT019", # Fixture without value is injected as parameter, use @pytest.mark.usefixtures instead
     "PYI041", # Use `float` instead of `int | float`
-    "RET504" # Unnecessary assignment before return statement
+    "RET504", # Unnecessary assignment before return statement
+    "PGH003"  # Unnecessary error/warning ignore
   ]
 
   [tool.ruff.lint.isort.sections]
