@@ -8,6 +8,7 @@ from threadlocals.threadlocals import get_request_variable
 from .integradores.categorias import IntegradorCategoriasIfood
 from .integradores.pedidos import IntegradorPedidosIfood
 from .integradores.produtos import ImportadorProdutosIfood
+from .limiter import LimitadorIntegracaoPedidosIfood
 
 
 class IfoodViewSet(ViewSet):
