@@ -57,6 +57,12 @@ class BaseViewSet(GenericViewSet):
         response_data = kwargs.get("data", None)
         return Response(response_data, status=response_status)
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = self.paginate_queryset(queryset)
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
 
 class BaseModelViewSet(BaseViewSet, ModelViewSet):
     tenant_view = True
