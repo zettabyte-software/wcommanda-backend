@@ -114,7 +114,7 @@ class PedidoIfood(Base):
     fd_bairro = models.CharField(_("bairro"), max_length=30)
     fd_rua = models.CharField(_("rua"), max_length=15)
     fd_numero = models.CharField(_("número"), max_length=8)
-    fd_complemento = models.CharField(_("complemento"), max_length=50, blank=True, default="")
+    fd_complemento = models.CharField(_("complemento"), max_length=350, blank=True, default="")
 
     # daods do cliente
     fd_nome_cliente = models.CharField(_("nome do cliente"), max_length=120, blank=True, default="")
@@ -136,7 +136,7 @@ class PedidoItemIfood(Base):
     # ft_tipo_pedido = models.CharField(_("tipo do pedido"), max_length=8)
 
     ft_nome_produto = models.CharField(_("nome do produto"), max_length=80)
-    fd_imagem_produto = models.CharField(_("complemento"), max_length=50, blank=True, default="")
+    fd_imagem_produto = models.URLField(_("complemento"), blank=True, default="")
     ft_unidade = models.CharField(_("unidade"), max_length=2)
     ft_preco_unitario = models.FloatField(_("preço unitário"), default=0)
     ft_quantidade = models.PositiveSmallIntegerField(_("quantidade"), default=0)
@@ -153,10 +153,11 @@ class PedidoItemIfood(Base):
 class PedidoItemComplementoIfood(Base):
     pf_item_pedido = TenantForeignKey(verbose_name=_("id interno"), to="ifood.PedidoItemIfood", on_delete=models.PROTECT, related_name="complementos")
     pf_ifood_id = models.UUIDField(_("id do complemento do item no iFood"))
+    pf_nome = models.CharField(_("nome"), default="")
     pf_quantidade = models.PositiveSmallIntegerField(_("quantidade"))
-    pf_unidade = models.CharField(_("unidade"), max_length=3)
-    pf_preco = models.FloatField(_("preço total"))
+    pf_tipo = models.CharField(_("unidade"), max_length=20, default="")
     pf_preco_unitario = models.FloatField(_("preço unitário"))
+    pf_preco = models.FloatField(_("preço total"))
 
     class Meta:
         db_table = "pedido_item_customizacao_ifood"

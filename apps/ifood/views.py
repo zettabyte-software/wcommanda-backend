@@ -1,41 +1,111 @@
 from rest_framework import status
 from rest_framework.decorators import action
+from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from threadlocals.threadlocals import get_request_variable
 
 from apps.system.base.views import BaseViewSet
 
 from .integradores.categorias import IntegradorCategoriasIfood
-from .integradores.pedidos import IntegradorPedidosIfood
+from .integradores.pedidos import IntegradorPedidosIfood, WebhookPedidoIfood
 from .integradores.produtos import ImportadorProdutosIfood
 from .serializers import PedidoIfood, PedidoIfoodVisualizacaoSerializer
 
 
-class IfoodViewSet(BaseViewSet):
+class PedidoIfoodViewSet(BaseViewSet, ReadOnlyModelViewSet):
     queryset = PedidoIfood.objects.filter(ativo=True)
-
-    @action(methods=["get"], detail=False)
-    def pedidos_integrados(self, request):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        serializer = PedidoIfoodVisualizacaoSerializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
+    serializer_class = PedidoIfoodVisualizacaoSerializer
 
     @action(methods=["post"], detail=False)
-    def webhook(self, request):
+    def webhook(self, request: Request):
         filial = get_request_variable("filial")
 
         if not filial:
             return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        integrador = IntegradorPedidosIfood(filial.fl_merchat_id_ifood)
-        integrador.criar_pedido_via_webhook(request.data)
+        integrador = WebhookPedidoIfood(filial.fl_merchat_id_ifood)
+        integrador.criar_pedido_via_webhook(request.data) # type: ignore
 
         return Response()
 
+    @action(methods=["post"], detail=True)
+    def confirmar(self, request: Request, pk: int):
+        filial = get_request_variable("filial")
+
+        if not filial:
+            return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        pedido = self.get_object()
+        integrador = IntegradorPedidosIfood(filial.fl_merchat_id_ifood)
+        status_integracao, _ = integrador.confirmar(pedido.fd_ifood_id)
+        return Response(status=status_integracao)
+
+    @action(methods=["post"], detail=True)
+    def iniciar_preparacao(self, request: Request, pk: int):
+        filial = get_request_variable("filial")
+
+        if not filial:
+            return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        pedido = self.get_object()
+        integrador = IntegradorPedidosIfood(filial.fl_merchat_id_ifood)
+        status_integracao, _ = integrador.iniciar_preparacao(pedido.fd_ifood_id)
+        return Response(status=status_integracao)
+
+    @action(methods=["post"], detail=True)
+    def preparar_recebimento(self, request: Request, pk: int):
+        filial = get_request_variable("filial")
+
+        if not filial:
+            return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        pedido = self.get_object()
+        integrador = IntegradorPedidosIfood(filial.fl_merchat_id_ifood)
+        status_integracao, _ = integrador.preparar_recebimento(pedido.fd_ifood_id)
+        return Response(status=status_integracao)
+
+    @action(methods=["post"], detail=True)
+    def dispachar(self, request: Request, pk: int):
+        filial = get_request_variable("filial")
+
+        if not filial:
+            return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        pedido = self.get_object()
+        integrador = IntegradorPedidosIfood(filial.fl_merchat_id_ifood)
+        status_integracao, _ = integrador.dispachar(pedido.fd_ifood_id)
+        return Response(status=status_integracao)
+
+    @action(methods=["post"], detail=True)
+    def cancelar(self, request: Request, pk: int):
+        filial = get_request_variable("filial")
+
+        if not filial:
+            return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        pedido = self.get_object()
+        integrador = IntegradorPedidosIfood(filial.fl_merchat_id_ifood)
+        status_integracao, _ = integrador.solicitar_cancelamento(pedido.fd_ifood_id, "PAPAEI")
+        return Response(status=status_integracao)
+
+    @action(methods=["post"], detail=True)
+    def solicitar_cancelamento(self, request: Request, pk: int):
+        filial = get_request_variable("filial")
+
+        if not filial:
+            return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        pedido = self.get_object()
+        integrador = IntegradorPedidosIfood(filial.fl_merchat_id_ifood)
+        status_integracao, _ = integrador.solicitar_cancelamento(pedido.fd_ifood_id)
+        return Response(status=status_integracao)
+
+
+class IntegracaoIfoodViewSet(BaseViewSet):
     @action(methods=["post"], detail=False)
-    def importar_produtos_ifood(self, request):
+    def importar_produtos_ifood(self, request: Request):
         filial = get_request_variable("filial")
 
         if not filial:
@@ -48,7 +118,7 @@ class IfoodViewSet(BaseViewSet):
         return Response(response)
 
     @action(methods=["post"], detail=False)
-    def importar_categorias(self, request):
+    def importar_categorias(self, request: Request):
         filial = get_request_variable("filial")
 
         if not filial:
