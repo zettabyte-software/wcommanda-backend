@@ -21,7 +21,7 @@ class BaseViewSet(GenericViewSet):
         distinct_fields = self.request.query_params.get("distinct", None)
         if distinct_fields is not None:
             return queryset.distinct(*distinct_fields)
-        return queryset.filter(ambiente=get_current_tenant())
+        return queryset.filter(assinatura=get_current_tenant())
 
     def get_object(self):
         instance = super().get_object()
@@ -90,11 +90,11 @@ class BaseModelViewSet(BaseViewSet, ModelViewSet):
         if distinct_fields is not None:
             queryset = queryset.distinct(*distinct_fields).order_by(*distinct_fields)
             if self.tenant_view:
-                queryset = queryset.filter(ambiente=get_current_tenant())
+                queryset = queryset.filter(assinatura=get_current_tenant())
             return queryset
 
         if self.tenant_view:
-            queryset = queryset.filter(ambiente=get_current_tenant())
+            queryset = queryset.filter(assinatura=get_current_tenant())
 
         return queryset
 
