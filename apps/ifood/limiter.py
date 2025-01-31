@@ -7,6 +7,7 @@ from utils.date import gerar_primeiro_e_ultimo_dia_mes
 
 logger = logging.getLogger(__name__)
 
+
 class LimitadorIntegracaoPedidosIfood:
     def __init__(self):
         tenant = get_current_tenant()
