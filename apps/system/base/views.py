@@ -23,6 +23,11 @@ class BaseViewSet(GenericViewSet):
             return queryset.distinct(*distinct_fields)
         return queryset.filter(ambiente=get_current_tenant())
 
+    def get_object(self):
+        instance = super().get_object()
+        self.instance = instance
+        return instance
+
     def get_serializer_class(self):
         assert self.serializer_classes != {} or self.serializer_class is not None, (
             f"'{self.__class__.__name__}' deve implementar o 'serializer_class' ou  'serializer_classes'."
