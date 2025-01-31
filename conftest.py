@@ -41,10 +41,14 @@ def _use_dummy_cache_backend(settings):
 
 
 @pytest.fixture(autouse=True)
-def ambiente():
-    ambiente = AmAssinaturabiente.objects.create(mb_nome="Teste", mb_subdominio="teste")
-    set_current_tenant(ambiente)
-    return ambiente
+def assinatura():
+    assinatura = Assinatura.objects.create(
+        ss_nome="Teste",
+        ss_subdominio="teste",
+        ss_cloudflare_id="test-id",
+    )
+    set_current_tenant(assinatura)
+    return assinatura
 
 
 @pytest.fixture(autouse=True)
