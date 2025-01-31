@@ -153,7 +153,7 @@ class PedidoItemIfood(Base):
 class PedidoItemComplementoIfood(Base):
     pf_item_pedido = TenantForeignKey(verbose_name=_("id interno"), to="ifood.PedidoItemIfood", on_delete=models.PROTECT, related_name="complementos")
     pf_ifood_id = models.UUIDField(_("id do complemento do item no iFood"))
-    pf_nome = models.CharField(_("nome"), default="")
+    pf_nome = models.CharField(_("nome"), max_length=150, default="")
     pf_quantidade = models.PositiveSmallIntegerField(_("quantidade"))
     pf_tipo = models.CharField(_("unidade"), max_length=20, default="")
     pf_preco_unitario = models.FloatField(_("preço unitário"))
