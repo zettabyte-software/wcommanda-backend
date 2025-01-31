@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 from apps.system.base.serializers import BaseModelSerializer
 
 from .models import (
@@ -80,3 +82,8 @@ class ProdutoIfoodAlteracaoSerializer(BaseModelSerializer):
     class Meta:
         model = ProdutoIfood
         fields = "__all__"
+
+
+
+class PedidoCancelamentoIfoodSerializer(serializers.Serializer):
+    motivo = serializers.CharField()

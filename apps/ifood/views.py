@@ -11,7 +11,7 @@ from apps.system.base.views import BaseViewSet
 from .integradores.categorias import IntegradorCategoriasIfood
 from .integradores.pedidos import IntegradorPedidosIfood, WebhookPedidoIfood
 from .integradores.produtos import ImportadorProdutosIfood
-from .serializers import PedidoIfood, PedidoIfoodVisualizacaoSerializer
+from .serializers import PedidoCancelamentoIfoodSerializer, PedidoIfood, PedidoIfoodVisualizacaoSerializer
 
 
 class PedidoIfoodViewSet(BaseViewSet, ReadOnlyModelViewSet):
@@ -86,8 +86,10 @@ class PedidoIfoodViewSet(BaseViewSet, ReadOnlyModelViewSet):
             return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         pedido = self.get_object()
+        serializer = PedidoCancelamentoIfoodSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         integrador = IntegradorPedidosIfood(filial.fl_merchat_id_ifood)
-        status_integracao, _ = integrador.solicitar_cancelamento(pedido.fd_ifood_id, "PAPAEI")
+        status_integracao, _ = integrador.solicitar_cancelamento(pedido.fd_ifood_id, serializer.validated_data["motivo"])
         return Response(status=status_integracao)
 
     @action(methods=["post"], detail=True)
@@ -112,9 +114,7 @@ class IntegracaoIfoodViewSet(BaseViewSet):
             return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         integrador = ImportadorProdutosIfood(filial.fl_merchat_id_ifood)
-
         response = integrador.importar_produtos()
-
         return Response(response)
 
     @action(methods=["post"], detail=False)
@@ -125,7 +125,5 @@ class IntegracaoIfoodViewSet(BaseViewSet):
             return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         integrador = IntegradorCategoriasIfood(filial.fl_merchat_id_ifood, filial.fl_catalogo_grupo_id)
-
         response = integrador.importar_categorias()
-
         return Response(response)
