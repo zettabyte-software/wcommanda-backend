@@ -11,7 +11,7 @@ class Command(BaseCommand):
     help = "Debuga o processo de importação de produtos do iFood"
 
     def handle(self, *args, **options):
-        DEBUG_MERCHANT = "85330304-7ee6-4182-b40d-6c65cca35a65"
+        DEBUG_MERCHANT = ""
         integrador = ImportadorProdutosIfood(DEBUG_MERCHANT)
         integrador.importar_produtos()
         logger.info("Produtos integrados com sucesso!")
