@@ -15,7 +15,7 @@ from threadlocals.threadlocals import get_current_user
 
 
 class Base(TenantModel, LifecycleModel):
-    tenant_id = "ambiente_id"
+    tenant_id = "assinatura_id"
 
     ativo = models.BooleanField(_("ativo"), default=True)
     codigo = models.PositiveBigIntegerField(_("código"), editable=False, default=1)
@@ -25,7 +25,7 @@ class Base(TenantModel, LifecycleModel):
     hora_ultima_alteracao = models.TimeField(_("hora da última alteração"), auto_now=True)
     filial = TenantForeignKey(verbose_name=_("filial"), to="filiais.Filial", on_delete=models.PROTECT, null=True)
     owner = TenantForeignKey(verbose_name=_("owner"), to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True)
-    ambiente = models.ForeignKey(verbose_name=_("tenant"), to="tenants.Ambiente", on_delete=models.PROTECT, null=True, blank=True)
+    assinatura = models.ForeignKey(verbose_name=_("tenant"), to="assinaturas.Assinatura", on_delete=models.PROTECT, null=True, blank=True)
 
     history = AuditlogHistoryField()
 

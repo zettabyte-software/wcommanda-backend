@@ -12,117 +12,111 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('assinaturas', '0003_initial'),
-        ('clientes', '0003_initial'),
-        ('fidelidade', '0002_initial'),
-        ('filiais', '0001_initial'),
+        ('filiais', '0002_initial'),
+        ('ifood', '0001_initial'),
         ('produtos', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='carimbo',
+            model_name='catalogoifood',
             name='owner',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='owner'),
         ),
         migrations.AddField(
-            model_name='cartaofidelidade',
+            model_name='categoriaifood',
             name='assinatura',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='assinaturas.assinatura', verbose_name='tenant'),
         ),
         migrations.AddField(
-            model_name='cartaofidelidade',
-            name='cr_cliente',
-            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='cartoes_fidelidade', to='clientes.cliente', verbose_name='cliente'),
+            model_name='categoriaifood',
+            name='cd_categoria',
+            field=django_multitenant.fields.TenantOneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='integracao_ifood', to='produtos.categoriaproduto', verbose_name='categoria'),
         ),
         migrations.AddField(
-            model_name='cartaofidelidade',
-            name='cr_filial',
-            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='cartoes_fidelidade', to='filiais.filial', verbose_name='filial'),
-        ),
-        migrations.AddField(
-            model_name='cartaofidelidade',
+            model_name='categoriaifood',
             name='filial',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='filiais.filial', verbose_name='filial'),
         ),
         migrations.AddField(
-            model_name='cartaofidelidade',
+            model_name='categoriaifood',
             name='owner',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='owner'),
         ),
         migrations.AddField(
-            model_name='carimbo',
-            name='cb_cartao_fidelidade',
-            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='carimbos', to='fidelidade.cartaofidelidade', verbose_name='cartão fidelidade'),
-        ),
-        migrations.AddField(
-            model_name='condicaopremio',
+            model_name='pedidoifood',
             name='assinatura',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='assinaturas.assinatura', verbose_name='tenant'),
         ),
         migrations.AddField(
-            model_name='condicaopremio',
-            name='cn_produto',
-            field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='produtos.produto', verbose_name='produto'),
-        ),
-        migrations.AddField(
-            model_name='condicaopremio',
+            model_name='pedidoifood',
             name='filial',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='filiais.filial', verbose_name='filial'),
         ),
         migrations.AddField(
-            model_name='condicaopremio',
+            model_name='pedidoifood',
             name='owner',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='owner'),
         ),
         migrations.AddField(
-            model_name='cartaofidelidade',
-            name='cr_condicao_premio',
-            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='cartoes_fidelidade', to='fidelidade.condicaopremio', verbose_name='condição da premio'),
-        ),
-        migrations.AddField(
-            model_name='premio',
+            model_name='pedidoitemcomplementoifood',
             name='assinatura',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='assinaturas.assinatura', verbose_name='tenant'),
         ),
         migrations.AddField(
-            model_name='premio',
+            model_name='pedidoitemcomplementoifood',
             name='filial',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='filiais.filial', verbose_name='filial'),
         ),
         migrations.AddField(
-            model_name='premio',
+            model_name='pedidoitemcomplementoifood',
             name='owner',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='owner'),
         ),
         migrations.AddField(
-            model_name='cartaofidelidade',
-            name='cr_premio',
-            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='cartoes_fidelidade', to='fidelidade.premio', verbose_name='prêmio'),
-        ),
-        migrations.AddField(
-            model_name='premioitem',
+            model_name='pedidoitemifood',
             name='assinatura',
             field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='assinaturas.assinatura', verbose_name='tenant'),
         ),
         migrations.AddField(
-            model_name='premioitem',
+            model_name='pedidoitemifood',
             name='filial',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='filiais.filial', verbose_name='filial'),
         ),
         migrations.AddField(
-            model_name='premioitem',
+            model_name='pedidoitemifood',
+            name='ft_pedido',
+            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='itens', to='ifood.pedidoifood', verbose_name='id interno'),
+        ),
+        migrations.AddField(
+            model_name='pedidoitemifood',
             name='owner',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='owner'),
         ),
         migrations.AddField(
-            model_name='premioitem',
-            name='pt_premio',
-            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='itens', to='fidelidade.premio', verbose_name='cliente'),
+            model_name='pedidoitemcomplementoifood',
+            name='pf_item_pedido',
+            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='complementos', to='ifood.pedidoitemifood', verbose_name='id interno'),
         ),
         migrations.AddField(
-            model_name='premioitem',
-            name='pt_produto',
-            field=django_multitenant.fields.TenantForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='premios', to='produtos.produto', verbose_name='produto'),
+            model_name='produtoifood',
+            name='assinatura',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='assinaturas.assinatura', verbose_name='tenant'),
+        ),
+        migrations.AddField(
+            model_name='produtoifood',
+            name='fd_produto',
+            field=django_multitenant.fields.TenantOneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='integracao_ifood', to='produtos.produto', verbose_name='produto'),
+        ),
+        migrations.AddField(
+            model_name='produtoifood',
+            name='filial',
+            field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='filiais.filial', verbose_name='filial'),
+        ),
+        migrations.AddField(
+            model_name='produtoifood',
+            name='owner',
+            field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='owner'),
         ),
     ]

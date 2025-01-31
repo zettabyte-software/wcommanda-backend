@@ -6,7 +6,7 @@ from django.utils.module_loading import import_string
 
 from django_multitenant.utils import set_current_tenant
 
-from apps.system.tenants.models import Ambiente
+from apps.system.assinaturas.models import Assinatura
 
 logger = logging.getLogger(__name__)
 
@@ -70,9 +70,9 @@ class DefaultRecordsManger:
         self.__cached_models = {}
 
     def multitenant_apply_updates(self):
-        ambientes = Ambiente.objects.all()
-        for ambiente in ambientes:
-            set_current_tenant(ambiente)
+        assinaturas = Assinatura.objects.all()
+        for assinatura in assinaturas:
+            set_current_tenant(assinatura)
             self.apply_updates()
 
     def apply_updates(self):

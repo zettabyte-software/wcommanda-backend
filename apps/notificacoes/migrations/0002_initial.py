@@ -11,13 +11,18 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('clientes', '0002_initial'),
+        ('notificacoes', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cliente',
+            model_name='notificacao',
+            name='nt_usuario',
+            field=django_multitenant.fields.TenantForeignKey(default=None, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='usuarios', to=settings.AUTH_USER_MODEL, verbose_name='usuário'),
+        ),
+        migrations.AddField(
+            model_name='notificacao',
             name='owner',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='owner'),
         ),

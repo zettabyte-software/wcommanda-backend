@@ -34,6 +34,7 @@ class StatusChoices(models.IntegerChoices):
     NORMAL = 0, _("Normal")
     CANCELADA = 1, _("Cancelada")
     ATRASADA = 2, _("Pagamento Atrasado")
+    ULTRA = 99, _("Ultra(não precisa pagar)")
 
 
 class TierChoices(models.IntegerChoices):
@@ -44,12 +45,13 @@ class TierChoices(models.IntegerChoices):
 
 
 class Assinatura(TenantModel):
+    tenant_id = "id"
+
     ss_nome = models.CharField(_("nome"), max_length=30)
     ss_subdominio = models.CharField(_("subdominio"), max_length=50)
     ss_cloudflare_id = models.CharField(_("id cloudflare"), max_length=50)
     ss_codigo_licenca = models.UUIDField(_("código da licença"), default=uuid.uuid4, editable=False)
     ss_status = models.IntegerField(_("status"), choices=StatusChoices.choices, default=StatusChoices.NORMAL)
-    ss_integracoes_ifood = models.PositiveIntegerField(_("número integrações ifood utilizadas"), default=1)
 
     class Meta:
         db_table = "assinatura"
@@ -59,7 +61,7 @@ class Assinatura(TenantModel):
 
 
 class Plano(Base):
-    pl_assinatura = TenantForeignKey(verbose_name=_("assinatura"), to="assinaturas.Assinatura", on_delete=models.CASCADE)
+    # pl_assinatura = TenantForeignKey(verbose_name=_("assinatura"), to="assinaturas.Assinatura", on_delete=models.CASCADE)
     pl_nome = models.CharField(_("nome"), max_length=15)
     pl_tier = models.PositiveIntegerField(_("tíer"), choices=TierChoices.choices, default=TierChoices.TIER_4)
     pl_numero_usuarios = models.PositiveIntegerField(_("número usuarios"), default=1)
@@ -70,7 +72,7 @@ class Plano(Base):
     @classmethod
     def criar_plano_basico(cls, assinatura: Assinatura):
         return cls.objects.create(
-            pl_assinatura=assinatura,
+            # pl_assinatura=assinatura,
             pl_nome="Básico",
             pl_tier=TierChoices.TIER_1,
             pl_numero_usuarios=3,
@@ -82,7 +84,7 @@ class Plano(Base):
     @classmethod
     def criar_plano_premium(cls, assinatura: Assinatura):
         return cls.objects.create(
-            pl_assinatura=assinatura,
+            # pl_assinatura=assinatura,
             pl_nome="Prêmium",
             pl_tier=TierChoices.TIER_2,
             pl_numero_usuarios=7,
@@ -94,7 +96,7 @@ class Plano(Base):
     @classmethod
     def criar_plano_pro(cls, assinatura: Assinatura):
         return cls.objects.create(
-            pl_assinatura=assinatura,
+            # pl_assinatura=assinatura,
             pl_nome="Pro",
             pl_tier=TierChoices.TIER_3,
             pl_numero_usuarios=15,

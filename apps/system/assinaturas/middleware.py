@@ -6,13 +6,13 @@ from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from threadlocals.threadlocals import set_current_user, set_request_variable
 
 from apps.filiais.models import Filial
-from apps.system.tenants.authentications import JWTAuthentication
+from apps.system.core.authentications import JWTAuthentication
 from utils.jwt import decode_jwt
 
-from .models import Ambiente
+from .models import Assinatura
 
 
-class TenantMiddleware:
+class AssinaturaMiddleware:
     authenticator = JWTAuthentication()
 
     def __init__(self, get_response):
@@ -44,9 +44,9 @@ class TenantMiddleware:
 
         return self.get_response(request)
 
-    def get_tenant(self, request: WSGIRequest) -> tuple[Ambiente | None, str]:
+    def get_tenant(self, request: WSGIRequest) -> tuple[Assinatura | None, str]:
         host = self.get_host(request).split(".")[0]
-        tenant = Ambiente.objects.filter(mb_subdominio=host).first()
+        tenant = Assinatura.objects.filter(ss_subdominio=host).first()
         return tenant, host
 
     def get_host(self, request: WSGIRequest) -> str:

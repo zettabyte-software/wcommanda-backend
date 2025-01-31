@@ -108,7 +108,6 @@ WCOMMANDA_APPS = [
     "apps.system.base",
     "apps.system.core",
     "apps.system.conf",
-    "apps.system.tenants",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LIBS_APPS + WCOMMANDA_APPS
@@ -125,7 +124,7 @@ MIDDLEWARE = [
     "threadlocals.middleware.ThreadLocalMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    "apps.system.tenants.middleware.TenantMiddleware",
+    "apps.system.assinaturas.middleware.AssinaturaMiddleware",
     "auditlog.middleware.AuditlogMiddleware",
 ]
 
@@ -388,8 +387,8 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 30,
     "DEFAULT_PAGINATION_CLASS": "apps.system.core.pagination.CustomPagination",
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "apps.system.tenants.authentications.JWTAuthentication",
-        "apps.system.tenants.authentications.JWTQueryParamAuthentication",
+        "apps.system.core.authentications.JWTAuthentication",
+        "apps.system.core.authentications.JWTQueryParamAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",

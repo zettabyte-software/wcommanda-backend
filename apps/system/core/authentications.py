@@ -28,14 +28,13 @@ class JWTAuthentication(SimpleJWTAuthentication):
         ambiente_usuario = user.ambiente
         if ambiente_usuario.mb_subdominio != subdominio:
             raise AuthenticationFailed(
-                {"mensagem": "O usuário não tem permissão para acessar este ambiente"},
-                code="authentication_failed"
+                {"mensagem": "O usuário não tem permissão para acessar este ambiente"}, code="authentication_failed"
             )
         return user
 
     def get_validated_token(self, raw_token, request):
         messages = []
-        for AuthToken in api_settings.AUTH_TOKEN_CLASSES:
+        for AuthToken in api_settings.AUTH_TOKEN_CLASSES: # type: ignore
             try:
                 return AuthToken(raw_token, request=request)
             except TokenError as e:

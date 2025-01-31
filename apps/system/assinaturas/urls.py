@@ -3,9 +3,10 @@ from django.urls import include, path
 
 from rest_framework.routers import DefaultRouter
 
-from .views import AssinaturaViewSet, PlanoViewSet
+from .views import AssinaturaViewSet, CriarAssinaturaViewSet, PlanoViewSet
 
 router_v1 = DefaultRouter()
+router_v1.register("criar_assinatura", CriarAssinaturaViewSet, "criar_assinatura")
 
 if settings.IN_DEVELOPMENT:
     router_v1.register("assinaturas", AssinaturaViewSet, "assinaturas")

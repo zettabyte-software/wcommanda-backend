@@ -10,13 +10,13 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('fidelidade', '0001_initial'),
+        ('assinaturas', '0001_initial'),
         ('filiais', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='carimbo',
+            model_name='plano',
             name='filial',
             field=django_multitenant.fields.TenantForeignKey(null=True, on_delete=django.db.models.deletion.PROTECT, to='filiais.filial', verbose_name='filial'),
         ),

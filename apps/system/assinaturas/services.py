@@ -3,14 +3,14 @@ from django.contrib.auth.hashers import make_password
 
 from django_multitenant.utils import set_current_tenant
 
+from apps.system.assinaturas.models import Assinatura
 from apps.system.core.records import DefaultRecordsManger
-from apps.system.tenants.models import Ambiente
 from apps.users.models import Usuario
 from lib.cloudflare.dns import create_dns_record
 
 
-class TenantManager:
-    def criar_tenant(self, dados_ambient, dados_usuario):
+class InicializadorAssinatura:
+    def criar_assinatura(self, dados_ambient, dados_usuario):
         self.criar_ambiente(dados_ambient["mb_nome"], dados_ambient["mb_subdominio"])
         self.criar_usuario_root(
             dados_usuario["first_name"],
@@ -20,11 +20,28 @@ class TenantManager:
         )
         self.popular_registros_padroes()
 
-    def criar_ambiente(self, nome, subdominio):
-        ambiente = Ambiente.objects.create(mb_subdominio=subdominio, mb_nome=nome)
-        set_current_tenant(ambiente)
-        if settings.IN_PRODUCTION:
-            create_dns_record(ambiente.mb_subdominio)
+    def criar_ambiente(self, nome: str, subdominio: str):
+        raise Exception
+
+        # assinatura = Assinatura.objects.create(
+        #     ss_subdominio=subdominio,
+        #     ss_nome=nome,
+        #     ss_cloudflare_id="dev-id",
+        #     ss_status=StatusChoices.ULTRA,
+        # )
+        # plano = Plano.objects.create(
+        #     pl_nome="Dev",
+        #     pl_tier=TierChoices.TIER_4,
+        #     pl_numero_usuarios=100,
+        #     pl_limite_integracoes_ifood=99999,
+        #     pl_valor_mensalidade=0,
+        #     pl_observacao="",
+        #     assinatura=assinatura,
+        # )
+
+        # set_current_tenant(ambiente)
+        # if settings.IN_PRODUCTION:
+        #     create_dns_record(ambiente.mb_subdominio)
 
     def criar_usuario_root(self, nome: str, sobrenome: str, email: str, senha: str):
         usuario = Usuario()

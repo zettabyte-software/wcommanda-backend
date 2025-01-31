@@ -11,8 +11,8 @@ from threadlocals.threadlocals import set_current_user
 
 from apps.mesas.models import Mesa
 from apps.produtos.models import Produto
+from apps.system.assinaturas.models import Assinatura
 from apps.system.conf.models import Configuracao
-from apps.system.tenants.models import Ambiente
 from apps.users.models import Usuario
 
 dotenv.load_dotenv()
@@ -42,7 +42,7 @@ def _use_dummy_cache_backend(settings):
 
 @pytest.fixture(autouse=True)
 def ambiente():
-    ambiente = Ambiente.objects.create(mb_nome="Teste", mb_subdominio="teste")
+    ambiente = AmAssinaturabiente.objects.create(mb_nome="Teste", mb_subdominio="teste")
     set_current_tenant(ambiente)
     return ambiente
 
