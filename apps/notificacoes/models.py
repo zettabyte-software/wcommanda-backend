@@ -8,6 +8,8 @@ from apps.system.base.models import Base
 
 
 class Notificacao(Base):
+    system_model = True
+
     nt_titulo = models.CharField(_("título"), max_length=80)
     nt_mensagem = models.CharField(_("mensagem"), max_length=80)
     nt_usuario = TenantForeignKey(

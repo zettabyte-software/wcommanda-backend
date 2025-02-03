@@ -2,6 +2,7 @@ import copy
 import json
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.forms.models import model_to_dict
@@ -15,6 +16,8 @@ from threadlocals.threadlocals import get_current_user
 
 
 class Base(TenantModel, LifecycleModel):
+    system_model = False
+
     tenant_id = "assinatura_id"
 
     ativo = models.BooleanField(_("ativo"), default=True)
@@ -49,7 +52,12 @@ class Base(TenantModel, LifecycleModel):
 
     def save(self, *args, **kwargs):
         if not hasattr(self, "owner"):
-            self.owner = get_current_user()
+            if self.system_model:
+                user_cls = get_user_model()
+                owner = user_cls.get_instacia_bot_wcommanda()
+            else:
+                self.owner = get_current_user()
+
 
         last = self.__class__.objects.all().order_by("codigo").last()
         if last:
