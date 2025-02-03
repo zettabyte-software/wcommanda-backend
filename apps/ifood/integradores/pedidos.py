@@ -48,7 +48,7 @@ class WebhookPedidoIfood(BaseIntegradorIfood):
             response.raise_for_status()
             return DinamicAttrs(response.json())
         except (httpx.HTTPStatusError, httpx.DecodingError) as e:
-            logger.error("Erro ao realizar login no iFood: %s", e)
+            logger.error("Erro ao obter os dados do pedido no iFood: %s", e)
             sentry_sdk.capture_exception(e)
             return None
 
