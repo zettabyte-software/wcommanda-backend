@@ -28,7 +28,7 @@ class ProdutoIfoodDataclass:
 class ImportadorProdutosIfood(BaseIntegradorIfood):
     @transaction.atomic
     def importar_produtos(self):
-        produtos_ifood = self.get_produtos_from_catalogo_ifood()
+        produtos_ifood = self.get_produtos_from_catalog_ifood()
         dados_produtos_ifood_complementares = self.get_todos_produtos_ifood()
 
         for dados in produtos_ifood:
@@ -70,12 +70,12 @@ class ImportadorProdutosIfood(BaseIntegradorIfood):
                 fd_produto=produto_wcommanda,
                 fd_pizza=False,
                 fd_categoria_id=dados["categoryId"],
-                fd_grupo_catalogo_id=dados["catalogId"],
-                fd_item_catalogo_id=dados["itemId"],
+                fd_grupo_catalog_id=dados["catalogId"],
+                fd_item_catalog_id=dados["itemId"],
                 fd_index=dados["categoryIndex"],
             )
 
-    def get_produtos_from_catalogo_ifood(self):
+    def get_produtos_from_catalog_ifood(self):
         catalogs = self.get_catalogs()
         itens = []
 
@@ -98,7 +98,7 @@ class ImportadorProdutosIfood(BaseIntegradorIfood):
         response.raise_for_status()
         return (catalog["groupId"] for catalog in response.json())
 
-    def processar_item_catalogo_ifood(self, dados):
+    def processar_item_catalog_ifood(self, dados):
         pass
 
     def get_todos_produtos_ifood(self):

@@ -124,6 +124,6 @@ class IntegracaoIfoodViewSet(BaseViewSet):
         if not filial:
             return Response({"mensagem": "ERRO"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        integrador = IntegradorCategoriasIfood(filial.fl_merchat_id_ifood, filial.fl_catalogo_grupo_id)
+        integrador = IntegradorCategoriasIfood(filial.fl_merchat_id_ifood, filial.fl_catalog_grupo_id)
         response = integrador.importar_categorias()
         return Response(response)

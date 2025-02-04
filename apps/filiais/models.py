@@ -32,8 +32,8 @@ class Filial(Base):
     fl_email = models.EmailField(_("email"), blank=True)
 
     fl_merchat_id_ifood = models.UUIDField(_("id do merchant do iFood"), null=True, default=None)
-    fl_catalogo_id = models.UUIDField(_("id do catálogo digital do iFood"), null=True, default=None)
-    fl_catalogo_grupo_id = models.UUIDField(_("id do grupo do catálogo do iFood"), null=True, default=None)
+    fl_catalog_id = models.UUIDField(_("id do catálogo digital do iFood"), null=True, default=None)
+    fl_catalog_grupo_id = models.UUIDField(_("id do grupo do catálogo do iFood"), null=True, default=None)
 
     fl_hora_inicio_funcionamento_domingo = models.TimeField(_("horário de início no domingo"), null=True)
     fl_hora_fim_funcionamento_domingo = models.TimeField(_("horário de encerramento no domingo"), null=True)

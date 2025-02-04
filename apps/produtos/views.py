@@ -113,7 +113,7 @@ class CategoriaProdutoViewSet(BaseModelViewSet):
             return
 
         merchant_id = filial.fl_merchat_id_ifood
-        catalog_id = filial.fl_catalogo_id
+        catalog_id = filial.fl_catalog_id
 
         integrador = IntegradorCategoriasIfood(merchant_id, catalog_id)
         integrador.sincronizar_alteracoes_ifood(instance)
@@ -127,7 +127,7 @@ class CategoriaProdutoViewSet(BaseModelViewSet):
             return
 
         merchant_id = filial.fl_merchat_id_ifood
-        catalog_id = filial.fl_catalogo_id
+        catalog_id = filial.fl_catalog_id
 
         integrador = IntegradorCategoriasIfood(merchant_id, catalog_id)
         integrador.sincronizar_alteracoes_ifood(instance)
@@ -139,7 +139,7 @@ class CategoriaProdutoViewSet(BaseModelViewSet):
             return super().perform_destroy(instance)
 
         merchant_id = filial.fl_merchat_id_ifood
-        catalog_id = filial.fl_catalogo_id
+        catalog_id = filial.fl_catalog_id
 
         integrador = IntegradorCategoriasIfood(merchant_id, catalog_id)
         integrador.deletar_categoria(instance)
