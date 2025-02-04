@@ -6,7 +6,7 @@ from apps.system.core.classes import SingletonMeta
 from utils.env import get_env_var
 
 
-class BackBlazeB2Handler(SingletonMeta):
+class BackBlazeB2Handler:
     def __init__(self):
         application_key_id = get_env_var("BACKBLAZE_APPLICATION_ID")
         application_key = get_env_var("BACKBLAZE_APPLICATION_KEY")
