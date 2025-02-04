@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.system.base.serializers import BaseModelSerializer
 
 from .models import (
-    CatalogoIfood,
+    CatalogIfood,
     CategoriaIfood,
     PedidoIfood,
     PedidoItemComplementoIfood,
@@ -12,15 +12,15 @@ from .models import (
 )
 
 
-class CatalogoIfoodVisualizacaoSerializer(BaseModelSerializer):
+class CatalogIfoodVisualizacaoSerializer(BaseModelSerializer):
     class Meta:
-        model = CatalogoIfood
+        model = CatalogIfood
         fields = "__all__"
 
 
-class CatalogoIfoodAlteracaoSerializer(BaseModelSerializer):
+class CatalogIfoodAlteracaoSerializer(BaseModelSerializer):
     class Meta:
-        model = CatalogoIfood
+        model = CatalogIfood
         fields = "__all__"
 
 

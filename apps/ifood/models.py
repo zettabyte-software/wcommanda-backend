@@ -16,14 +16,14 @@ class TemplatesCategoriaIfood(models.TextChoices):
     DEFAULT = "DEFAULT"
 
 
-class CatalogoIfood(Base):
+class CatalogIfood(Base):
     cc_ifood_id = models.UUIDField(_("id do iFood"), null=True)
 
     class Meta:
-        db_table = "catalogo_ifood"
+        db_table = "catalog_ifood"
         ordering = ["-id"]
-        verbose_name = _("Catálogo do iFood")
-        verbose_name_plural = _("Catálogos do iFood")
+        verbose_name = _("Catálog do iFood")
+        verbose_name_plural = _("Catálogs do iFood")
 
 
 class MerchantIfood:
