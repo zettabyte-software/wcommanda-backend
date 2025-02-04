@@ -77,7 +77,7 @@ def test_visualizar_comanda(api_client, comanda, produto):
 
 @pytest.mark.django_db
 def test_criar_comanda_item(api_client, comanda, produto):
-    url = "/api/v1/itens_comanda/"
+    url = "/api/v1/comandas_itens/"
     dados = {
         "ct_comanda": comanda.id,
         "ct_produto": produto.id,
@@ -90,7 +90,7 @@ def test_criar_comanda_item(api_client, comanda, produto):
 
 @pytest.mark.django_db
 def test_finalizar_comanda_item(api_client, comanda_item):
-    url = f"/api/v1/itens_comanda/{comanda_item.id}/finalizar/"
+    url = f"/api/v1/comandas_itens/{comanda_item.id}/finalizar/"
     response = api_client.post(url, None, format="json")
     assert response.status_code == status.HTTP_200_OK
     comanda_item.refresh_from_db()
@@ -99,7 +99,7 @@ def test_finalizar_comanda_item(api_client, comanda_item):
 
 @pytest.mark.django_db
 def test_entregar_comanda_item(api_client, comanda_item):
-    url = f"/api/v1/itens_comanda/{comanda_item.id}/entregar/"
+    url = f"/api/v1/comandas_itens/{comanda_item.id}/entregar/"
     response = api_client.post(url, None, format="json")
     assert response.status_code == status.HTTP_200_OK
     comanda_item.refresh_from_db()
@@ -108,7 +108,7 @@ def test_entregar_comanda_item(api_client, comanda_item):
 
 @pytest.mark.django_db
 def test_cancelar_comanda_item(api_client, comanda_item):
-    url = f"/api/v1/itens_comanda/{comanda_item.id}/cancelar/"
+    url = f"/api/v1/comandas_itens/{comanda_item.id}/cancelar/"
     response = api_client.post(url, None, format="json")
     assert response.status_code == status.HTTP_200_OK
     comanda_item.refresh_from_db()
