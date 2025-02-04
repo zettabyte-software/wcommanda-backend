@@ -7,7 +7,7 @@ from .views import ComandaViewSet, ItemComandaViewSet, PainelPedidosViewSet
 router_v1 = DefaultRouter()
 
 router_v1.register("comandas", ComandaViewSet, "comandas")
-router_v1.register("itens_comanda", ItemComandaViewSet, "itens_comanda")
+router_v1.register("comandas_itens", ItemComandaViewSet, "comandas_itens")
 router_v1.register("painel_pedidos", PainelPedidosViewSet, "painel_pedidos")
 
 urlpatterns = [
