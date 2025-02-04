@@ -130,7 +130,7 @@ class ComandaViewSet(BaseModelViewSet):
             .values(
                 "ct_produto",
                 "ct_produto__pr_nome",
-                "ct_produto__pr_imagem",
+                "ct_produto__pr_url_imagem",
                 "ct_preco_unitario_produto",
             )
             .annotate(ct_quantidade_total_produto=Count(F("id")))
