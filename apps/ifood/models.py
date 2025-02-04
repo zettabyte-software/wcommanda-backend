@@ -30,10 +30,10 @@ class MerchantIfood:
     md_ifood_id = models.UUIDField(_("id do iFood"), null=True)
 
     class Meta:
-        db_table = "catalogo_ifood"
+        db_table = "merchant_ifood"
         ordering = ["-id"]
-        verbose_name = _("Catálogo do iFood")
-        verbose_name_plural = _("Catálogos do iFood")
+        verbose_name = _("Merchant do iFood")
+        verbose_name_plural = _("Merchants do iFood")
 
 
 class ProdutoIfood(Base):
