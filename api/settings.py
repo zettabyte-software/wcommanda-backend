@@ -7,9 +7,12 @@ import warnings
 from django.core.management.utils import get_random_secret_key
 from django.utils.translation import gettext_lazy as _
 
+import stripe
 from corsheaders.defaults import default_headers
 
 from utils.env import get_bool_from_env, get_env_var
+
+stripe.api_key = get_env_var("STRIPE_SECRET_KEY")
 
 BASE_DIR = pathlib.Path(__file__).resolve().parent.parent
 
