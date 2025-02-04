@@ -107,7 +107,7 @@ class PedidoIfoodViewSet(BaseViewSet, ReadOnlyModelViewSet):
 
 class IntegracaoIfoodViewSet(BaseViewSet):
     @action(methods=["post"], detail=False)
-    def importar_produtos_ifood(self, request: Request):
+    def produtos(self, request: Request):
         filial = get_request_variable("filial")
 
         if not filial:
@@ -118,7 +118,7 @@ class IntegracaoIfoodViewSet(BaseViewSet):
         return Response(response)
 
     @action(methods=["post"], detail=False)
-    def importar_categorias(self, request: Request):
+    def categorias(self, request: Request):
         filial = get_request_variable("filial")
 
         if not filial:
