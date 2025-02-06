@@ -70,21 +70,12 @@ class AuthViewSet(BaseViewSet):
 
     @action(methods=["post"], detail=False)
     def enviar_email_redefinicao_senha(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response()
+        return self.generic_action()
 
     @action(methods=["post"], detail=False)
     def redefinir_senha(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response()
+        return self.generic_action()
 
     @action(methods=["post"], detail=False)
     def trocar_senha(self, request):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response()
+        return self.generic_action()
