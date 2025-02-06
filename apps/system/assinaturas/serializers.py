@@ -33,10 +33,10 @@ class PlanoAlteracaoSerializer(BaseModelSerializer):
 
 
 class CriarAssinaturaSerializer(serializers.Serializer):
-    ambiente = AssinaturaAlteracaoSerializer()
+    assinatura = AssinaturaAlteracaoSerializer()
     usuario = UsuarioSerializer()
 
     def save(self, **kwargs):
         raise Exception
         manager = InicializadorAssinatura()
-        manager.criar_assinatura(self.validated_data["ambiente"], self.validated_data["usuario"])  # type: ignore
+        manager.criar_assinatura(self.validated_data["assinatura"], self.validated_data["usuario"])  # type: ignore

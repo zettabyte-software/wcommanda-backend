@@ -110,3 +110,11 @@ class Plano(Base):
         ordering = ["-id"]
         verbose_name = _("Plano")
         verbose_name_plural = _("Planos")
+
+
+class Pagamento:
+    class Meta:
+        db_table = "pagamento"
+        ordering = ["-id"]
+        verbose_name = _("Pagamento")
+        verbose_name_plural = _("Pagamentos")

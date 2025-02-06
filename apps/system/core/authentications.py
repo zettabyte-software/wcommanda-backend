@@ -25,8 +25,8 @@ class JWTAuthentication(SimpleJWTAuthentication):
     def get_user(self, validated_token, request):
         user = super().get_user(validated_token)
         subdominio = self.get_subdominio(request)
-        ambiente_usuario = user.ambiente
-        if ambiente_usuario.mb_subdominio != subdominio:
+        assinatura_usuario = user.assinatura
+        if assinatura_usuario.ss_subdominio != subdominio:
             raise AuthenticationFailed(
                 {"mensagem": "O usuário não tem permissão para acessar este ambiente"}, code="authentication_failed"
             )

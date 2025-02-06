@@ -11,5 +11,5 @@ router_auth.register("cadastro", CadastroViewSet, "cadastro")
 
 urlpatterns = [
     path("auth/", include(router_auth.urls)),
-    path("auth/login/", LoginView.as_view()),
+    path("auth/token/obtain/", LoginView.as_view()),
 ]

@@ -16,11 +16,7 @@ class Filial(Base):
     fl_nome = models.CharField(_("nome"), max_length=120)
 
     fl_cep = models.CharField(_("cep"), max_length=8, blank=True, default="")
-    fl_estado = models.PositiveSmallIntegerField(
-        _("estado"),
-        choices=EstadosChoices.choices,
-        default=EstadosChoices.EM_BRANCO,
-    )
+    fl_estado = models.PositiveSmallIntegerField(_("estado"), choices=EstadosChoices.choices, default=EstadosChoices.EM_BRANCO)
     fl_cidade = models.CharField(_("cidade"), max_length=50, blank=True, default="")
     fl_bairro = models.CharField(_("bairro"), max_length=40, blank=True, default="")
     fl_rua = models.CharField(_("rua"), max_length=30, blank=True, default="")

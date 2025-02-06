@@ -15,9 +15,11 @@ dotenv.load_dotenv()
 django.setup()
 
 from django.contrib.auth.hashers import make_password  # noqa: E402
+from django.contrib.sites.models import Site
 
 from django_multitenant.utils import set_current_tenant  # noqa: E402
 
+from apps.filiais.models import Filial  # noqa: E402
 from apps.system.assinaturas.models import Assinatura, Plano, StatusChoices, TierChoices  # noqa: E402
 from apps.system.core.records import DefaultRecordsManger  # noqa: E402
 from apps.users.models import Usuario  # noqa: E402
@@ -29,12 +31,15 @@ DEFAULT_SUBDOMAIN = "zettabyte"
 DEFAULT_NAME = "Zettabyte"
 
 try:
+    site = Site.objects.create(name="wcommanda", domain="api.wcommanda.com.br")
+
     assinatura = Assinatura.objects.create(
         ss_subdominio=DEFAULT_SUBDOMAIN,
         ss_nome=DEFAULT_NAME,
         ss_cloudflare_id="dev-id",
         ss_status=StatusChoices.ULTRA,
     )
+
     plano = Plano.objects.create(
         pl_nome="Dev",
         pl_tier=TierChoices.TIER_4,
@@ -46,13 +51,18 @@ try:
     )
 
     set_current_tenant(assinatura)
+
+    filial = Filial.objects.create(fl_nome="Dev Wcommanda", assinatura=assinatura)
+
     usuario = Usuario.objects.create(
-        email="",
-        password=make_password(""),
-        first_name="",
-        last_name="",
+        email="davi.s.rafacho@gmail.com",
+        password=make_password("dsrafacho!123"),
+        first_name="Davi",
+        last_name="Silva Rafacho",
         assinatura=assinatura,
+        filial=filial,
     )
+
     DefaultRecordsManger().apply_updates()
     logging.info("Assinatura de desenvolvimento criada com sucesso!")
 except Exception as e:

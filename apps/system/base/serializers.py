@@ -14,8 +14,8 @@ class BaseModelSerializer(serializers.ModelSerializer):
             for field_name in exclude_fields:
                 self.fields.pop(field_name, None)
 
-        if "ambiente" in self.fields.keys():
-            del self.fields["ambiente"]
+        if "assinatura" in self.fields.keys():
+            del self.fields["assinatura"]
 
         if "owner" in self.fields.keys():
             del self.fields["owner"]

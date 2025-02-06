@@ -412,7 +412,7 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": datetime.timedelta(days=365 if IN_DEVELOPMENT else 3),
     "TOKEN_OBTAIN_SERIALIZER": "apps.system.autenticacao.serializers.LoginSerializer",
     "USER_AUTHENTICATION_RULE": "rest_framework_simplejwt.authentication.default_user_authentication_rule",
-    "AUTH_TOKEN_CLASSES": ["apps.system.tenants.tokens.AccessToken"],
+    "AUTH_TOKEN_CLASSES": ["apps.system.assinaturas.tokens.AccessToken"],
     "UPDATE_LAST_LOGIN": True,
     "USER_ID_FIELD": "email",
     "USER_ID_CLAIM": "sub",

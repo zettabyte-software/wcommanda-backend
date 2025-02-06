@@ -11,7 +11,7 @@ from lib.cloudflare.dns import create_dns_record
 
 class InicializadorAssinatura:
     def criar_assinatura(self, dados_ambient, dados_usuario):
-        self.criar_ambiente(dados_ambient["mb_nome"], dados_ambient["mb_subdominio"])
+        self._criar_assinatura(dados_ambient["mb_nome"], dados_ambient["mb_subdominio"])
         self.criar_usuario_root(
             dados_usuario["first_name"],
             dados_usuario["last_name"],
@@ -20,7 +20,7 @@ class InicializadorAssinatura:
         )
         self.popular_registros_padroes()
 
-    def criar_ambiente(self, nome: str, subdominio: str):
+    def _criar_assinatura(self, nome: str, subdominio: str):
         raise Exception
 
         # assinatura = Assinatura.objects.create(
