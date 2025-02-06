@@ -37,6 +37,7 @@ EnviromentVar = Literal[
 
     # stripe
     "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
 
     # twilio
     "TWILLIO_ACCOUNT_SID",
