@@ -6,11 +6,7 @@ from rest_framework.response import Response
 from apps.comandas.serializers import Comanda, ComandaRetrieveSerializer
 from apps.system.base.views import BaseModelViewSet
 
-from .serializers import (
-    Mesa,
-    MesaAlteracaoSerializer,
-    MesaVisualizacaoSerializer,
-)
+from .serializers import Mesa, MesaAlteracaoSerializer, MesaVisualizacaoSerializer
 
 
 class MesaViewSet(BaseModelViewSet):
