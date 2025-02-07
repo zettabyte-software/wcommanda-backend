@@ -11,10 +11,9 @@ from .services import baixar_estoque, vincular_num_pedido
 
 
 class ComandaItemVisualizacaoSerializer(BaseModelSerializer):
-
     ct_produto = ProdutoVisualizacaoSerializer()
-    ct_quantidade_total_produto = serializers.SerializerMethodField()
-    ct_valor_total_produto = serializers.SerializerMethodField()
+    ct_quantidade_total_produto = serializers.SerializerMethodField(read_only=True)
+    ct_valor_total_produto = serializers.SerializerMethodField(read_only=True)
 
     def get_ct_quantidade_total_produto(self, obj: ComandaItem):
         """Utilizado no endpoint de visualização da comanda."""
