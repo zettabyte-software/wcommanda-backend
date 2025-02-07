@@ -6,6 +6,7 @@ from apps.users.serializers import UsuarioSerializer
 from .models import Assinatura, Plano
 from .services import InicializadorAssinatura
 
+
 class AssinaturaVisualizacaoSerializer(BaseModelSerializer):
     class Meta:
         model = Assinatura
