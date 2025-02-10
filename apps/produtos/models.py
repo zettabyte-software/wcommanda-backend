@@ -11,11 +11,10 @@ from django_multitenant.utils import get_current_tenant
 from apps.comandas.models import StatusComandaItemChoices
 from apps.system.base.models import Base
 from lib.back_blaze.bucket import BackBlazeB2Handler
-from utils.env import get_env_var
 
 DEFAULT_BUCKET_PHOTO_PATH = '%s/produtos/%s/imgs/%s'
 """Caminho padrão para a imagem dentro do bucket: \n
-<id_tenant>/produtos/<id_produto>/imgs/<nome_arquivo>
+[id_tenant]/produtos/[id_produto]/imgs/[nome_arquivo]
 """
 
 
