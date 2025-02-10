@@ -60,7 +60,7 @@ class ComandaViewSet(BaseModelViewSet):
             comanda.cm_mesa.ms_ocupada = True
             comanda.cm_mesa.save()
 
-    @action(detail=True, methods=["post"])
+    @action(methods=["post"], detail=True)
     def finalizar(self, request, **kwargs):
         comanda = self.get_object()
         serializer = ComandaFinalizarSerializer(data=request.data, context={"comanda": comanda})
@@ -90,7 +90,7 @@ class ComandaViewSet(BaseModelViewSet):
 
         return Response()
 
-    @action(detail=True, methods=["post"])
+    @action(methods=["post"], detail=True)
     def cancelar(self, request, **kwargs):
         comanda = self.get_object()
 
@@ -114,7 +114,7 @@ class ComandaViewSet(BaseModelViewSet):
 
         return Response()
 
-    @action(detail=True, methods=["post"])
+    @action(methods=["post"], detail=True)
     def aplicar_cupon(self, request, **kwargs):
         comanda = self.get_object()
         serializer = AplicarCuponSerializer(data=request.data, context={"comanda": comanda})
@@ -122,7 +122,7 @@ class ComandaViewSet(BaseModelViewSet):
         serializer.save()
         return Response()
 
-    @action(detail=True, methods=["get"])
+    @action(methods=["get"], detail=True)
     def visualizar(self, request, **kwargs):
         comanda = self.get_object()
         queryset = (
@@ -170,7 +170,7 @@ class ItemComandaViewSet(BaseModelViewSet):
         context["vincular_num_pedido"] = self.action == "bulk_create"
         return context
 
-    @action(detail=True, methods=["post"])
+    @action(methods=["post"], detail=True)
     def preparar(self, request, *args, **kwargs):
         agora = timezone.now()
 
@@ -184,7 +184,7 @@ class ItemComandaViewSet(BaseModelViewSet):
 
         return Response()
 
-    @action(detail=True, methods=["post"])
+    @action(methods=["post"], detail=True)
     def finalizar(self, request, *args, **kwargs):
         agora = timezone.now()
 
@@ -198,7 +198,7 @@ class ItemComandaViewSet(BaseModelViewSet):
 
         return Response()
 
-    @action(detail=True, methods=["post"])
+    @action(methods=["post"], detail=True)
     def entregar(self, request, *args, **kwargs):
         agora = timezone.now()
 
@@ -213,7 +213,7 @@ class ItemComandaViewSet(BaseModelViewSet):
 
         return Response()
 
-    @action(detail=True, methods=["post"])
+    @action(methods=["post"], detail=True)
     def cancelar(self, request, *args, **kwargs):
         agora = timezone.now()
 
