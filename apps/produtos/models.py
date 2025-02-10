@@ -23,6 +23,15 @@ class TiposChoices(models.IntegerChoices):
     CONSUMIVEL = 2, _("Consumível")
 
 
+class PontosCarneChoices(models.IntegerChoices):
+    NAO_TEM = 0, _("Não tem ponto")
+    MAL_PASSADA = 1, _("Mal passada")
+    AO_PONTO_PARA_MAL_PASSADA = 2, _("Ao ponto para mal passada")
+    AO_PONTO = 3, _("Ao ponto")
+    AO_PONTO_PARA_BEM_PASSADA = 4, _("Ao ponto para bem passada")
+    BEM_PASSADA = 5, _("Bem passada")
+
+
 class UnidadesProdutoChoices(models.IntegerChoices):
     GRAMA = 1, _("Grama")
     QUILO = 2, _("Quilo")
@@ -79,9 +88,8 @@ class Produto(Base):
     # porção da comida
     pr_serve_pessoas = models.PositiveSmallIntegerField(_("n° de pessoas que a comida serve"), validators=[MaxValueValidator(4)], null=True)
     pr_unidade = models.PositiveSmallIntegerField(_("tipo"), choices=UnidadesProdutoChoices.choices, null=True)
-    pr_quantidade = models.IntegerField(_("tipo"), default=0)
-
-    # pr_integra_ifood = models.BooleanField(_("integra com o ifood"), default=False)
+    pr_quantidade = models.PositiveSmallIntegerField(_("tipo"), default=0)
+    pr_ponto_carne = models.IntegerField(_("ponto da carne"), choices=PontosCarneChoices.choices, default=PontosCarneChoices.NAO_TEM)
 
     @classmethod
     def upload(cls, produto: "Produto", arquivo: InMemoryUploadedFile, metadata="{}"):
