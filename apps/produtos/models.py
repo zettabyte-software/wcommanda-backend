@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from auditlog.registry import auditlog
 from django_multitenant.fields import TenantForeignKey
 from django_multitenant.utils import get_current_tenant
 
@@ -12,7 +13,7 @@ from apps.comandas.models import StatusComandaItemChoices
 from apps.system.base.models import Base
 from lib.back_blaze.bucket import BackBlazeB2Handler
 
-DEFAULT_BUCKET_PHOTO_PATH = '%s/produtos/%s/imgs/%s'
+DEFAULT_BUCKET_PHOTO_PATH = "%s/produtos/%s/imgs/%s"
 """Caminho padrão para a imagem dentro do bucket: \n
 [id_tenant]/produtos/[id_produto]/imgs/[nome_arquivo]
 """
@@ -86,10 +87,14 @@ class Produto(Base):
     )
 
     # porção da comida
-    pr_serve_pessoas = models.PositiveSmallIntegerField(_("n° de pessoas que a comida serve"), validators=[MaxValueValidator(4)], null=True)
+    pr_serve_pessoas = models.PositiveSmallIntegerField(
+        _("n° de pessoas que a comida serve"), validators=[MaxValueValidator(4)], null=True
+    )
     pr_unidade = models.PositiveSmallIntegerField(_("tipo"), choices=UnidadesProdutoChoices.choices, null=True)
     pr_quantidade = models.PositiveSmallIntegerField(_("tipo"), default=0)
-    pr_ponto_carne = models.IntegerField(_("ponto da carne"), choices=PontosCarneChoices.choices, default=PontosCarneChoices.NAO_TEM)
+    pr_ponto_carne = models.IntegerField(
+        _("ponto da carne"), choices=PontosCarneChoices.choices, default=PontosCarneChoices.NAO_TEM
+    )
 
     @classmethod
     def upload(cls, produto: "Produto", arquivo: InMemoryUploadedFile, metadata="{}"):
@@ -106,7 +111,7 @@ class Produto(Base):
         file_version = handler.upload(arquivo.read(), path, metadata)
 
         produto.pr_path_imagem = path
-        produto.pr_ = f'https://f005.backblazeb2.com/file/wcommanda/{path}'
+        produto.pr_ = f"https://f005.backblazeb2.com/file/wcommanda/{path}"
         produto.pr_id_back_blaze = file_version.id_
         produto.save()
 
@@ -117,7 +122,6 @@ class Produto(Base):
         produto.pr_path_imagem = ""
         produto.pr_id_back_blaze = ""
         produto.save()
-
 
     class Meta:
         db_table = "produto"
@@ -167,3 +171,33 @@ class ComplementoProduto(Base):
         ordering = ["-id"]
         verbose_name = _("Complemento do Produto")
         verbose_name_plural = _("Complementos dos Produtos")
+
+
+auditlog.register(
+    Produto,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
+auditlog.register(
+    CategoriaProduto,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
+auditlog.register(
+    GrupoComplementoProduto,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
+auditlog.register(
+    ComplementoProduto,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)

@@ -3,6 +3,8 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from auditlog.registry import auditlog
+
 from apps.system.base.models import Base
 
 from .mixins import FilaHooksMixin
@@ -63,14 +65,18 @@ class Fila(Base, FilaHooksMixin):
 
         # avançando posições na fila
         if nova_posicao > posicao_antiga:
-            pessoas_fila = cls.objects.filter(ff_posicao__gt=posicao_antiga, ff_posicao__lte=nova_posicao).exclude(id=fila_id)
+            pessoas_fila = cls.objects.filter(ff_posicao__gt=posicao_antiga, ff_posicao__lte=nova_posicao).exclude(
+                id=fila_id
+            )
             for pessoa in pessoas_fila:
                 pessoa.ff_posicao -= 1
                 pessoa.save()
 
         # voltando posições na fila
         else:
-            pessoas_fila = cls.objects.filter(ff_posicao__gte=nova_posicao, ff_posicao__lt=posicao_antiga).exclude(id=fila_id)
+            pessoas_fila = cls.objects.filter(ff_posicao__gte=nova_posicao, ff_posicao__lt=posicao_antiga).exclude(
+                id=fila_id
+            )
             for pessoa in pessoas_fila:
                 pessoa.ff_posicao += 1
                 pessoa.save()
@@ -97,3 +103,12 @@ class ProdutosSelecionadosFila:
         ordering = ["-id"]
         verbose_name = _("Produto Selecinado na Fila")
         verbose_name_plural = _("Produtos Selecinados nas Filas")
+
+
+auditlog.register(
+    Fila,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)

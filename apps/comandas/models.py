@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from auditlog.registry import auditlog
 from django_multitenant.fields import TenantForeignKey
 
 from apps.system.base.models import Base
@@ -34,9 +35,7 @@ class Comanda(Base):
     # TODO gerar um QR code para uma página onde a pessoa pode acompanhar se o pedido está pronto
     cm_codigo = models.PositiveSmallIntegerField(_("código"), editable=False, default=1)
     cm_status = models.PositiveSmallIntegerField(
-        _("status"),
-        choices=StatusComandaChoices.choices,
-        default=StatusComandaChoices.ABERTA
+        _("status"), choices=StatusComandaChoices.choices, default=StatusComandaChoices.ABERTA
     )
     cm_mesa = TenantForeignKey(
         verbose_name=_("mesa"),
@@ -158,3 +157,19 @@ class ComandaItem(Base):
         ordering = ["-id"]
         verbose_name = _("Item da Comanda")
         verbose_name_plural = _("Items da Comanda")
+
+
+auditlog.register(
+    Comanda,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
+auditlog.register(
+    ComandaItem,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)

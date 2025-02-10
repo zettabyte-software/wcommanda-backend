@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from auditlog.registry import auditlog
 from django_multitenant.fields import TenantForeignKey
 
 from apps.system.base.models import Base
@@ -36,3 +37,12 @@ class MovimentacaoEstoque(Base):
         ordering = ["-id"]
         verbose_name = _("Movimentação de Estoque do Produto")
         verbose_name_plural = _("Movimentações de Estoque dos Produtos")
+
+
+auditlog.register(
+    MovimentacaoEstoque,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)

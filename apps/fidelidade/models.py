@@ -5,6 +5,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from auditlog.registry import auditlog
 from django_multitenant.fields import TenantForeignKey
 from threadlocals.threadlocals import get_current_request, get_request_variable
 
@@ -77,7 +78,7 @@ class CartaoFidelidade(Base):
     @property
     def cr_link(self):
         request = get_current_request()
-        host = request.headers.get(settings.TENANT_HOST_HEADER)
+        host = request.headers.get(settings.TENANT_HOST_HEADER)  # type: ignore
         token = get_request_variable("token")
         link = f"https://{host}/espaco-do-cliente/cartoes-fidelidade/{self.pk}/?jwt={token}"
         return link
@@ -106,9 +107,7 @@ class Carimbo(Base):
 
 class Premio(Base):
     pm_nome = models.CharField(_("nome"), max_length=50)
-    pm_descricao = models.CharField(
-        _("descrição"), max_length=150, blank=True, default=""
-    )
+    pm_descricao = models.CharField(_("descrição"), max_length=150, blank=True, default="")
 
     class Meta:
         db_table = "premio"
@@ -130,9 +129,7 @@ class PremioItem(Base):
         on_delete=models.PROTECT,
         related_name="premios",
     )
-    pt_observacao = models.CharField(
-        _("observação"), max_length=150, blank=True, default=""
-    )
+    pt_observacao = models.CharField(_("observação"), max_length=150, blank=True, default="")
 
     class Meta:
         db_table = "premio_item"
@@ -165,3 +162,40 @@ class CondicaoPremio(Base):
         ordering = ["-id"]
         verbose_name = _("Condição da Prêmio")
         verbose_name_plural = _("Condições dos Prêmios")
+
+
+auditlog.register(
+    CartaoFidelidade,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
+auditlog.register(
+    Carimbo,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
+auditlog.register(
+    Premio,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
+auditlog.register(
+    PremioItem,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
+auditlog.register(
+    CondicaoPremio,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)

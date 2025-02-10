@@ -1,9 +1,8 @@
-import random
-
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from auditlog.registry import auditlog
 from django_multitenant.fields import TenantForeignKey
 from django_multitenant.utils import get_current_tenant
 
@@ -16,7 +15,9 @@ class Filial(Base):
     fl_nome = models.CharField(_("nome"), max_length=120)
 
     fl_cep = models.CharField(_("cep"), max_length=8, blank=True, default="")
-    fl_estado = models.PositiveSmallIntegerField(_("estado"), choices=EstadosChoices.choices, default=EstadosChoices.EM_BRANCO)
+    fl_estado = models.PositiveSmallIntegerField(
+        _("estado"), choices=EstadosChoices.choices, default=EstadosChoices.EM_BRANCO
+    )
     fl_cidade = models.CharField(_("cidade"), max_length=50, blank=True, default="")
     fl_bairro = models.CharField(_("bairro"), max_length=40, blank=True, default="")
     fl_rua = models.CharField(_("rua"), max_length=30, blank=True, default="")
@@ -52,18 +53,33 @@ class Filial(Base):
     fl_hora_inicio_funcionamento_sabado = models.TimeField(_("horário de início no sabado"), null=True)
     fl_hora_fim_funcionamento_sabado = models.TimeField(_("horário de encerramento no sabado"), null=True)
 
-    owner = TenantForeignKey(verbose_name=_("owner"), to=settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, related_name="filiais")
+    owner = TenantForeignKey(
+        verbose_name=_("owner"),
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        null=True,
+        related_name="filiais",
+    )
 
-    def make_upload_path(self, filename):
-        file_extension = filename.split(".")[-1]
-        new_file_name = random.randint(1000000, 9999999)
-        tenant = get_current_tenant()
-        return f"{tenant.pk}//filiais/{new_file_name}.{file_extension}"
+    # def make_upload_path(self, filename):
+    #     file_extension = filename.split(".")[-1]
+    #     new_file_name = random.randint(1000000, 9999999)
+    #     tenant = get_current_tenant()
+    #     return f"{tenant.pk}//filiais/{new_file_name}.{file_extension}"
 
-    fl_logo = models.ImageField(_("logo"), upload_to=make_upload_path, blank=True, null=True)
+    # fl_logo = models.ImageField(_("logo"), upload_to=make_upload_path, blank=True, null=True)
 
     class Meta:
         db_table = "filial"
         ordering = ["-id"]
         verbose_name = _("Filial")
         verbose_name_plural = _("Filiais")
+
+
+auditlog.register(
+    Filial,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)

@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from auditlog.registry import auditlog
+
 from apps.system.base.models import Base, EstadosChoices
 
 
@@ -16,7 +18,9 @@ class Cliente(Base):
 
     # endereço
     cl_cep = models.CharField(_("cep"), max_length=8, blank=True, default="")
-    cl_estado = models.PositiveSmallIntegerField(_("estado"), choices=EstadosChoices.choices, default=EstadosChoices.EM_BRANCO)
+    cl_estado = models.PositiveSmallIntegerField(
+        _("estado"), choices=EstadosChoices.choices, default=EstadosChoices.EM_BRANCO
+    )
     cl_cidade = models.CharField(_("cidade"), max_length=50, blank=True, default="")
     cl_bairro = models.CharField(_("bairro"), max_length=40, blank=True, default="")
     cl_rua = models.CharField(_("rua"), max_length=30, blank=True, default="")
@@ -28,3 +32,12 @@ class Cliente(Base):
         ordering = ["-id"]
         verbose_name = _("Cliente")
         verbose_name_plural = _("Clientes")
+
+
+auditlog.register(
+    Cliente,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)

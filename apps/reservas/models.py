@@ -3,6 +3,7 @@ import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from auditlog.registry import auditlog
 from django_multitenant.fields import TenantForeignKey
 
 from apps.system.base.models import Base
@@ -24,7 +25,7 @@ class Reserva(Base):
         verbose_name=_("cliente fidelidade"),
         related_name="reservas",
         on_delete=models.PROTECT,
-        null=True
+        null=True,
     )
     rs_data = models.DateField(_("data"))
     rs_hora = models.TimeField(_("hora"))
@@ -38,3 +39,12 @@ class Reserva(Base):
         ordering = ["-id"]
         verbose_name = _("Reserva")
         verbose_name_plural = _("Reservas")
+
+
+auditlog.register(
+    Reserva,
+    exclude_fields=[
+        "data_ultima_alteracao",
+        "hora_ultima_alteracao",
+    ],
+)
