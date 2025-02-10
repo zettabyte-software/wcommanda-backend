@@ -15,6 +15,12 @@ class Venda(Base):
     )
 
     vn_cliente = models.CharField(_("cliente"), max_length=30)
+    vn_cliente_fidelidade = TenantForeignKey(
+        verbose_name=_("cliente fidelidade"),
+        to="clientes.Cliente",
+        on_delete=models.PROTECT,
+        null=True,
+    )
 
     vn_valor_total = models.FloatField(_("valor total"), default=0)
 

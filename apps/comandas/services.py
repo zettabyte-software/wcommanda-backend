@@ -198,6 +198,7 @@ def gerar_venda_por_comanda(comanda: Comanda):
     venda = Venda(
         vn_comanda=comanda,
         vn_cliente=comanda.cm_cliente,
+        vn_cliente_fidelidade=comanda.cm_cliente_fidelidade,
         vn_valor_total=comanda.cm_valor_total,
         owner=get_current_user(),
     )
