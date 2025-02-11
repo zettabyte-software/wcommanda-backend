@@ -15,14 +15,14 @@ dotenv.load_dotenv()
 django.setup()
 
 from django.contrib.auth.hashers import make_password  # noqa: E402
-from django.contrib.sites.models import Site
+from django.contrib.sites.models import Site  # noqa: E402
 
 from django_multitenant.utils import set_current_tenant  # noqa: E402
 
 from apps.filiais.models import Filial  # noqa: E402
 from apps.system.assinaturas.models import Assinatura, Plano, StatusChoices, TierChoices  # noqa: E402
 from apps.system.core.records import DefaultRecordsManger  # noqa: E402
-from apps.users.models import Usuario  # noqa: E402
+from apps.users.models import StatusSolicitacaoChoices, Usuario  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
@@ -55,12 +55,13 @@ try:
     filial = Filial.objects.create(fl_nome="Dev Wcommanda", assinatura=assinatura)
 
     usuario = Usuario.objects.create(
+        status=StatusSolicitacaoChoices.ACEITO,
         email="davi.s.rafacho@gmail.com",
         password=make_password("dsrafacho!123"),
         first_name="Davi",
         last_name="Silva Rafacho",
-        assinatura=assinatura,
         filial=filial,
+        assinatura=assinatura,
     )
 
     DefaultRecordsManger().apply_updates()
