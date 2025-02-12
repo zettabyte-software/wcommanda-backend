@@ -1,4 +1,7 @@
+import uuid
+
 from django.conf import settings
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -7,6 +10,12 @@ from django_multitenant.fields import TenantForeignKey
 from django_multitenant.utils import get_current_tenant
 
 from apps.system.base.models import Base, EstadosChoices
+from lib.back_blaze.bucket import BackBlazeB2Handler
+
+DEFAULT_BUCKET_BRANCH_LOGO_PATH = "%s/filiais/%s/imgs/%s"
+"""Caminho padrão para a imagem dentro do bucket: \n
+[id_tenant]/filiais/[id_filial]/imgs/[nome_arquivo]
+"""
 
 
 class Filial(Base):
@@ -53,6 +62,11 @@ class Filial(Base):
     fl_hora_inicio_funcionamento_sabado = models.TimeField(_("horário de início no sabado"), null=True)
     fl_hora_fim_funcionamento_sabado = models.TimeField(_("horário de encerramento no sabado"), null=True)
 
+    fl_url_logo = models.URLField(_("url amigável da foto"), blank=True, default="")
+    fl_path_logo = models.CharField(_("caminho da logo no bucket"), max_length=120, blank=True, default="")
+    fl_id_back_blaze = models.CharField(_("id backblaze do upload"), max_length=40, blank=True, default="")
+
+    # sobreescrevendo por causa do related_name
     owner = TenantForeignKey(
         verbose_name=_("owner"),
         to=settings.AUTH_USER_MODEL,
@@ -61,13 +75,25 @@ class Filial(Base):
         related_name="filiais",
     )
 
-    # def make_upload_path(self, filename):
-    #     file_extension = filename.split(".")[-1]
-    #     new_file_name = random.randint(1000000, 9999999)
-    #     tenant = get_current_tenant()
-    #     return f"{tenant.pk}//filiais/{new_file_name}.{file_extension}"
+    @classmethod
+    def upload(cls, filial: "Filial", arquivo: InMemoryUploadedFile, metadata="{}"):
+        handler = BackBlazeB2Handler()
+        assinatura = get_current_tenant()
+        extencao = arquivo.name.split(".")[-1]
+        nome_aleatorio_imagem = f'{uuid.uuid4()}.{extencao}'
 
-    # fl_logo = models.ImageField(_("logo"), upload_to=make_upload_path, blank=True, null=True)
+        path = DEFAULT_BUCKET_BRANCH_LOGO_PATH % (
+            assinatura.ss_codigo_licenca,  # type: ignore
+            filial.pk,
+            nome_aleatorio_imagem,
+        )
+
+        file_version = handler.upload(arquivo.read(), path, metadata)
+
+        filial.pr_path_imagem = path
+        filial.pr_ = f"https://f005.backblazeb2.com/file/wcommanda/{path}"
+        filial.pr_id_back_blaze = file_version.id_
+        filial.save()
 
     class Meta:
         db_table = "filial"

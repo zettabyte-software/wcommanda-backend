@@ -13,7 +13,7 @@ from apps.comandas.models import StatusComandaItemChoices
 from apps.system.base.models import Base
 from lib.back_blaze.bucket import BackBlazeB2Handler
 
-DEFAULT_BUCKET_PHOTO_PATH = "%s/produtos/%s/imgs/%s"
+DEFAULT_BUCKET_PRODUCT_PHOTO_PATH = "%s/produtos/%s/imgs/%s"
 """Caminho padrão para a imagem dentro do bucket: \n
 [id_tenant]/produtos/[id_produto]/imgs/[nome_arquivo]
 """
@@ -102,7 +102,7 @@ class Produto(Base):
         assinatura = get_current_tenant()
         nome_aleatorio_imagem = str(uuid.uuid4())
 
-        path = DEFAULT_BUCKET_PHOTO_PATH % (
+        path = DEFAULT_BUCKET_PRODUCT_PHOTO_PATH % (
             assinatura.ss_codigo_licenca,  # type: ignore
             produto.pk,
             nome_aleatorio_imagem,
@@ -111,7 +111,7 @@ class Produto(Base):
         file_version = handler.upload(arquivo.read(), path, metadata)
 
         produto.pr_path_imagem = path
-        produto.pr_ = f"https://f005.backblazeb2.com/file/wcommanda/{path}"
+        produto.pr_url_imagem = f"https://f005.backblazeb2.com/file/wcommanda/{path}"
         produto.pr_id_back_blaze = file_version.id_
         produto.save()
 
