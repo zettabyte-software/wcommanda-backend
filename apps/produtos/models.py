@@ -100,7 +100,9 @@ class Produto(Base):
     def upload(cls, produto: "Produto", arquivo: InMemoryUploadedFile, metadata="{}"):
         handler = BackBlazeB2Handler()
         assinatura = get_current_tenant()
-        nome_aleatorio_imagem = str(uuid.uuid4())
+        extencao = arquivo.name.split(".")[-1]
+        nome_aleatorio_imagem = f'{uuid.uuid4()}.{extencao}'
+
 
         path = DEFAULT_BUCKET_PRODUCT_PHOTO_PATH % (
             assinatura.ss_codigo_licenca,  # type: ignore
@@ -111,16 +113,20 @@ class Produto(Base):
         file_version = handler.upload(arquivo.read(), path, metadata)
 
         produto.pr_path_imagem = path
-        produto.pr_url_imagem = f"https://f005.backblazeb2.com/file/wcommanda/{path}"
         produto.pr_id_back_blaze = file_version.id_
+        produto.pr_url_imagem = f"https://f005.backblazeb2.com/file/wcommanda/{path}"
+
         produto.save()
 
     @classmethod
     def remover_foto(cls, produto: "Produto"):
         handler = BackBlazeB2Handler()
         handler.destroy(produto.pr_id_back_blaze, produto.pr_path_imagem)
+
+        produto.pr_url_imagem = ""
         produto.pr_path_imagem = ""
         produto.pr_id_back_blaze = ""
+
         produto.save()
 
     class Meta:
