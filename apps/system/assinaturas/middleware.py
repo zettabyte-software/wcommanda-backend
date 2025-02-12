@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.core.handlers.wsgi import WSGIRequest
 
@@ -11,6 +13,8 @@ from utils.jwt import decode_jwt
 
 from .models import Assinatura
 
+logger = logging.getLogger(__name__)
+
 
 class AssinaturaMiddleware:
     authenticator = JWTAuthentication()
@@ -19,16 +23,21 @@ class AssinaturaMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: WSGIRequest):
-        tenant, host = self.get_tenant(request)
+        tenant, subdomain = self.get_tenant(request)
+
         if tenant is None:
             return self.get_response(request)
 
         request.tenant = tenant  # type: ignore
-        request.host = host  # type: ignore
+        request.host = subdomain  # type: ignore
+
         filial = self.get_filial(request)
+        host = self.get_host(request)
 
         set_current_tenant(tenant)
+
         set_request_variable("host", host)
+        set_request_variable("subdomain", subdomain)
         set_request_variable("filial", filial)
 
         try:
@@ -39,7 +48,8 @@ class AssinaturaMiddleware:
 
         request.user = user
 
-        token = request.headers.get("Authentication")
+        token = request.headers.get("Authorization")
+
         set_request_variable("token", token.split(" ")[1] if token else None)
 
         return self.get_response(request)
@@ -64,4 +74,5 @@ class AssinaturaMiddleware:
         id_filial = decode_jwt(token, host).get("branch", 0)
 
         filial = Filial.objects.filter(pk=id_filial).first()
+
         return filial
