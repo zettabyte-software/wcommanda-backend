@@ -7,12 +7,13 @@ from rest_framework.response import Response
 
 from apps.system.base.views import BaseModelViewSet
 
-from .serializers import ConvidarUsuarioSerializer, Usuario, UsuarioSerializer
+from .models import StatusSolicitacaoChoices
+from .serializers import AceitarConviteSerializer, ConvidarUsuarioSerializer, Usuario, UsuarioSerializer
 
 
 class UsuarioViewSet(BaseModelViewSet):
     model = Usuario
-    queryset = Usuario.objects.all()
+    queryset = Usuario.objects.all().exclude(status=StatusSolicitacaoChoices.PENDENTE)
     serializer_classes = {
         "list": UsuarioSerializer,
         "retrieve": UsuarioSerializer,
@@ -20,7 +21,7 @@ class UsuarioViewSet(BaseModelViewSet):
         "update": UsuarioSerializer,
         "partial_update": UsuarioSerializer,
         "convidar_usuario": ConvidarUsuarioSerializer,
-        "aceitar_convite_usuario": UsuarioSerializer,
+        "aceitar_convite": AceitarConviteSerializer,
     }
     filterset_fields = {
         "email": ["exact"],
@@ -54,9 +55,9 @@ class UsuarioViewSet(BaseModelViewSet):
         return Response({"mensagem": _("Usuário inativado")})
 
     @action(methods=["post"], detail=False)
-    def convidar_usuario(self, request, pk):
+    def convidar_usuario(self, request):
         return self.generic_action()
 
     @action(methods=["post"], detail=False)
-    def aceitar_convite_usuario(self, request, pk):
+    def aceitar_convite(self, request):
         return self.generic_action()

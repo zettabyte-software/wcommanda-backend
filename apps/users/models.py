@@ -53,9 +53,7 @@ class Usuario(Base, AbstractUser):
 
     WCOMMANDA_USER_EMAIL = "bot@wcommanda.com.br"
 
-    status = models.PositiveSmallIntegerField(
-        _("status"), choices=StatusSolicitacaoChoices.choices, default=StatusSolicitacaoChoices.PENDENTE
-    )
+    status = models.PositiveSmallIntegerField(_("status"), choices=StatusSolicitacaoChoices.choices, default=StatusSolicitacaoChoices.PENDENTE)
     first_name = models.CharField(_("nome"), max_length=30)
     last_name = models.CharField(_("sobrenome"), max_length=60)
     email = models.EmailField(_("email"), unique=True)

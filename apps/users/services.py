@@ -1,12 +1,14 @@
 from threadlocals.threadlocals import get_request_variable
 
+from apps.filiais.models import Filial
 from apps.system.core.classes import Email
 from apps.users.models import Usuario
 
 
-def convidar_usuario_sistema(email: str):
+def convidar_usuario_sistema(email: str, filial: Filial):
     usuario = Usuario.objects.create(
         email=email,
+        filial=filial,
         first_name="",
         last_name="",
         password="",
@@ -16,7 +18,7 @@ def convidar_usuario_sistema(email: str):
 
     base_url = get_request_variable('host')
     token = get_request_variable("token")
-    url = f"{base_url}auth/aceitar-convite?accessToken={token}&userId={usuario.pk}&email={email}"
+    url = f"https://{base_url}/auth/aceitar-convite?accessToken={token}&userId={usuario.pk}&email={email}"
 
     email_confirmacao = Email(
         titulo="Convite para o sistema",
