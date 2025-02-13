@@ -5,7 +5,6 @@
         "pr_nome": "Suco Limamora (340ml)",
         "pr_descricao": "Combinação do exclusivo suco de Morango Outback com suco natural de limão.",
         "pr_preco": 30,
-        "pr_imagem": null,
         "pr_tempo_preparo": 15
     },
     {
@@ -14,7 +13,6 @@
         "pr_nome": "Suco Maramora (340ml)",
         "pr_descricao": "Combinação do exclusivo suco de Morango Outback com suco natural de maracujá.",
         "pr_preco": 30,
-        "pr_imagem": null,
         "pr_tempo_preparo": 15
     },
     {
@@ -23,7 +21,6 @@
         "pr_nome": "Suca Integral de Uva (300 ml)",
         "pr_descricao": "",
         "pr_preco": 16,
-        "pr_imagem": null,
         "pr_tempo_preparo": 10
     },
     {
@@ -32,7 +29,6 @@
         "pr_nome": "Suco Maramora (340ml)",
         "pr_descricao": "Combinação do exclusivo suco de Morango Outback com suco natural de maracujá",
         "pr_preco": 30,
-        "pr_imagem": null,
         "pr_tempo_preparo": 10
     },
     {
@@ -41,7 +37,6 @@
         "pr_nome": "KitKat® Thunder & S’mores",
         "pr_descricao": "A novidade brookie, que é um brownie de chocolate com noz pecan feito com nosso cookie, coberto com pasta de KitKat®, marshmallows gratinados, sorvete sabor baunilha e finalizado com mousse que tem um sabor inconfundível de KitKat® e calda de chocolate. *Contém nozes. **Vegetariano – Esse produto contém leite e pode conter ovo em sua composição.",
         "pr_preco": 90,
-        "pr_imagem": null,
         "pr_tempo_preparo": 15
     },
     {
@@ -50,7 +45,6 @@
         "pr_nome": "Bloomin’ Tower",
         "pr_descricao": "Nossa Bloomin’ Onion recheada com fritas, cobertas com fonduta de queijo e, para finalizar, nossos camarões empanados e temperados com o molho Billa Ranch, que é uma combinação dos molhos Outback Billabong e Ranch. Acompanha o molho Bloom Ranch.",
         "pr_preco": 80,
-        "pr_imagem": null,
         "pr_tempo_preparo": 30
     },
     {
@@ -59,7 +53,6 @@
         "pr_nome": "Ribs Catupiry®",
         "pr_descricao": "Nossa Ribs on the Barbie coberta com uma camada de Catupiry® gratinado com queijo parmesão e finalizado com bacon e cebolinha. Servido com picles de cebola roxa com maçã e acompanhamento à sua escolha.",
         "pr_preco": 60,
-        "pr_imagem": null,
         "pr_tempo_preparo": 40
     }
 ]
