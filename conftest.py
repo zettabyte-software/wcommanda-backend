@@ -60,8 +60,9 @@ def usuario():
         first_name="Davi",
         last_name="Silva Rafacho",
         email="exemplo@gmail.com",
-        password="exemplo@gmail.com",
+        password="",
     )
+    usuario.set_unusable_password()
     set_current_user(usuario)
     return usuario
 
