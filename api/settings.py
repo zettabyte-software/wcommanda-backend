@@ -158,12 +158,12 @@ WSGI_APPLICATION = "api.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
+        "HOST": get_env_var("DATABASE_HOST"),
         "NAME": get_env_var("DATABASE_NAME"),
         "USER": get_env_var("DATABASE_USER"),
         "PASSWORD": get_env_var("DATABASE_PASSWORD"),
-        "HOST": get_env_var("DATABASE_HOST"),
         "PORT": get_env_var("DATABASE_PORT"),
-        "CONN_MAX_AGE": None,
+        "CONN_MAX_AGE": 60 * 60 * 3,
     },
 }
 
