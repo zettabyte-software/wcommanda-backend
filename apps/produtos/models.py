@@ -67,7 +67,7 @@ class Produto(Base):
 
     pr_url_imagem = models.URLField(_("url amigável da foto"), blank=True, default="")
     pr_path_imagem = models.CharField(_("caminho da imagem no bucket"), max_length=120, blank=True, default="")
-    pr_id_back_blaze = models.CharField(_("id backblaze do upload"), max_length=40, blank=True, default="")
+    pr_id_back_blaze = models.CharField(_("id backblaze do upload"), max_length=102, blank=True, default="")
 
     # restrições alimentares
     pr_vegano = models.BooleanField(_("vegano"), default=False)
@@ -97,7 +97,10 @@ class Produto(Base):
     )
 
     @classmethod
-    def upload(cls, produto: "Produto", arquivo: InMemoryUploadedFile, metadata="{}"):
+    def upload(cls, produto: "Produto", arquivo: InMemoryUploadedFile, metadata=None):
+        if metadata is None:
+            metadata = {}
+
         handler = BackBlazeB2Handler()
         assinatura = get_current_tenant()
         extencao = arquivo.name.split(".")[-1]
