@@ -2,7 +2,6 @@ from django.core.cache import cache
 
 from b2sdk.v2 import AuthInfoCache, B2Api, DoNothingProgressListener, InMemoryAccountInfo
 
-from apps.system.core.classes import SingletonMeta
 from utils.env import get_env_var
 
 
