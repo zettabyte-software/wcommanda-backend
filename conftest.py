@@ -1,6 +1,8 @@
 import json
 import os
 
+from django.core.cache import cache
+
 from rest_framework.test import APIClient
 
 import dotenv
@@ -21,7 +23,7 @@ os.environ["DJANGO_MODE"] = "testing"
 
 
 @pytest.fixture(autouse=True)
-def _use_test_database(settings):
+def use_test_database(settings):
     settings.DATABASES["default"]["NAME"] = "test_wcommanda"
 
 
@@ -32,7 +34,8 @@ def disable_auditlog_fixture():
 
 
 @pytest.fixture(autouse=True)
-def _use_dummy_cache_backend(settings):
+def use_dummy_cache_backend(settings):
+    cache.clear()
     settings.CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.dummy.DummyCache",
