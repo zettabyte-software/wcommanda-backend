@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
                 ('fl_hora_fim_funcionamento_sexta', models.TimeField(null=True, verbose_name='horário de encerramento na sexta-feira')),
                 ('fl_hora_inicio_funcionamento_sabado', models.TimeField(null=True, verbose_name='horário de início no sabado')),
                 ('fl_hora_fim_funcionamento_sabado', models.TimeField(null=True, verbose_name='horário de encerramento no sabado')),
-                ('fl_logo', models.ImageField(blank=True, null=True, upload_to=apps.filiais.models.Filial.make_upload_path, verbose_name='logo')),
+                # ('fl_logo', models.ImageField(blank=True, null=True, upload_to=apps.filiais.models.Filial.make_upload_path, verbose_name='logo')),
                 ('assinatura', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, to='assinaturas.assinatura', verbose_name='tenant')),
             ],
             options={

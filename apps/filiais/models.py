@@ -25,7 +25,9 @@ class Filial(Base):
 
     fl_cep = models.CharField(_("cep"), max_length=8, blank=True, default="")
     fl_estado = models.PositiveSmallIntegerField(
-        _("estado"), choices=EstadosChoices.choices, default=EstadosChoices.EM_BRANCO
+        _("estado"),
+        choices=EstadosChoices.choices,
+        default=EstadosChoices.EM_BRANCO,
     )
     fl_cidade = models.CharField(_("cidade"), max_length=50, blank=True, default="")
     fl_bairro = models.CharField(_("bairro"), max_length=40, blank=True, default="")
@@ -36,10 +38,6 @@ class Filial(Base):
     fl_celular = models.CharField(_("celular"), max_length=11, blank=True)
     fl_telefone = models.CharField(_("telefone"), max_length=10, blank=True)
     fl_email = models.EmailField(_("email"), blank=True)
-
-    fl_merchat_id_ifood = models.UUIDField(_("id do merchant do iFood"), null=True, default=None)
-    fl_catalog_id = models.UUIDField(_("id do catálogo digital do iFood"), null=True, default=None)
-    fl_catalog_grupo_id = models.UUIDField(_("id do grupo do catálogo do iFood"), null=True, default=None)
 
     fl_hora_inicio_funcionamento_domingo = models.TimeField(_("horário de início no domingo"), null=True)
     fl_hora_fim_funcionamento_domingo = models.TimeField(_("horário de encerramento no domingo"), null=True)
@@ -62,6 +60,10 @@ class Filial(Base):
     fl_hora_inicio_funcionamento_sabado = models.TimeField(_("horário de início no sabado"), null=True)
     fl_hora_fim_funcionamento_sabado = models.TimeField(_("horário de encerramento no sabado"), null=True)
 
+    fl_merchat_id_ifood = models.UUIDField(_("id do merchant do iFood"), null=True, default=None)
+    fl_catalog_id = models.UUIDField(_("id do catálogo digital do iFood"), null=True, default=None)
+    fl_catalog_group_id = models.UUIDField(_("id do grupo do catálogo do iFood"), null=True, default=None)
+
     fl_url_logo = models.URLField(_("url amigável da foto"), blank=True, default="")
     fl_path_logo = models.CharField(_("caminho da logo no bucket"), max_length=120, blank=True, default="")
     fl_id_back_blaze = models.CharField(_("id backblaze do upload"), max_length=40, blank=True, default="")
@@ -76,7 +78,10 @@ class Filial(Base):
     )
 
     @classmethod
-    def upload(cls, filial: "Filial", arquivo: InMemoryUploadedFile, metadata="{}"):
+    def upload(cls, filial: "Filial", arquivo: InMemoryUploadedFile, metadata=None):
+        if metadata is None:
+            metadata = {}
+
         handler = BackBlazeB2Handler()
         assinatura = get_current_tenant()
         extencao = arquivo.name.split(".")[-1]
@@ -90,9 +95,10 @@ class Filial(Base):
 
         file_version = handler.upload(arquivo.read(), path, metadata)
 
-        filial.pr_path_imagem = path
-        filial.pr_ = f"https://f005.backblazeb2.com/file/wcommanda/{path}"
-        filial.pr_id_back_blaze = file_version.id_
+        filial.fl_url_logo = f"https://f005.backblazeb2.com/file/wcommanda/{path}"
+        filial.fl_path_logo = path
+        filial.fl_id_back_blaze = file_version.id_
+
         filial.save()
 
     class Meta:
