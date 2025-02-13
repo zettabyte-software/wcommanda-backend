@@ -32,7 +32,9 @@ class PlanoAdmin(admin.ModelAdmin):
         "pl_tier",
         "assinatura",
         "pl_numero_usuarios",
-        "pl_limite_integracoes_ifood",
+        "pl_numero_telas",
+        "pl_integra_ifood",
+        "pl_limite_integracoes_pedidos_ifood",
         "pl_valor_mensalidade",
         "pl_observacao",
     )
