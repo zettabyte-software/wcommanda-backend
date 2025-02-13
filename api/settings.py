@@ -376,7 +376,7 @@ if IN_PRODUCTION:
 # wcommanda
 AUTH_QUERY_PARAM_NAME = "jwt"
 
-TENANT_HOST_HEADER = "X-Zettabyte-Host"
+TENANT_HOST_HEADER = "X-Wcommanda-Host"
 
 
 # corsheaders
