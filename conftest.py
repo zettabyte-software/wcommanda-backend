@@ -83,6 +83,8 @@ def produto():
         pr_descricao="A novidade brookie, que é um brownie de chocolate com noz pecan.",
         pr_preco=85,
         pr_tempo_preparo=15,
+        pr_path_imagem="undefined",
+        pr_id_back_blaze="undefined",
     )
 
 
