@@ -20,7 +20,10 @@ class ProdutoVisualizacaoSerializer(BaseModelSerializer):
 
     class Meta:
         model = Produto
-        fields = "__all__"
+        exclude = (
+            "pr_path_imagem",
+            "pr_id_back_blaze",
+        )
 
 
 class ProdutoAlteracaoSerializer(BaseModelSerializer):
@@ -52,7 +55,10 @@ class ProdutoAlteracaoSerializer(BaseModelSerializer):
 
     class Meta:
         model = Produto
-        fields = "__all__"
+        exclude = (
+            "pr_path_imagem",
+            "pr_id_back_blaze",
+        )
 
 
 class ComplementoProdutoVisualizacaoSerializer(BaseModelSerializer):
