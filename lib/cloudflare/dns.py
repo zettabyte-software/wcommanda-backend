@@ -25,7 +25,7 @@ def get_dns_records(zone_id: str):
     return response.json()
 
 
-def create_dns_record(subdomain: str):
+def criar_subdominio(subdomain: str):
     url = f"zones/{_WCOMMANDA_ZONE_ID}/dns_records"
     data = {
         "type": "A",
