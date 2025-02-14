@@ -1,8 +1,9 @@
-import jwt
 import uuid
 
 from django.conf import settings
 from django.utils import timezone
+
+import jwt
 
 from .env import get_env_var
 
