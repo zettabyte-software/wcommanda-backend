@@ -74,7 +74,20 @@ class Plano(Base):
     pl_observacao = models.CharField(_("observação"), max_length=50)
 
     @classmethod
-    def criar_plano_basico(cls, assinatura: Assinatura):
+    def criar_plano(cls, tier: TierChoices):
+        if tier == TierChoices.TIER_1:
+            return cls.criar_plano_basico()
+
+        if tier == TierChoices.TIER_2:
+            return cls.criar_plano_premium()
+
+        if tier == TierChoices.TIER_3:
+            return cls.criar_plano_pro()
+
+        raise ValueError("Tíer inválido")
+
+    @classmethod
+    def criar_plano_basico(cls):
         return cls.objects.create(
             pl_nome="Básico",
             pl_tier=TierChoices.TIER_1,
@@ -85,7 +98,7 @@ class Plano(Base):
         )
 
     @classmethod
-    def criar_plano_premium(cls, assinatura: Assinatura):
+    def criar_plano_premium(cls):
         return cls.objects.create(
             pl_nome="Prêmium",
             pl_tier=TierChoices.TIER_2,
@@ -96,7 +109,7 @@ class Plano(Base):
         )
 
     @classmethod
-    def criar_plano_pro(cls, assinatura: Assinatura):
+    def criar_plano_pro(cls):
         return cls.objects.create(
             pl_nome="Pro",
             pl_tier=TierChoices.TIER_3,
