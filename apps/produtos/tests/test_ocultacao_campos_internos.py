@@ -8,22 +8,22 @@ from apps.produtos.models import Produto, TiposChoices
 
 
 @pytest.fixture
-def produtos():
+def produtos(assinatura):
     json_configuracoes = json.load(open("data/mock/produtos.json"))
     for dados in json_configuracoes:
         Produto.objects.create(
             pr_path_imagem="undefined",
             pr_id_back_blaze="undefined",
-            **dados["data"],
+            assinatura=assinatura,
+            **dados,
         )
 
 
 @pytest.mark.django_db
-def test_list_produtos(api_client):
-    response = api_client.get("/api/produtos/")
-
+def test_list_produtos(api_client, produtos):
+    response = api_client.get("/api/v1/produtos/")
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 3
+    assert len(response.data["resultados"]) == Produto.objects.all().count()
 
     for produto in response.data:
         assert "pr_path_imagem" not in produto
@@ -32,7 +32,7 @@ def test_list_produtos(api_client):
 
 @pytest.mark.django_db
 def test_retrieve_produto(api_client, produto):
-    response = api_client.get(f"/api/produtos/{produto.id}/")
+    response = api_client.get(f"/api/v1/produtos/{produto.id}/")
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["id"] == produto.id
@@ -45,13 +45,14 @@ def test_create_produto(api_client):
     data = {
         "pr_nome": "Test Product",
         "pr_descricao": "Test Description",
-        "pr_tipo": TiposChoices.ALIMENTACAO,
-        "pr_valor": "10.00",
+        "pr_tipo": TiposChoices.CONSUMIVEL,
+        "pr_valor": 10,
+        "pr_codigo_cardapio": "A910",
         "pr_path_imagem": "should_not_be_saved.jpg",
         "pr_id_back_blaze": "should_not_be_saved",
     }
 
-    response = api_client.post("/api/produtos/", data)
+    response = api_client.post("/api/v1/produtos/", data)
 
     assert response.status_code == status.HTTP_201_CREATED
     assert "pr_path_imagem" not in response.data
@@ -70,7 +71,7 @@ def test_partial_update_produto(api_client, produto):
         "pr_id_back_blaze": "should_not_update",
     }
 
-    response = api_client.patch(f"/api/produtos/{produto.id}/", data)
+    response = api_client.patch(f"/api/v1/produtos/{produto.id}/", data)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["pr_nome"] == "Updated Name"
@@ -79,5 +80,5 @@ def test_partial_update_produto(api_client, produto):
 
     produto.refresh_from_db()
     assert produto.pr_nome == "Updated Name"
-    assert produto.pr_path_imagem == ""
-    assert produto.pr_id_back_blaze == ""
+    assert produto.pr_path_imagem == "undefined"
+    assert produto.pr_id_back_blaze == "undefined"
