@@ -70,22 +70,17 @@ class StripeWebhookViewSet(BaseViewSet):
         endpoint_secret = get_env_var("STRIPE_WEBHOOK_SECRET")
 
         try:
-            # Verifica e constrói o objeto de evento do Stripe
             event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
         except ValueError:
-            # Payload inválido
             logger.error("Payload inválido")
             return Response({"error": "Invalid payload"}, status=status.HTTP_400_BAD_REQUEST)
         except stripe.error.SignatureVerificationError:
-            # Assinatura inválida
             logger.error("Assinatura inválida")
             return Response({"error": "Invalid signature"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Tratamento dos diferentes tipos de evento
         if event["type"] == "invoice.payment_succeeded":
             self.handle_payment_succeeded()
 
-        # Retorna 200 para confirmar o recebimento do webhook
         return Response(status=status.HTTP_200_OK)
 
     def handle_payment_succeeded(self):
