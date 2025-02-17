@@ -92,9 +92,6 @@ class Produto(Base):
     )
     pr_unidade = models.PositiveSmallIntegerField(_("tipo"), choices=UnidadesProdutoChoices.choices, null=True)
     pr_quantidade = models.PositiveSmallIntegerField(_("tipo"), default=0)
-    pr_ponto_carne = models.IntegerField(
-        _("ponto da carne"), choices=PontosCarneChoices.choices, default=PontosCarneChoices.NAO_TEM
-    )
 
     @classmethod
     def upload(cls, produto: "Produto", arquivo: InMemoryUploadedFile, metadata=None):
@@ -151,6 +148,7 @@ class CategoriaProduto(Base):
         verbose_name_plural = _("Categorias")
 
 
+# TODO remover/rever esses modelos
 class GrupoComplementoProduto(Base):
     gr_nome = models.CharField(_("nome"), max_length=30)
 
