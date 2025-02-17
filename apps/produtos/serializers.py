@@ -2,7 +2,14 @@ from rest_framework import serializers
 
 from apps.system.base.serializers import BaseModelSerializer
 
-from .models import CategoriaProduto, ComplementoProduto, GrupoComplementoProduto, Produto
+from .models import (
+    CategoriaProduto,
+    ComplementoProduto,
+    CustomizacaoProduto,
+    CustomizacaoProdutoItem,
+    GrupoComplementoProduto,
+    Produto,
+)
 
 
 class CategoriaProdutoSerializer(BaseModelSerializer):
@@ -43,8 +50,8 @@ class ProdutoAlteracaoSerializer(BaseModelSerializer):
             setattr(instance, attr, value)
         instance.save()
 
-        if 'pr_imagem' in self.initial_data:  # type: ignore
-            imagem = validated_data.get('pr_imagem', None)
+        if "pr_imagem" in self.initial_data:  # type: ignore
+            imagem = validated_data.get("pr_imagem", None)
             if instance.pr_id_back_blaze and instance.pr_path_imagem:
                 Produto.remover_foto(instance)
 
@@ -82,4 +89,28 @@ class GrupoComplementoProdutoVisualizacaoSerializer(BaseModelSerializer):
 class GrupoComplementoProdutoAlteracaoSerializer(BaseModelSerializer):
     class Meta:
         model = GrupoComplementoProduto
+        fields = "__all__"
+
+
+class CustomizacaoProdutoVisualizacaoSerializer(BaseModelSerializer):
+    class Meta:
+        model = CustomizacaoProduto
+        fields = "__all__"
+
+
+class CustomizacaoProdutoAlteracaoSerializer(BaseModelSerializer):
+    class Meta:
+        model = CustomizacaoProduto
+        fields = "__all__"
+
+
+class CustomizacaoProdutoItemVisualizacaoSerializer(BaseModelSerializer):
+    class Meta:
+        model = CustomizacaoProdutoItem
+        fields = "__all__"
+
+
+class CustomizacaoProdutoItemAlteracaoSerializer(BaseModelSerializer):
+    class Meta:
+        model = CustomizacaoProdutoItem
         fields = "__all__"

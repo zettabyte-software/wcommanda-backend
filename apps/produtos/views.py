@@ -13,6 +13,12 @@ from .serializers import (
     ComplementoProduto,
     ComplementoProdutoAlteracaoSerializer,
     ComplementoProdutoVisualizacaoSerializer,
+    CustomizacaoProduto,
+    CustomizacaoProdutoAlteracaoSerializer,
+    CustomizacaoProdutoItem,
+    CustomizacaoProdutoItemAlteracaoSerializer,
+    CustomizacaoProdutoItemVisualizacaoSerializer,
+    CustomizacaoProdutoVisualizacaoSerializer,
     GrupoComplementoProduto,
     GrupoComplementoProdutoAlteracaoSerializer,
     GrupoComplementoProdutoVisualizacaoSerializer,
@@ -170,4 +176,34 @@ class GrupoComplementoProdutoViewSet(BaseModelViewSet):
         "partial_update": GrupoComplementoProdutoAlteracaoSerializer,
         "bulk_create": GrupoComplementoProdutoAlteracaoSerializer,
         "clonar": GrupoComplementoProdutoAlteracaoSerializer,
+    }
+
+
+class CustomizacaoProdutoViewSet(BaseModelViewSet):
+    queryset = CustomizacaoProduto.objects.all()
+    serializer_classes = {
+        "list": CustomizacaoProdutoVisualizacaoSerializer,
+        "retrieve": CustomizacaoProdutoVisualizacaoSerializer,
+        "create": CustomizacaoProdutoAlteracaoSerializer,
+        "update": CustomizacaoProdutoAlteracaoSerializer,
+        "partial_update": CustomizacaoProdutoAlteracaoSerializer,
+        "bulk_create": CustomizacaoProdutoAlteracaoSerializer,
+        "clonar": CustomizacaoProdutoAlteracaoSerializer,
+    }
+
+
+class CustomizacaoProdutoItemViewSet(BaseModelViewSet):
+    queryset = CustomizacaoProdutoItem.objects.all()
+    serializer_classes = {
+        "list": CustomizacaoProdutoItemVisualizacaoSerializer,
+        "retrieve": CustomizacaoProdutoItemVisualizacaoSerializer,
+        "create": CustomizacaoProdutoItemAlteracaoSerializer,
+        "update": CustomizacaoProdutoItemAlteracaoSerializer,
+        "partial_update": CustomizacaoProdutoItemAlteracaoSerializer,
+        "bulk_create": CustomizacaoProdutoItemAlteracaoSerializer,
+        "clonar": CustomizacaoProdutoItemAlteracaoSerializer,
+    }
+
+    filterset_fields = {
+        "cc_customizacao": ["exact"],
     }

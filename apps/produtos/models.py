@@ -148,6 +148,35 @@ class CategoriaProduto(Base):
         verbose_name_plural = _("Categorias")
 
 
+class CustomizacaoProduto(Base):
+    cz_nome = models.CharField(_("nome"), max_length=30)
+    cz_preco = models.FloatField(_("preço"), default=0)
+    cz_descricao = models.CharField(_("descrição"), max_length=150, blank=True)
+
+    class Meta:
+        db_table = "customizacao_produto"
+        ordering = ["-id"]
+        verbose_name = _("Customização do Produto")
+        verbose_name_plural = _("Customizações dos Produtos")
+
+
+class CustomizacaoProdutoItem(Base):
+    cc_customizacao = TenantForeignKey(
+        verbose_name=_("customização"),
+        to="produtos.CustomizacaoProduto",
+        on_delete=models.CASCADE,
+        related_name="itens",
+    )
+    cc_nome = models.CharField(_("nome"), max_length=30)
+    cc_descricao = models.CharField(_("descrição"), max_length=150, blank=True)
+
+    class Meta:
+        db_table = "customizacao_produto_item"
+        ordering = ["-id"]
+        verbose_name = _("Item da Customização do Produto")
+        verbose_name_plural = _("Itens das Customizações dos Produtos")
+
+
 # TODO remover/rever esses modelos
 class GrupoComplementoProduto(Base):
     gr_nome = models.CharField(_("nome"), max_length=30)
