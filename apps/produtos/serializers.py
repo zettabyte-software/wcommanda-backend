@@ -4,10 +4,10 @@ from apps.system.base.serializers import BaseModelSerializer
 
 from .models import (
     CategoriaProduto,
-    ComplementoProduto,
+    # ComplementoProduto,
     CustomizacaoProduto,
     CustomizacaoProdutoItem,
-    GrupoComplementoProduto,
+    # GrupoComplementoProduto,
     Produto,
 )
 
@@ -68,28 +68,28 @@ class ProdutoAlteracaoSerializer(BaseModelSerializer):
         )
 
 
-class ComplementoProdutoVisualizacaoSerializer(BaseModelSerializer):
-    class Meta:
-        model = ComplementoProduto
-        fields = "__all__"
+# class ComplementoProdutoVisualizacaoSerializer(BaseModelSerializer):
+#     class Meta:
+#         model = ComplementoProduto
+#         fields = "__all__"
 
 
-class ComplementoProdutoAlteracaoSerializer(BaseModelSerializer):
-    class Meta:
-        model = ComplementoProduto
-        fields = "__all__"
+# class ComplementoProdutoAlteracaoSerializer(BaseModelSerializer):
+#     class Meta:
+#         model = ComplementoProduto
+#         fields = "__all__"
 
 
-class GrupoComplementoProdutoVisualizacaoSerializer(BaseModelSerializer):
-    class Meta:
-        model = GrupoComplementoProduto
-        fields = "__all__"
+# class GrupoComplementoProdutoVisualizacaoSerializer(BaseModelSerializer):
+#     class Meta:
+#         model = GrupoComplementoProduto
+#         fields = "__all__"
 
 
-class GrupoComplementoProdutoAlteracaoSerializer(BaseModelSerializer):
-    class Meta:
-        model = GrupoComplementoProduto
-        fields = "__all__"
+# class GrupoComplementoProdutoAlteracaoSerializer(BaseModelSerializer):
+#     class Meta:
+#         model = GrupoComplementoProduto
+#         fields = "__all__"
 
 
 class CustomizacaoProdutoVisualizacaoSerializer(BaseModelSerializer):

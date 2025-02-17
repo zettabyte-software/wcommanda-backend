@@ -103,7 +103,6 @@ class Produto(Base):
         extencao = arquivo.name.split(".")[-1]
         nome_aleatorio_imagem = f'{uuid.uuid4()}.{extencao}'
 
-
         path = DEFAULT_BUCKET_PRODUCT_PHOTO_PATH % (
             assinatura.ss_codigo_licenca,  # type: ignore
             produto.pk,
@@ -177,36 +176,35 @@ class CustomizacaoProdutoItem(Base):
         verbose_name_plural = _("Itens das Customizações dos Produtos")
 
 
-# TODO remover/rever esses modelos
-class GrupoComplementoProduto(Base):
-    gr_nome = models.CharField(_("nome"), max_length=30)
+# class GrupoComplementoProduto(Base):
+#     gr_nome = models.CharField(_("nome"), max_length=30)
 
-    class Meta:
-        db_table = "grupo_complemento_produto"
-        ordering = ["-id"]
-        verbose_name = _("Grupo de Acréscimo do Produto")
-        verbose_name_plural = _("Grupos de Acréscimos dos Produtos")
+#     class Meta:
+#         db_table = "grupo_complemento_produto"
+#         ordering = ["-id"]
+#         verbose_name = _("Grupo de Acréscimo do Produto")
+#         verbose_name_plural = _("Grupos de Acréscimos dos Produtos")
 
 
-class ComplementoProduto(Base):
-    pc_grupo_complemento = TenantForeignKey(
-        verbose_name=_("grupo de complemento"),
-        to="produtos.GrupoComplementoProduto",
-        on_delete=models.CASCADE,
-        related_name="complementos",
-    )
-    pc_nome = models.CharField(_("nome"), max_length=40)
-    pc_preco = models.FloatField(_("preço"), default=0)
-    pc_quantidade_minima = models.FloatField(_("quantidade máxima"), default=1)
-    pc_quantidade_maxima = models.FloatField(_("quantidade máxima"), default=1)
-    pc_descricao = models.CharField(_("descrição"), max_length=50, blank=True)
-    pc_obrigatorio = models.BooleanField(_("obrigatório"), default=False)
+# class ComplementoProduto(Base):
+#     pc_grupo_complemento = TenantForeignKey(
+#         verbose_name=_("grupo de complemento"),
+#         to="produtos.GrupoComplementoProduto",
+#         on_delete=models.CASCADE,
+#         related_name="complementos",
+#     )
+#     pc_nome = models.CharField(_("nome"), max_length=40)
+#     pc_preco = models.FloatField(_("preço"), default=0)
+#     pc_quantidade_minima = models.FloatField(_("quantidade máxima"), default=1)
+#     pc_quantidade_maxima = models.FloatField(_("quantidade máxima"), default=1)
+#     pc_descricao = models.CharField(_("descrição"), max_length=50, blank=True)
+#     pc_obrigatorio = models.BooleanField(_("obrigatório"), default=False)
 
-    class Meta:
-        db_table = "complemento_produto"
-        ordering = ["-id"]
-        verbose_name = _("Complemento do Produto")
-        verbose_name_plural = _("Complementos dos Produtos")
+#     class Meta:
+#         db_table = "complemento_produto"
+#         ordering = ["-id"]
+#         verbose_name = _("Complemento do Produto")
+#         verbose_name_plural = _("Complementos dos Produtos")
 
 
 auditlog.register(
@@ -223,17 +221,17 @@ auditlog.register(
         "hora_ultima_alteracao",
     ],
 )
-auditlog.register(
-    GrupoComplementoProduto,
-    exclude_fields=[
-        "data_ultima_alteracao",
-        "hora_ultima_alteracao",
-    ],
-)
-auditlog.register(
-    ComplementoProduto,
-    exclude_fields=[
-        "data_ultima_alteracao",
-        "hora_ultima_alteracao",
-    ],
-)
+# auditlog.register(
+#     GrupoComplementoProduto,
+#     exclude_fields=[
+#         "data_ultima_alteracao",
+#         "hora_ultima_alteracao",
+#     ],
+# )
+# auditlog.register(
+#     ComplementoProduto,
+#     exclude_fields=[
+#         "data_ultima_alteracao",
+#         "hora_ultima_alteracao",
+#     ],
+# )

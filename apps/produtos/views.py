@@ -10,18 +10,18 @@ from apps.system.base.views import BaseModelViewSet
 from .serializers import (
     CategoriaProduto,
     CategoriaProdutoSerializer,
-    ComplementoProduto,
-    ComplementoProdutoAlteracaoSerializer,
-    ComplementoProdutoVisualizacaoSerializer,
+    # ComplementoProduto,
+    # ComplementoProdutoAlteracaoSerializer,
+    # ComplementoProdutoVisualizacaoSerializer,
     CustomizacaoProduto,
     CustomizacaoProdutoAlteracaoSerializer,
     CustomizacaoProdutoItem,
     CustomizacaoProdutoItemAlteracaoSerializer,
     CustomizacaoProdutoItemVisualizacaoSerializer,
     CustomizacaoProdutoVisualizacaoSerializer,
-    GrupoComplementoProduto,
-    GrupoComplementoProdutoAlteracaoSerializer,
-    GrupoComplementoProdutoVisualizacaoSerializer,
+    # GrupoComplementoProduto,
+    # GrupoComplementoProdutoAlteracaoSerializer,
+    # GrupoComplementoProdutoVisualizacaoSerializer,
     Produto,
     ProdutoAlteracaoSerializer,
     ProdutoVisualizacaoSerializer,
@@ -153,30 +153,30 @@ class CategoriaProdutoViewSet(BaseModelViewSet):
         return super().perform_destroy(instance)
 
 
-class ComplementoProdutoViewSet(BaseModelViewSet):
-    queryset = ComplementoProduto.objects.all()
-    serializer_classes = {
-        "list": ComplementoProdutoVisualizacaoSerializer,
-        "retrieve": ComplementoProdutoVisualizacaoSerializer,
-        "create": ComplementoProdutoAlteracaoSerializer,
-        "update": ComplementoProdutoAlteracaoSerializer,
-        "partial_update": ComplementoProdutoAlteracaoSerializer,
-        "bulk_create": ComplementoProdutoAlteracaoSerializer,
-        "clonar": ComplementoProdutoAlteracaoSerializer,
-    }
+# class ComplementoProdutoViewSet(BaseModelViewSet):
+#     queryset = ComplementoProduto.objects.all()
+#     serializer_classes = {
+#         "list": ComplementoProdutoVisualizacaoSerializer,
+#         "retrieve": ComplementoProdutoVisualizacaoSerializer,
+#         "create": ComplementoProdutoAlteracaoSerializer,
+#         "update": ComplementoProdutoAlteracaoSerializer,
+#         "partial_update": ComplementoProdutoAlteracaoSerializer,
+#         "bulk_create": ComplementoProdutoAlteracaoSerializer,
+#         "clonar": ComplementoProdutoAlteracaoSerializer,
+#     }
 
 
-class GrupoComplementoProdutoViewSet(BaseModelViewSet):
-    queryset = GrupoComplementoProduto.objects.all()
-    serializer_classes = {
-        "list": GrupoComplementoProdutoVisualizacaoSerializer,
-        "retrieve": GrupoComplementoProdutoVisualizacaoSerializer,
-        "create": GrupoComplementoProdutoAlteracaoSerializer,
-        "update": GrupoComplementoProdutoAlteracaoSerializer,
-        "partial_update": GrupoComplementoProdutoAlteracaoSerializer,
-        "bulk_create": GrupoComplementoProdutoAlteracaoSerializer,
-        "clonar": GrupoComplementoProdutoAlteracaoSerializer,
-    }
+# class GrupoComplementoProdutoViewSet(BaseModelViewSet):
+#     queryset = GrupoComplementoProduto.objects.all()
+#     serializer_classes = {
+#         "list": GrupoComplementoProdutoVisualizacaoSerializer,
+#         "retrieve": GrupoComplementoProdutoVisualizacaoSerializer,
+#         "create": GrupoComplementoProdutoAlteracaoSerializer,
+#         "update": GrupoComplementoProdutoAlteracaoSerializer,
+#         "partial_update": GrupoComplementoProdutoAlteracaoSerializer,
+#         "bulk_create": GrupoComplementoProdutoAlteracaoSerializer,
+#         "clonar": GrupoComplementoProdutoAlteracaoSerializer,
+#     }
 
 
 class CustomizacaoProdutoViewSet(BaseModelViewSet):
