@@ -30,7 +30,7 @@
     },
     "data": {
       "cf_codigo": "WCM_CONTROLE_ESTOQUE",
-      "cf_descricao": "Define se o sistema vai barrar em caso de estoque negativo",
+      "cf_descricao": "Define se o sistema vai bloqear a finalização da comanda em caso da falta da quantidade do produto no estoque",
       "cf_valor": true
     },
     "active": true
