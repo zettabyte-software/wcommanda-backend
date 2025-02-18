@@ -78,13 +78,13 @@ class Produto(Base):
     pr_zero_lactose = models.BooleanField(_("zero lactose"), default=False)
 
     # complemento
-    pr_grupo_complementos = TenantForeignKey(
-        verbose_name=_("grupo de complementos"),
-        to="produtos.GrupoComplementoProduto",
-        on_delete=models.PROTECT,
-        null=True,
-        related_name="produtos",
-    )
+    # pr_grupo_complementos = TenantForeignKey(
+    #     verbose_name=_("grupo de complementos"),
+    #     to="produtos.GrupoComplementoProduto",
+    #     on_delete=models.PROTECT,
+    #     null=True,
+    #     related_name="produtos",
+    # )
 
     # porção da comida
     pr_serve_pessoas = models.PositiveSmallIntegerField(
@@ -148,6 +148,12 @@ class CategoriaProduto(Base):
 
 
 class CustomizacaoProduto(Base):
+    cz_produto = TenantForeignKey(
+        verbose_name=_("produto"),
+        to="produtos.Produto",
+        on_delete=models.CASCADE,
+        related_name="customizacoes",
+    )
     cz_nome = models.CharField(_("nome"), max_length=30)
     cz_preco = models.FloatField(_("preço"), default=0)
     cz_descricao = models.CharField(_("descrição"), max_length=150, blank=True)
