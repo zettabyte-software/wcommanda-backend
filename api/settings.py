@@ -47,6 +47,7 @@ ALLOWED_HOSTS = [
     # dev
     "127.0.0.1",
     "localhost",
+    "191.101.234.208",
     # prod
     ".wcommanda.com.br",
 ]
