@@ -2,13 +2,12 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from apps.system.base.views import BaseModelViewSet
-from apps.system.base.views import BaseModelViewSet
 
 from .models import StatusComissaoGarcomChoices
 from .serializers import (
     ComissaoGarcom,
-    ComissaoGarcomVisualizacaoSerializer,
     ComissaoGarcomAlteracaoSerializer,
+    ComissaoGarcomVisualizacaoSerializer,
 )
 
 
