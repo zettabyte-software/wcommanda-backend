@@ -5,10 +5,10 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from apps.system.base.views import BaseViewSet
 from apps.users.serializers import UsuarioSerializer
 
 from .serializers import (
@@ -24,8 +24,6 @@ class LoginView(TokenObtainPairView):
     permission_classes = [AllowAny]
 
     def get_host(self):
-        if settings.IN_DEVELOPMENT:
-            return "zettabyte.wcommanda.com.br"
         return self.request.get_host()
 
     def get_subdominio(self):
@@ -38,7 +36,7 @@ class LoginView(TokenObtainPairView):
         return context
 
 
-class CadastroViewSet(BaseViewSet):
+class CadastroViewSet(GenericViewSet):
     serializer_class = UsuarioSerializer
 
     def create(self, request):
@@ -48,7 +46,7 @@ class CadastroViewSet(BaseViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class AuthViewSet(BaseViewSet):
+class AuthViewSet(GenericViewSet):
     serializer_class = UsuarioSerializer
     authentication_classes = []
     permission_classes = [AllowAny]

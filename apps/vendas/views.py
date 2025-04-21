@@ -5,15 +5,14 @@ from django.utils import timezone
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-from apps.system.base.views import BaseViewSet
+from rest_framework.viewsets import GenericViewSet
 
 from .dashboards import vendas_por_periodo
 from .models import Venda, VendaItem
 from .serializers import DashboardQueryParamSerializer
 
 
-class DashboardVendasViewSet(BaseViewSet):
+class DashboardVendasViewSet(GenericViewSet):
     @action(methods=["get"], detail=False)
     def por_dias(self, request):
         serializer = DashboardQueryParamSerializer(data=request.query_params)

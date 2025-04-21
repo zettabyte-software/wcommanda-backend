@@ -4,9 +4,10 @@ from django.utils import timezone
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.viewsets import GenericViewSet
 
 from apps.fidelidade.models import StatusCartaoFidelidadeChoices
-from apps.system.base.views import BaseModelViewSet, BaseViewSet
+from apps.system.base.views import BaseModelViewSet
 from apps.vendas.services import gerar_venda_por_comanda
 
 from .models import StatusComandaChoices, StatusComandaItemChoices
@@ -227,7 +228,7 @@ class ItemComandaViewSet(BaseModelViewSet):
         return Response()
 
 
-class PainelPedidosViewSet(BaseViewSet):
+class PainelPedidosViewSet(GenericViewSet):
     def list(self, request):
         numeros_pedidos = (
             ComandaItem.objects.filter(

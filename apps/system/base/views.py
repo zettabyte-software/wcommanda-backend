@@ -1,26 +1,27 @@
-from django.conf import settings
+import warnings
+
 from django.db.models import ProtectedError
 
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from django_multitenant.utils import get_current_tenant
 from threadlocals.threadlocals import get_request_variable
 
 
-class BaseViewSet(GenericViewSet):
+class BaseModelViewSet(ModelViewSet):
+    tenant_view = True
+    model = None
     serializer_classes = {}
     serializer_class = None
     filterset_fields = {}
     search_fields = []
+    ordering_fields = []
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        distinct_fields = self.request.query_params.get("distinct", None)
-        if distinct_fields is not None:
-            return queryset.distinct(*distinct_fields)
         return queryset.filter(assinatura=get_current_tenant())
 
     def get_object(self):
@@ -34,7 +35,18 @@ class BaseViewSet(GenericViewSet):
         )
 
         if self.serializer_class:
+            if self.serializer_class is not None and self.serializer_classes != {}:
+                warnings.warn(
+                    f"'{self.__class__.__name__}' possui o 'serializer_class' e 'serializer_classes'. O 'serializer_classes' será ignorado.",
+                    stacklevel=1,
+                )
+
             return self.serializer_class
+
+        if self.action not in self.serializer_classes:
+            raise AssertionError(
+                f"'{self.__class__.__name__}' não possui o 'serializer_classes' para a ação '{self.action}'."
+            )
 
         return self.serializer_classes[self.action]
 
@@ -45,89 +57,6 @@ class BaseViewSet(GenericViewSet):
         context = super().get_serializer_context()
         aditional_context = self.get_aditional_serializer_context()
         return {"action": self.action, "token": get_request_variable("token"), **context, **aditional_context}
-
-    def get_host(self):
-        if settings.IN_DEVELOPMENT:
-            return "zettabyte.wcommanda.com.br"
-        return self.request.get_host()
-
-    def get_subdominio(self):
-        return self.get_host().split(".")[0]
-
-    def generic_action(self, *args, **kwargs):
-        serializer = self.get_serializer(data=self.request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        response_status = kwargs.get("status", status.HTTP_200_OK)
-        response_data = kwargs.get("data", None)
-        return Response(response_data, status=response_status)
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        serializer = self.get_serializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
-
-
-class BaseModelViewSet(BaseViewSet, ModelViewSet):
-    tenant_view = True
-    model = None
-    serializer_classes = {}
-    serializer_class = None
-    filterset_fields = {}
-    search_fields = []
-    ordering_fields = []
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-
-        fields = self.request.query_params.get("fields", None)
-
-        if fields is not None:
-            queryset = queryset.values(*fields)
-
-        distinct_fields = self.request.query_params.get("distinct", None)
-        if distinct_fields is not None:
-            queryset = queryset.distinct(*distinct_fields).order_by(*distinct_fields)
-            if self.tenant_view:
-                queryset = queryset.filter(assinatura=get_current_tenant())
-            return queryset
-
-        if self.tenant_view:
-            queryset = queryset.filter(assinatura=get_current_tenant())
-
-        return queryset
-
-    def get_serializer_class(self):
-        assert self.serializer_classes != {} or self.serializer_class is not None, (
-            f"'{self.__class__.__name__}' deve implementar o 'serializer_class' ou  'serializer_classes'."
-        )
-
-        if self.serializer_class:
-            return self.serializer_class
-
-        return self.serializer_classes[self.action]
-
-    def get_object(self):
-        instance = super().get_object()
-        self.instance = instance
-        return instance
-
-    def get_aditional_serializer_context(self):
-        return {}
-
-    def get_serializer_context(self):
-        context = super().get_serializer_context()
-        aditional_context = self.get_aditional_serializer_context()
-        return {"action": self.action, "token": get_request_variable("token"), **context, **aditional_context}
-
-    def get_host(self):
-        if settings.IN_DEVELOPMENT:
-            return "zettabyte.wcommanda.com.br"
-        return self.request.get_host()
-
-    def get_subdominio(self):
-        return self.get_host().split(".")[0]
 
     def perform_create(self, serializer, **overwrite):
         return serializer.save(owner=self.request.user, **overwrite)
@@ -138,6 +67,8 @@ class BaseModelViewSet(BaseViewSet, ModelViewSet):
     def alterar_campos_unicos(self, instance):
         """Alterar campos antes da clonagem."""
 
+        pass
+
     def generic_action(self, *args, **kwargs):
         serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
@@ -145,6 +76,11 @@ class BaseModelViewSet(BaseViewSet, ModelViewSet):
         response_status = kwargs.get("status", status.HTTP_200_OK)
         response_data = kwargs.get("data", None)
         return Response(response_data, status=response_status)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset()).values()
+        page = self.paginate_queryset(queryset)
+        return self.get_paginated_response(page)
 
     def destroy(self, request, *args, **kwargs):
         try:
@@ -184,4 +120,3 @@ class BaseModelViewSet(BaseViewSet, ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset()).values(*values)
         page = self.paginate_queryset(queryset)
         return self.get_paginated_response(page)
-

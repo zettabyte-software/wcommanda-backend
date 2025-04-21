@@ -5,12 +5,12 @@ from django.conf import settings
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.viewsets import ViewSet
+from rest_framework.viewsets import GenericViewSet, ViewSet
 
 import stripe
 from django_multitenant.utils import set_current_tenant
 
-from apps.system.base.views import BaseModelViewSet, BaseViewSet
+from apps.system.base.views import BaseModelViewSet
 from utils.env import get_env_var
 
 from .serializers import (
@@ -61,7 +61,7 @@ class CriarAssinaturaViewSet(ViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
 
-class StripeWebhookViewSet(BaseViewSet):
+class StripeWebhookViewSet(GenericViewSet):
     permission_classes = [AllowAny]
 
     def create(self, request):
