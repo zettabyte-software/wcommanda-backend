@@ -66,6 +66,6 @@ try:
     )
 
     DefaultRecordsManger().apply_updates()
-    logging.info("Assinatura de desenvolvimento criada com sucesso!")
+    logger.info("Assinatura de desenvolvimento criada com sucesso!")
 except Exception as e:
-    logging.error("Ocorreu um erro inesperado ao criar a assinatura de desenvolvimento: \n%s", e)
+    logger.error("Ocorreu um erro inesperado ao criar a assinatura de desenvolvimento: \n%s", e)
