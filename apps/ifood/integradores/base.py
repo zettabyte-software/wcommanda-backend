@@ -1,3 +1,6 @@
+import hashlib
+import hmac
+import json
 import logging
 import urllib.parse
 
@@ -82,6 +85,33 @@ class BaseIntegradorIfood:
             logger.error("Erro ao realizar login no iFood: %s", e)
             sentry_sdk.capture_exception(e)
             raise e
+
+    @staticmethod
+    def validar_evento_ifood(payload: str, signature: str, secret: str) -> bool:
+        """Valida se o conteúdo enviado no webhook do iFood é válido.
+
+        Parâmetros:
+        payload (str): Corpo da requisição recebido (em formato JSON).
+        signature (str): Assinatura enviada no header da requisição.
+        secret (str): Chave secreta para validação (fornecida pelo iFood).
+
+        Retorna:
+        bool: True se o webhook for válido, False caso contrário.
+        """
+
+        if isinstance(payload, dict):
+            payload = json.dumps(payload)
+
+        # Calcula o HMAC utilizando a chave secreta e o payload, utilizando SHA256.
+        computed_signature = hmac.new(
+            key=secret.encode('utf-8'),
+            msg=payload.encode('utf-8'),
+            digestmod=hashlib.sha256
+        ).hexdigest()
+
+        # Compara a assinatura computada com a assinatura recebida de forma segura
+        return hmac.compare_digest(computed_signature, signature)
+
 
 
 class IntegradorCadastroIfood(BaseIntegradorIfood):
