@@ -63,6 +63,8 @@ class Filial(Base):
     fl_merchat_id_ifood = models.UUIDField(_("id do merchant do iFood"), null=True, default=None)
     fl_catalog_id = models.UUIDField(_("id do catálogo digital do iFood"), null=True, default=None)
     fl_catalog_group_id = models.UUIDField(_("id do grupo do catálogo do iFood"), null=True, default=None)
+    fl_client_secret_ifood = models.UUIDField(_("clientId do iFood"), null=True, default=None)
+    fl_client_id_ifood = models.UUIDField(_("clientSecret do iFood"), null=True, default=None)
 
     fl_url_logo = models.URLField(_("url amigável da foto"), blank=True, default="")
     fl_path_logo = models.CharField(_("caminho da logo no bucket"), max_length=120, blank=True, default="")
