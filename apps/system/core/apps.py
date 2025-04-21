@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
-from common.internal.checks.api.envs import check_required_env_vars  # noqa: F401
+from common.checks.envs import check_required_env_vars  # noqa: F401
 
 
 class CoreConfig(AppConfig):

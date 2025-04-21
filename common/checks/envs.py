@@ -5,7 +5,7 @@ from django.core.checks import Error, Tags, register
 from utils.env import ENVS
 
 
-@register(Tags.compatibility)
+@register(Tags.compatibility, deploy=True)
 def check_required_env_vars(app_configs, **kwargs):
     """Verifica se todas as variáveis de ambiente necessárias estão definidas.
 
