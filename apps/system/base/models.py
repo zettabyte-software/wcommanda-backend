@@ -3,12 +3,11 @@ import json
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
 
-from auditlog.models import AuditlogHistoryField, LogEntry
+from auditlog.models import AuditlogHistoryField
 from django_lifecycle import LifecycleModel
 from django_multitenant.fields import TenantForeignKey
 from django_multitenant.models import TenantModel
@@ -39,9 +38,9 @@ class Base(TenantModel, LifecycleModel):
         data = model_to_dict(self)
         return json.dumps(data, default=str)
 
-    def get_historico_alteracoes(self):
-        content_type = ContentType.objects.get_for_model(self)
-        return LogEntry.objects.filter(content_type=content_type, object_id=self.pk).order_by("-timestamp")
+    def as_dict(self):
+        data = model_to_dict(self)
+        return data
 
     def clonar(self, commit=True, **fields):
         clone = copy.copy(self)
@@ -54,16 +53,13 @@ class Base(TenantModel, LifecycleModel):
         if not hasattr(self, "owner"):
             if self.system_model:
                 user_cls = get_user_model()
-                owner = user_cls.get_instacia_bot_wcommanda()
+                self.owner = user_cls.get_instacia_bot_wcommanda()
             else:
                 self.owner = get_current_user()
 
-
-        last = self.__class__.objects.all().order_by("codigo").last()
-        if last:
-            self.codigo = last.codigo + 1
-        else:
-            self.codigo = 1
+        if self.pk is None:
+            max_code = self.__class__.objects.all().aggregate(max=models.Max("codigo"))["max"] or 0
+            self.codigo = max_code + 1
 
         return super().save(*args, **kwargs)
 
