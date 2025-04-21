@@ -66,10 +66,7 @@ class Plano(Base):
     pl_numero_usuarios = models.PositiveIntegerField(_("número usuarios"), default=2)
     pl_numero_telas = models.PositiveIntegerField(_("número de telas"), default=1)
     pl_integra_ifood = models.BooleanField(_("define se o plano inegra com o ifood"), default=False)
-    pl_limite_integracoes_pedidos_ifood = models.PositiveIntegerField(
-        _("número máximo pedidos de ifood recebíveis"),
-        default=0,
-    )
+    pl_limite_integracoes_pedidos_ifood = models.PositiveIntegerField(_("número máximo pedidos de ifood recebíveis"), default=0)
     pl_valor_mensalidade = models.FloatField(_("valor mensalidade"), default=0)
     pl_observacao = models.CharField(_("observação"), max_length=50)
 

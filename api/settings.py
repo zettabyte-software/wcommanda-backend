@@ -80,9 +80,9 @@ DJANGO_APPS = [
 
 LIBS_APPS = [
     "auditlog",
-    "django_multitenant",
     "cachalot",
     "corsheaders",
+    "django_multitenant",
     "django_filters",
     "rest_framework",
 ]
