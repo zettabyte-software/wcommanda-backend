@@ -37,7 +37,7 @@ class MovimentacaoEstoqueViewSet(BaseModelViewSet):
 
     def perform_create(self, serializer):
         return criar_movimentacao(
-            serializer.validated_data["mv_comanda_item"],
+            serializer.validated_data.get("mv_comanda_item", None),
             serializer.validated_data["mv_produto"],
             serializer.validated_data["mv_quantidade"],
             serializer.validated_data["mv_tipo"],
