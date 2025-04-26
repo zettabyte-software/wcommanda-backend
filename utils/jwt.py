@@ -7,6 +7,7 @@ import jwt
 
 from .env import get_env_var
 
+DEFAULT_ALGORITHM = "HS256"
 API_SECRET_KEY = get_env_var("DJANGO_SECRET_KEY")
 API_ISSUER = settings.SIMPLE_JWT["ISSUER"]
 DEFAULT_JWT_PAYLOAD_CONTENT = {
@@ -19,11 +20,11 @@ DEFAULT_JWT_PAYLOAD_CONTENT = {
 
 
 def decode_jwt(token: str, audience: str):
-    payload = jwt.decode(token, key=API_SECRET_KEY, algorithms=["HS256"], audience=audience)
+    payload = jwt.decode(token, key=API_SECRET_KEY, algorithms=[DEFAULT_ALGORITHM], audience=audience)
     return payload
 
 
 def generate_jwt(payload: dict):
     payload = {**DEFAULT_JWT_PAYLOAD_CONTENT, **payload}
-    token = jwt.encode(payload=payload, algorithm="HS256", key=API_SECRET_KEY)
+    token = jwt.encode(payload=payload, algorithm=DEFAULT_ALGORITHM, key=API_SECRET_KEY)
     return token
