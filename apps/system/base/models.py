@@ -42,11 +42,11 @@ class Base(TenantModel, LifecycleModel):
         data = model_to_dict(self)
         return data
 
-    def clonar(self, commit=True, **fields):
+    def clonar(self, **fields):
         clone = copy.copy(self)
         for chave, valor in fields.items():
             setattr(clone, chave, valor)
-        clone.save(commit=commit)
+        clone.save()
         return clone
 
     def save(self, *args, **kwargs):
