@@ -49,15 +49,14 @@ class EstoqueProduto:
         """
 
         """Quantidade de produtos reservados em comandas, mas ainda não entregues."""
-        quantidade = ComandaItem.objects.filter(
-            data_criacao=timezone.now().date(),
-            ct_produto=self.produto,
-            ct_status__in=(
-                StatusComandaItemChoices.ABERTO,
-                StatusComandaItemChoices.PREPARANDO,
-                StatusComandaItemChoices.PRONTO,
-            ),
-        ).count()
+        quantidade = (
+            ComandaItem.objects.filter(
+                data_criacao=timezone.now().date(),
+                ct_produto=self.produto,
+            )
+            .exclude(ct_status__in=(StatusComandaItemChoices.ENTREGUE, StatusComandaItemChoices.CANCELADO))
+            .count()
+        )
 
         return quantidade
 
@@ -97,22 +96,20 @@ class EstoqueProduto:
         return dados_estoque
 
 
-def criar_movimentacao(comanda_item, produto, quantidade, tipo):
-    ultima_movimentacao = (
-        MovimentacaoEstoque.objects.filter(mv_produto=produto)
-        .order_by("-id")
-        .first()
-    )
-
-    quantidade_anterior = 0
+def criar_movimentacao(produto, quantidade, tipo, comanda_item=None):
+    quantidade_atual_produto = 0
     quantidade_atual = quantidade
-    if ultima_movimentacao is not None:
-        quantidade_anterior = ultima_movimentacao.mv_quantidade_anterior
 
-        if (tipo == TiposMovimentacaoEstoqueChoices.ENTRADA):
+    movimentacoes = MovimentacaoEstoque.objects.filter(mv_produto=produto)
+
+    ultima_movimentacao = movimentacoes.first()
+    if ultima_movimentacao is not None:
+        quantidade_atual_produto = ultima_movimentacao.mv_quantidade_atual
+
+        if tipo == TiposMovimentacaoEstoqueChoices.ENTRADA:
             quantidade_atual = ultima_movimentacao.mv_quantidade_atual + quantidade
 
-        elif (tipo == TiposMovimentacaoEstoqueChoices.SAIDA):
+        elif tipo == TiposMovimentacaoEstoqueChoices.SAIDA:
             quantidade_atual = ultima_movimentacao.mv_quantidade_atual - quantidade
 
     movimentacao = MovimentacaoEstoque.objects.create(
@@ -120,7 +117,7 @@ def criar_movimentacao(comanda_item, produto, quantidade, tipo):
         mv_tipo=tipo,
         mv_produto=produto,
         mv_quantidade=quantidade,
-        mv_quantidade_anterior=quantidade_anterior,
+        mv_quantidade_anterior=quantidade_atual_produto,
         mv_quantidade_atual=quantidade_atual,
     )
 
