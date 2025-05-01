@@ -49,7 +49,5 @@ class AccessToken(SimpleJWTAccessToken):
         )
 
     def get_host(self) -> str:
-        if settings.IN_DEVELOPMENT:
-            return "zettabyte.wcommanda.com.br"
         request = get_current_request()
         return request.headers.get(settings.TENANT_HOST_HEADER)
