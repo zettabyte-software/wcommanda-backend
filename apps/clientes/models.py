@@ -27,6 +27,10 @@ class Cliente(Base):
     cl_numero = models.CharField(_("número"), max_length=8, blank=True, default="")
     cl_complemento = models.CharField(_("complemento"), max_length=100, blank=True, default="")
 
+    @property
+    def cl_nome_completo(self):
+        return f'{self.cl_nome} {self.cl_sobrenome}'
+
     class Meta:
         db_table = "cliente"
         ordering = ["-id"]
