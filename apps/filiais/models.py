@@ -21,6 +21,7 @@ DEFAULT_BUCKET_BRANCH_LOGO_PATH = "%s/filiais/%s/imgs/%s"
 class Filial(Base):
     filial = None
 
+    # informações básicas
     fl_nome = models.CharField(_("nome"), max_length=120)
 
     fl_cep = models.CharField(_("cep"), max_length=8, blank=True, default="")
@@ -35,10 +36,12 @@ class Filial(Base):
     fl_numero = models.CharField(_("número"), max_length=8, blank=True, default="")
     fl_complemento = models.CharField(_("complemento"), max_length=100, blank=True, default="")
 
+    # contato
     fl_celular = models.CharField(_("celular"), max_length=11, blank=True)
     fl_telefone = models.CharField(_("telefone"), max_length=10, blank=True)
     fl_email = models.EmailField(_("email"), blank=True)
 
+    # funcionamento
     fl_hora_inicio_funcionamento_domingo = models.TimeField(_("horário de início no domingo"), null=True)
     fl_hora_fim_funcionamento_domingo = models.TimeField(_("horário de encerramento no domingo"), null=True)
 
@@ -60,12 +63,15 @@ class Filial(Base):
     fl_hora_inicio_funcionamento_sabado = models.TimeField(_("horário de início no sabado"), null=True)
     fl_hora_fim_funcionamento_sabado = models.TimeField(_("horário de encerramento no sabado"), null=True)
 
+    # ifood
+    fl_client_secret_ifood = models.CharField(_("clientId do iFood"), max_length=300, blank=True, default="")
+    fl_client_id_ifood = models.UUIDField(_("clientSecret do iFood"), null=True, default=None)
+
     fl_merchat_id_ifood = models.UUIDField(_("id do merchant do iFood"), null=True, default=None)
     fl_catalog_id = models.UUIDField(_("id do catálogo digital do iFood"), null=True, default=None)
     fl_catalog_group_id = models.UUIDField(_("id do grupo do catálogo do iFood"), null=True, default=None)
-    fl_client_secret_ifood = models.UUIDField(_("clientId do iFood"), null=True, default=None)
-    fl_client_id_ifood = models.UUIDField(_("clientSecret do iFood"), null=True, default=None)
 
+    # TODO remover
     fl_url_logo = models.URLField(_("url amigável da foto"), blank=True, default="")
     fl_path_logo = models.CharField(_("caminho da logo no bucket"), max_length=120, blank=True, default="")
     fl_id_back_blaze = models.CharField(_("id backblaze do upload"), max_length=40, blank=True, default="")
@@ -79,6 +85,7 @@ class Filial(Base):
         related_name="filiais",
     )
 
+    # TODO remover
     @classmethod
     def upload(cls, filial: "Filial", arquivo: InMemoryUploadedFile, metadata=None):
         if metadata is None:
