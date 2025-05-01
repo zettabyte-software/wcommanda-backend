@@ -1,6 +1,4 @@
-from apps.system.base.serializers import (
-    BaseModelSerializer,
-)
+from apps.system.base.serializers import BaseModelSerializer
 
 from .models import Filial
 
@@ -8,7 +6,14 @@ from .models import Filial
 class FilialVisualizacaoSerializer(BaseModelSerializer):
     class Meta:
         model = Filial
-        fields = "__all__"
+        exclude = (
+            "fl_client_secret_ifood",
+            "fl_client_id_ifood",
+            "fl_merchat_id_ifood",
+            "fl_catalog_id",
+            "fl_catalog_group_id",
+        )
+        # fields = "__all__"
         depth = 1
 
 
