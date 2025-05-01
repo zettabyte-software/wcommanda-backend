@@ -24,7 +24,7 @@ class LoginView(TokenObtainPairView):
     permission_classes = [AllowAny]
 
     def get_host(self):
-        return self.request.get_host()
+        return self.request.headers.get(settings.TENANT_HOST_HEADER, "")
 
     def get_subdominio(self):
         return self.get_host().split(".")[0]
