@@ -83,6 +83,9 @@ class CartaoFidelidade(Base):
         link = f"https://{host}/espaco-do-cliente/cartoes-fidelidade/{self.pk}/?jwt={token}"
         return link
 
+    def __str__(self):
+        return f'{self.cr_cliente} - {self.cr_condicao_premio.cn_quantidade}/{self.cr_total_carimbos}'
+
     class Meta:
         db_table = "cartao_fidelidade"
         ordering = ["-id"]
