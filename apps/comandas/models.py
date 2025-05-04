@@ -88,21 +88,16 @@ class Comanda(Base):
     @property
     def cm_valor_total(self):
         valor_total = (
-            self.itens.filter(  # type: ignore
-                ct_comanda=self,
-            )
-            .exclude(
-                ct_status=StatusComandaChoices.CANCELADA,
-            )
+            ComandaItem.objects.filter(ct_comanda=self)
+            .exclude(ct_status=StatusComandaItemChoices.CANCELADO)
             .aggregate(total=models.Sum(models.F("ct_preco_unitario_produto")))["total"]
             or 0
         )
-
-        try:
-            if self.cm_cupon:
-                return self.cm_cupon.get_valor_com_desconto(valor_total)
-        except ValueError:
-            pass
+        # try:
+        #     if self.cm_cupon:
+        #         return self.cm_cupon.get_valor_com_desconto(valor_total)
+        # except ValueError:
+        #     pass
 
         return round(valor_total, 2)
 
