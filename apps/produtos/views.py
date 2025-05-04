@@ -51,6 +51,7 @@ class ProdutoViewSet(BaseModelViewSet):
     }
     search_fields = ["pr_nome", "pr_codigo_cardapio"]
 
+    """ TODO pensar um jeito melhor de fazer a sincronização do ifood
     def perform_create(self, serializer, **overwrite):
         instance = super().perform_create(serializer, **overwrite)
 
@@ -88,7 +89,7 @@ class ProdutoViewSet(BaseModelViewSet):
         integrador = IntegradorProdutoIfood(merchant_id)
         integrador.excluir_registro_ifood(instance)
 
-        return super().perform_destroy(instance)
+        return super().perform_destroy(instance) """
 
     def alterar_campos_unicos(self, instance):
         instance.pr_codigo_cardapio = gerar_codigo_cardapio()
