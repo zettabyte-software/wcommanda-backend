@@ -28,7 +28,7 @@ class Configuracao(Base):
     }
 
     cf_codigo = models.CharField(_("código"), max_length=40, editable=False)
-    cf_descricao = models.CharField(_("descrição"), max_length=100)
+    cf_descricao = models.CharField(_("descrição"), max_length=500)
     cf_valor = models.CharField(_("valor"), max_length=150)
 
     @classmethod
