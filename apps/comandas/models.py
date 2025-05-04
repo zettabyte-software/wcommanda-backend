@@ -108,6 +108,7 @@ class Comanda(Base):
 
     @property
     def cm_valor_comissao(self):
+        return 0
         percentual = round(get_configuracao("WCM_PERCENTUAL_COMISSAO_GARCON") / 100, 2)
         return round(self.cm_valor_total * percentual, 2)
 
