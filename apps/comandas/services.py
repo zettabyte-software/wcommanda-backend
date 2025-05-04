@@ -1,3 +1,5 @@
+import logging
+
 from django.db.models import Count, F
 from django.utils import timezone
 
@@ -12,6 +14,8 @@ from apps.system.conf.services import get_configuracao
 from apps.vendas.models import Venda, VendaItem
 
 from .models import Comanda, ComandaItem, StatusComandaChoices
+
+logger = logging.getLogger(__name__)
 
 
 def vincular_num_pedido(itens):
@@ -144,6 +148,7 @@ def criar_carimbo_cartao_fidelidade(comanda: Comanda):
         - Se o cliente associado ao cartão de fidelidade tiver um e-mail, um e-mail de notificação é enviado informando que o cartão está completo.
 
     """
+
     cartao_fidelidade = CartaoFidelidade.objects.filter(
         cr_status=StatusCartaoFidelidadeChoices.ABERTA,
         cr_cliente=comanda.cm_cliente_fidelidade,
@@ -152,27 +157,24 @@ def criar_carimbo_cartao_fidelidade(comanda: Comanda):
     if not cartao_fidelidade or cartao_fidelidade.cr_expirado:
         return
 
-    condicao = cartao_fidelidade.cr_condicao_premio
-
-    if condicao.cn_produto:
-        comprou_produto = ComandaItem.objects.filter(ct_comanda=comanda, ct_produto=condicao.cn_produto).exists()
-        if not comprou_produto:
+    condicao_premio = cartao_fidelidade.cr_condicao_premio
+    if condicao_premio.cn_produto:
+        comprou_produto_condicao = ComandaItem.objects.filter(ct_comanda=comanda, ct_produto=condicao_premio.cn_produto).exists()
+        if not comprou_produto_condicao:
             return
 
-    if condicao.cn_valor_minimo:
-        if condicao.cn_valor_minimo > comanda.cm_valor_total:
+    if condicao_premio.cn_valor_minimo:
+        if condicao_premio.cn_valor_minimo > comanda.cm_valor_total:
             return
 
-    Carimbo.objects.create(
-        cb_cartao_fidelidade=cartao_fidelidade,
-    )
+    Carimbo.objects.create(cb_cartao_fidelidade=cartao_fidelidade)
 
     if cartao_fidelidade.cr_total_carimbos == cartao_fidelidade.cr_condicao_premio.cn_quantidade:
         cartao_fidelidade.cr_status = StatusCartaoFidelidadeChoices.COMPLETO
         cartao_fidelidade.save()
 
-        if cartao_fidelidade.cr_cliente.cl_email:
-            enviar_email_cartao_fidelidade_completo(cartao_fidelidade)
+        # if cartao_fidelidade.cr_cliente.cl_email:
+        #     enviar_email_cartao_fidelidade_completo(cartao_fidelidade)
 
 
 def gerar_venda_por_comanda(comanda: Comanda):
