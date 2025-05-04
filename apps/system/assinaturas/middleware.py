@@ -23,13 +23,18 @@ class AssinaturaMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: WSGIRequest):
+        token = self.get_token(request)
+
+        if token is None:
+            return self.get_response(request)
+
         tenant, subdomain = self.get_tenant(request)
 
         if tenant is None:
             return self.get_response(request)
 
-        request.tenant = tenant  # type: ignore
-        request.host = subdomain  # type: ignore
+        request.tenant = tenant
+        request.host = subdomain
 
         filial = self.get_filial(request)
         host = self.get_host(request)
@@ -60,9 +65,10 @@ class AssinaturaMiddleware:
         return tenant, host
 
     def get_host(self, request: WSGIRequest) -> str:
-        if settings.IN_DEVELOPMENT:
-            return "zettabyte.wcommanda.com.br"
         return request.headers.get(settings.TENANT_HOST_HEADER, "")
+
+    def get_token(self, request: WSGIRequest) -> str:
+        return request.headers.get("Authorization", None)
 
     def get_filial(self, request: WSGIRequest) -> None | Filial:
         token = request.headers.get("Authorization", None)
