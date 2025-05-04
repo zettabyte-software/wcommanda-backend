@@ -89,7 +89,7 @@ class ComandaFinalizarSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         validated_data = super().validate(attrs)
-        comanda = self.context["comanda"]
+        comanda = self.instance
 
         if comanda.cm_status != StatusComandaChoices.ABERTA:
             raise serializers.ValidationError({"mensagem": "Apenas uma comanda ABERTA pode ser finalizada"})
@@ -164,3 +164,4 @@ class AplicarCuponSerializer(serializers.Serializer):
 
         comanda.cm_cupon = cupon
         comanda.save()
+

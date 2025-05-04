@@ -64,7 +64,7 @@ class ComandaViewSet(BaseModelViewSet):
     @action(methods=["post"], detail=True)
     def finalizar(self, request, **kwargs):
         comanda = self.get_object()
-        serializer = ComandaFinalizarSerializer(data=request.data, context={"comanda": comanda})
+        serializer = ComandaFinalizarSerializer(comanda, data=request.data)
         serializer.is_valid(raise_exception=True)
 
         agora = timezone.now()
