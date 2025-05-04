@@ -77,10 +77,10 @@ class BaseModelViewSet(ModelViewSet):
         response_data = kwargs.get("data", None)
         return Response(response_data, status=response_status)
 
-    def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset()).values()
-        page = self.paginate_queryset(queryset)
-        return self.get_paginated_response(page)
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset()).values()
+    #     page = self.paginate_queryset(queryset)
+    #     return self.get_paginated_response(page)
 
     def destroy(self, request, *args, **kwargs):
         try:
