@@ -54,10 +54,7 @@ class JWTAuthentication(SimpleJWTAuthentication):
         )
 
     def get_subdominio(self, request):
-        if settings.IN_DEVELOPMENT:
-            host = "zettabyte.wcommanda.com.br"
-        else:
-            host = request.headers.get(settings.TENANT_HOST_HEADER, "")
+        host = request.headers.get(settings.TENANT_HOST_HEADER, "")
         return host.split(".")[0]
 
 
