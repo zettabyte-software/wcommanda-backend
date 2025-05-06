@@ -6,7 +6,7 @@ import os
 # ==============================
 
 # Bind -> Gunicorn escutará apenas localmente para ser usado atrás do Nginx
-bind = "127.0.0.1:8000"
+bind = "0.0.0.0:80"
 
 # Workers -> Número ideal de processos baseados no número de núcleos de CPU
 workers = multiprocessing.cpu_count() * 2 + 1  # Regra recomendada
