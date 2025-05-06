@@ -111,7 +111,7 @@ class CategoriaProdutoViewSet(BaseModelViewSet):
     queryset = CategoriaProduto.objects.all()
     serializer_class = CategoriaProdutoSerializer
 
-    def perform_create(self, serializer, **overwrite):
+    """ def perform_create(self, serializer, **overwrite):
         instance = super().perform_create(serializer, **overwrite)
 
         filial = get_request_variable("filial")
@@ -151,7 +151,7 @@ class CategoriaProdutoViewSet(BaseModelViewSet):
         integrador = IntegradorCategoriasIfood(merchant_id, catalog_id)
         integrador.deletar_categoria(instance)
 
-        return super().perform_destroy(instance)
+        return super().perform_destroy(instance) """
 
 
 # class ComplementoProdutoViewSet(BaseModelViewSet):
