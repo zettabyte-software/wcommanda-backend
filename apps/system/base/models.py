@@ -1,8 +1,10 @@
 import copy
 import json
+import uuid
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.forms.models import model_to_dict
 from django.utils.translation import gettext_lazy as _
@@ -11,11 +13,17 @@ from auditlog.models import AuditlogHistoryField
 from django_lifecycle import LifecycleModel
 from django_multitenant.fields import TenantForeignKey
 from django_multitenant.models import TenantModel
+from django_multitenant.utils import get_current_tenant
 from threadlocals.threadlocals import get_current_user
+
+from apps.system.core.models import Upload
+from lib.back_blaze.bucket import BackBlazeB2Handler
 
 
 class Base(TenantModel, LifecycleModel):
     system_model = False
+    default_bucket_path = None
+    exclude_fields = []
 
     tenant_id = "assinatura_id"
 
@@ -40,6 +48,8 @@ class Base(TenantModel, LifecycleModel):
 
     def as_dict(self):
         data = model_to_dict(self)
+        for field in self.exclude_fields:
+            del data[field]
         return data
 
     def clonar(self, **fields):
@@ -48,6 +58,39 @@ class Base(TenantModel, LifecycleModel):
             setattr(clone, chave, valor)
         clone.save()
         return clone
+
+    def upload_arquivo(self, arquivo):
+        if self.default_bucket_path is None:
+            raise ValueError(f"O atributo 'default_bucket_path' não foi preenchido na classe {self.__class__.__name__}")
+
+        assinatura = get_current_tenant()
+        extencao = arquivo.name.split(".")[-1]
+        uuid_aleatorio = uuid.uuid4()
+        novo_nome_arquivo = F'{uuid_aleatorio}.{extencao}'
+        conteudo_arquivo = arquivo.read()
+
+        path = self.default_bucket_path % (assinatura.pk, self.pk, novo_nome_arquivo)
+
+        handler = BackBlazeB2Handler()
+        file_version = handler.upload(conteudo_arquivo, path)
+
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        bucket_url = f'{handler.BASE_URL}{path}'
+        upload = Upload.objects.create(
+            ld_content_type=content_type,
+            ld_registro_id=self.pk,
+            ld_registro=self,
+            ld_back_blaze_id=file_version.id_,
+            ld_back_blaze_path=bucket_url,
+            ld_back_blaze_url=path,
+        )
+
+        return upload
+
+    def excluir_arquivo(self, upload):
+        handler = BackBlazeB2Handler()
+        response = handler.destroy(upload.ld_back_blaze_id, upload.ld_back_blaze_path)
+        return response
 
     def save(self, *args, **kwargs):
         if not hasattr(self, "owner"):
