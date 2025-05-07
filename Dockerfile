@@ -28,11 +28,8 @@ WORKDIR /code
 RUN adduser -D appuser
 
 RUN mkdir -p /code/logs && chmod -R 777 /code/logs
-RUN mkdir -p /code/logs/gunicorn && chmod -R 777 /code/logs/gunicorn
 
 USER appuser
 
 COPY --chown=appuser:appuser --from=builder /home/appuser/venv /home/appuser/venv
 COPY --chown=appuser:appuser . .
-
-CMD [  ]
