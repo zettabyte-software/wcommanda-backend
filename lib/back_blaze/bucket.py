@@ -6,6 +6,8 @@ from utils.env import get_env_var
 
 
 class BackBlazeB2Handler:
+    BASE_URL = f"https://f005.backblazeb2.com/file/{get_env_var('BACKBLAZE_BUCKET_NAME')}/"
+
     def __init__(self):
         application_key_id = get_env_var("BACKBLAZE_APPLICATION_ID")
         application_key = get_env_var("BACKBLAZE_APPLICATION_KEY")
