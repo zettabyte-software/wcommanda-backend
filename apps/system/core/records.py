@@ -76,6 +76,7 @@ class DefaultRecordsManger:
             self.apply_updates()
 
     def apply_updates(self):
+        # TODO refatorar para chamar os métodos da própria classe
         records = self.get_records()
         try:
             for record in records:
@@ -88,10 +89,11 @@ class DefaultRecordsManger:
             logger.error("Erro ao criar registro do sistema!")
 
     def get_records(self):
-        files = self.get_files()
         records = []
+        files = self.get_files()
         for file in files:
             records_to_insert = json.load(file)
+
             for dataset in records_to_insert:
                 model = self.get_model(dataset["model"])
                 data = dataset["data"]
@@ -106,9 +108,12 @@ class DefaultRecordsManger:
                 )
 
                 records.append(default_record)
+
         return tuple(records)
 
     def get_files(self):
+        # TODO refatorar retornar o conteúdo do arqiuvo e não o arquivo em si
+        # para diminuir o processamento de ter x cursores de arquivos abertos
         files = []
         for file_name in os.listdir(self.default_records_path):
             path = self.default_records_path + file_name
