@@ -21,7 +21,8 @@
       "cf_descricao": "Define se o valor do código irá reiniciar no dia seguinte",
       "cf_valor": true
     },
-    "active": true
+    "active": false,
+    "motivo_desativacao": "Chega um ponto que o número fica muito grande e não cabe na tela"
   },
   {
     "model": "apps.system.conf.models.Configuracao",
@@ -33,7 +34,8 @@
       "cf_descricao": "Define se o sistema vai bloqear a finalização da comanda em caso da falta da quantidade do produto no estoque",
       "cf_valor": true
     },
-    "active": true
+    "active": false,
+    "motivo_desativacao": "O próprio produto mostra se controlar o estoque ou não"
   },
   {
     "model": "apps.system.conf.models.Configuracao",
@@ -45,7 +47,8 @@
       "cf_descricao": "Valor percentual a ser gerado na comissão dos garçons",
       "cf_valor": 10.0
     },
-    "active": true
+    "active": false,
+    "motivo_desativacao": "Esse parâmetro pode ser por garçom - cada um ganha uma %x + o modelo fica melhor no cadastro"
   },
 
   {
@@ -58,7 +61,8 @@
       "cf_descricao": "Client ID da loja no iFood",
       "cf_valor": ""
     },
-    "active": true
+    "active": false,
+    "motivo_desativacao": "fica no cadastro da filial para integrar com a loja"
   },
   {
     "model": "apps.system.conf.models.Configuracao",
@@ -70,6 +74,7 @@
       "cf_descricao": "Client Secret da loja no iFood",
       "cf_valor": ""
     },
-    "active": true
+    "active": false,
+    "motivo_desativacao": "fica no cadastro da filial para integrar com a loja"
   }
 ]
