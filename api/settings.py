@@ -404,7 +404,13 @@ REST_FRAMEWORK = {
     ],
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+    ]
 }
+
+if IN_DEVELOPMENT:
+    REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"].append("rest_framework.renderers.BrowsableAPIRenderer")
 
 # drf simple jwt
 SIMPLE_JWT = {
@@ -417,5 +423,5 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": True,
     "USER_ID_FIELD": "email",
     "USER_ID_CLAIM": "sub",
-    "ISSUER": "api.wcommanda.com.br",
+    "ISSUER": "wcommanda"
 }
