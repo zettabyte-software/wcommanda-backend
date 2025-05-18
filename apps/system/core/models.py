@@ -6,7 +6,7 @@ from apps.system.base.models import Base
 
 
 class Upload(Base):
-    ld_content_type = models.ForeignKey(_("content type"), "contenttypes.ContentType", on_delete=models.PROTECT)
+    ld_content_type = models.ForeignKey(verbose_name=_("content type"), to="contenttypes.ContentType", on_delete=models.PROTECT)
     ld_registro_id = models.PositiveBigIntegerField(_("id do registro"))
     ld_registro = GenericForeignKey("ld_content_type", "ld_registro_id")
     ld_back_blaze_id = models.CharField(_("id do upload no back blaze"), max_length=256)
