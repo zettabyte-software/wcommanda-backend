@@ -16,7 +16,6 @@ from django_multitenant.models import TenantModel
 from django_multitenant.utils import get_current_tenant
 from threadlocals.threadlocals import get_current_user
 
-from apps.system.core.models import Upload
 from lib.back_blaze.bucket import BackBlazeB2Handler
 
 
@@ -60,6 +59,8 @@ class Base(TenantModel, LifecycleModel):
         return clone
 
     def upload_arquivo(self, arquivo):
+        from apps.system.core.models import Upload
+
         if self.default_bucket_path is None:
             raise ValueError(f"O atributo 'default_bucket_path' não foi preenchido na classe {self.__class__.__name__}")
 
