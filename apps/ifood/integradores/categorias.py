@@ -114,8 +114,6 @@ class IntegradorCategoriasIfood(BaseIntegradorIfood):
         return 1
 
     def gerar_dados_ifood(self, categoria: CategoriaProduto):
-        print("categoria:", categoria)
-
         dados_ifood, _ = CategoriaIfood.objects.get_or_create(
             cd_categoria=categoria,
             defaults={
