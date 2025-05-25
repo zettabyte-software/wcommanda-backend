@@ -53,6 +53,7 @@ class Base(TenantModel, LifecycleModel):
 
     def clonar(self, **fields):
         clone = copy.copy(self)
+        clone.pk = None
         for chave, valor in fields.items():
             setattr(clone, chave, valor)
         clone.save()
@@ -145,3 +146,7 @@ class EstadosChoices(models.IntegerChoices):
     GOIAS = 26, "Goiás"
     DISTRITO_FEDERAL = 27, "Distrito Federal"
     EXTERIOR = 28, "Exterior"
+
+default_permissions = [
+    ("ativar_inativar", _("Ativar/Inativar"))
+]
