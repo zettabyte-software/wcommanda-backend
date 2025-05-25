@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+import serpy
+
 
 class BaseModelSerializer(serializers.ModelSerializer):
     def __init__(self, instance=None, data=serializers.empty, **kwargs):
@@ -22,3 +24,26 @@ class BaseModelSerializer(serializers.ModelSerializer):
 
     def get_field_verbose_name(self, field_name):
         return self.Meta.model._meta.get_field(field_name).verbose_name  # type: ignore
+
+
+class BaseModelSerpySerializer(serpy.Serializer):
+    id = serpy.IntField()
+
+    codigo = serpy.IntField()
+    ativo = serpy.BoolField()
+
+    data_criacao = serpy.StrField()
+    hora_criacao = serpy.StrField()
+    data_ultima_alteracao = serpy.StrField()
+    hora_ultima_alteracao = serpy.StrField()
+
+    def to_value(self, instance):
+        fields = self._compiled_fields
+        if self.many:
+            serialize = self._serialize
+            return [serialize(o, fields) for o in instance]
+
+        if instance is None:
+            return None
+
+        return self._serialize(instance, fields)
