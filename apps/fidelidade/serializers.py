@@ -2,6 +2,7 @@ from django.utils.translation import gettext_lazy as _
 
 from rest_framework import serializers
 
+from apps.clientes.serializers import ClienteVisualizacaoSerializer
 from apps.system.base.serializers import BaseModelSerializer
 from apps.system.core.classes import Email
 
@@ -41,6 +42,7 @@ class PremioAlteracaoSerializer(BaseModelSerializer):
 
 
 class CartaoFidelidadeVisualizacaoSerializer(BaseModelSerializer):
+    cr_cliente = ClienteVisualizacaoSerializer()
     cr_total_carimbos = serializers.SerializerMethodField()
     cr_expirado = serializers.SerializerMethodField()
 
