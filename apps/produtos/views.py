@@ -24,6 +24,7 @@ from .serializers import (
     # GrupoComplementoProdutoVisualizacaoSerializer,
     Produto,
     ProdutoAlteracaoSerializer,
+    ProdutoFormSerializer,
     ProdutoVisualizacaoSerializer,
 )
 from .services import gerar_codigo_cardapio
@@ -37,6 +38,8 @@ class ProdutoViewSet(BaseModelViewSet):
         "create": ProdutoAlteracaoSerializer,
         "update": ProdutoAlteracaoSerializer,
         "partial_update": ProdutoAlteracaoSerializer,
+        "grid": ProdutoFormSerializer,
+        "form": ProdutoFormSerializer,
         "bulk_create": ProdutoAlteracaoSerializer,
         "clonar": ProdutoAlteracaoSerializer,
     }

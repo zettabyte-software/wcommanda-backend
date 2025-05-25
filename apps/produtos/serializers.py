@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from apps.system.base.serializers import BaseModelSerializer
+import serpy
+
+from apps.system.base.serializers import BaseModelSerializer, BaseModelSerpySerializer
 
 from .models import (
     CategoriaProduto,
@@ -66,6 +68,22 @@ class ProdutoAlteracaoSerializer(BaseModelSerializer):
             "pr_path_imagem",
             "pr_id_back_blaze",
         )
+
+
+class ProdutoFormSerializer(BaseModelSerpySerializer):
+    class CategoriaField(BaseModelSerpySerializer):
+        cg_nome = serpy.StrField()
+        cg_descricao = serpy.StrField()
+
+    pr_tipo = serpy.IntField()
+    pr_nome = serpy.StrField()
+    pr_codigo_cardapio = serpy.StrField()
+    pr_preco = serpy.FloatField()
+    pr_tempo_preparo = serpy.IntField()
+    pr_categoria = CategoriaField()
+    pr_status_padrao_comanda_item = serpy.IntField()
+    pr_controla_estoque = serpy.BoolField()
+    pr_descricao = serpy.StrField()
 
 
 # class ComplementoProdutoVisualizacaoSerializer(BaseModelSerializer):
