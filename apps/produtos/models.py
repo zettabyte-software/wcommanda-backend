@@ -45,6 +45,8 @@ class UnidadesProdutoChoices(models.IntegerChoices):
 
 
 class Produto(Base):
+    default_bucket_path = DEFAULT_BUCKET_PRODUCT_PHOTO_PATH
+
     pr_tipo = models.PositiveSmallIntegerField(_("tipo"), choices=TiposChoices.choices, default=TiposChoices.CONSUMIVEL)
     pr_nome = models.CharField(_("nome"), max_length=100)
     pr_codigo_cardapio = models.CharField(_("código do cardápio"), max_length=8)
