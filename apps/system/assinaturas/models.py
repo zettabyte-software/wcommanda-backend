@@ -84,7 +84,8 @@ class Plano(Base):
 
     pl_integra_ifood = models.BooleanField(_("integra com o ifood"), default=False)
     pl_limite_integracoes_pedidos_ifood = models.PositiveIntegerField(
-        _("número máximo pedidos de ifood recebíveis por mês"), default=0
+        _("número máximo pedidos de ifood recebíveis por mês"),
+        default=0,
     )
 
     pl_envia_sms = models.BooleanField(_("envia sms"), default=False)
