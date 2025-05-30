@@ -9,15 +9,21 @@ class AssinaturaAdmin(admin.ModelAdmin):
         "id",
         "ss_nome",
         "ss_subdominio",
-        "ss_cloudflare_id",
-        "ss_codigo_licenca",
         "ss_status",
+        "ss_plano__pl_nome",
+        "ss_plano__pl_tier",
+        "ss_plano__pl_numero_usuarios",
+        "ss_plano__pl_numero_telas",
+        "ss_plano__pl_integra_ifood",
+        "ss_plano__pl_limite_integracoes_pedidos_ifood",
+        "ss_plano__pl_valor_mensalidade",
+        "data_criacao",
+        "hora_criacao",
     )
     list_filter = ("ss_status",)
     search_fields = (
         "ss_nome",
         "ss_subdominio",
-        "ss_cloudflare_id",
         "ss_codigo_licenca",
     )
     ordering = ("-id",)
@@ -30,7 +36,6 @@ class PlanoAdmin(admin.ModelAdmin):
         "id",
         "pl_nome",
         "pl_tier",
-        "assinatura",
         "pl_numero_usuarios",
         "pl_numero_telas",
         "pl_integra_ifood",
@@ -38,15 +43,10 @@ class PlanoAdmin(admin.ModelAdmin):
         "pl_valor_mensalidade",
         "pl_observacao",
     )
-    list_filter = (
-        "pl_tier",
-        "ativo",
-        "assinatura",
-    )
+    list_filter = ("pl_tier",)
     search_fields = (
         "pl_nome",
         "pl_observacao",
-        "assinatura__ss_nome",
     )
     ordering = ("-id",)
     list_per_page = 25
