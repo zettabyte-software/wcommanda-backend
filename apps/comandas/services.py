@@ -173,8 +173,8 @@ def criar_carimbo_cartao_fidelidade(comanda: Comanda):
         cartao_fidelidade.cr_status = StatusCartaoFidelidadeChoices.COMPLETO
         cartao_fidelidade.save()
 
-        # if cartao_fidelidade.cr_cliente.cl_email:
-        #     enviar_email_cartao_fidelidade_completo(cartao_fidelidade)
+        if cartao_fidelidade.cr_cliente.cl_email:
+            enviar_email_cartao_fidelidade_completo(cartao_fidelidade)
 
 
 def gerar_venda_por_comanda(comanda: Comanda):
