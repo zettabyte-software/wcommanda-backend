@@ -59,10 +59,7 @@ class ConvidarUsuarioSerializer(serializers.Serializer):
 
 
 class AceitarConviteSerializer(serializers.Serializer):
-    email = serializers.SlugRelatedField(
-        slug_field="email",
-        queryset=Usuario.objects.filter(status=StatusSolicitacaoChoices.PENDENTE)
-    )
+    email = serializers.SlugRelatedField(slug_field="email", queryset=Usuario.objects.filter(status=StatusSolicitacaoChoices.PENDENTE))
     nome = serializers.CharField()
     sobrenome = serializers.CharField()
     senha = PasswordField()
