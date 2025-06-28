@@ -47,7 +47,7 @@ class UnidadesProdutoChoices(models.IntegerChoices):
 class Produto(Base):
     pr_tipo = models.PositiveSmallIntegerField(_("tipo"), choices=TiposChoices.choices, default=TiposChoices.CONSUMIVEL)
     pr_nome = models.CharField(_("nome"), max_length=100)
-    pr_codigo_cardapio = models.CharField(_("código do cardápio"), max_length=8)
+    pr_codigo_cardapio = models.CharField(_("código do cardápio"), max_length=8, blank=True, default="")
     pr_preco = models.FloatField(_("preço"), default=0)
     pr_tempo_preparo = models.IntegerField(_("código"), default=0)
     pr_categoria = TenantForeignKey(

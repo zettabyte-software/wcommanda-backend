@@ -25,6 +25,7 @@ from .serializers import (
 
 logger = logging.getLogger(__name__)
 
+
 class AssinaturaViewSet(BaseModelViewSet):
     queryset = Assinatura.objects.all()
     serializer_classes = {

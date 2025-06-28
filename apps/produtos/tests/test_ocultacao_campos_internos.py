@@ -47,7 +47,7 @@ def test_create_produto(api_client):
         "pr_descricao": "Test Description",
         "pr_tipo": TiposChoices.CONSUMIVEL,
         "pr_valor": 10,
-        "pr_codigo_cardapio": "A910",
+        "pr_codigo_cardapio": "910",
         "pr_path_imagem": "should_not_be_saved.jpg",
         "pr_id_back_blaze": "should_not_be_saved",
     }
