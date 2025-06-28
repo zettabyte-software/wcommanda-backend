@@ -26,7 +26,7 @@ def comanda_com_comissao(usuario, produto):
 
 @pytest.mark.django_db
 def test_comissao(comanda_com_comissao, configuracoes):
-    percentual_comissao = get_configuracao("WCM_PERCENTUAL_COMISSAO_GARCON")
+    percentual_comissao = comanda_com_comissao.cm_garcom.comission
     comissao = gerar_comissao_garcom(comanda_com_comissao)
     assert comanda_com_comissao.cm_valor_comissao == comissao.cg_valor
     assert comissao.cg_percentual == percentual_comissao

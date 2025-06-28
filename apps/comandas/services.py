@@ -1,6 +1,6 @@
 import logging
 
-from django.db.models import Count, F
+from django.db.models import Count, F, Max
 from django.utils import timezone
 
 from threadlocals.threadlocals import get_current_user
@@ -75,32 +75,11 @@ def baixar_estoque(comanda_item: ComandaItem):
 
 
 def atualizar_codigo_comanda(comanda: Comanda):
-    """Atualiza o código da comanda com base na configuração de reinício de código.
+    """Atualiza o código da comanda com base na configuração de reinício de código."""
 
-    Se a configuração "WCM_REINICIO_CODIGO_COMANDA" estiver habilitada, o código da comanda será reiniciado diariamente.
-    Caso contrário, o código da comanda será incrementado com base na última comanda criada.
-
-    Args:
-        comanda (Comanda): A instância da comanda que será atualizada.
-
-    Returns:
-        None
-
-    """
-    reinicia_codigo = get_configuracao("WCM_REINICIO_CODIGO_COMANDA")
-
-    if reinicia_codigo:
-        ultima_comanda_hoje = Comanda.objects.filter(data_criacao=timezone.now()).exclude(id=comanda.pk).first()
-
-        if ultima_comanda_hoje is not None:
-            comanda.cm_codigo = ultima_comanda_hoje.cm_codigo + 1
-    else:
-        ultima_comanda = Comanda.objects.exclude(id=comanda.pk).first()
-
-        if ultima_comanda is not None:
-            comanda.cm_codigo = ultima_comanda.cm_codigo + 1
-
-
+    hoje = timezone.now().date()
+    maior_codigo = Comanda.objects.filter(data_criacao=hoje).aggregate(max=Max("cm_codigo"))["max"] or 0
+    comanda.cm_codigo = maior_codigo.cm_codigo + 1
     comanda.save()
 
 
@@ -117,15 +96,17 @@ def gerar_comissao_garcom(comanda: Comanda):
         Pode lançar exceções relacionadas à criação do objeto ComissaoGarcom ou à obtenção da configuração do percentual de comissão.
 
     """
-    percentual_comissao = get_configuracao("WCM_PERCENTUAL_COMISSAO_GARCON")
-    return ComissaoGarcom.objects.create(
-        cg_garcom=comanda.cm_garcom,
-        cg_comanda=comanda,
-        cg_valor_total_comanda=comanda.cm_valor_total,
-        cg_valor=comanda.cm_valor_comissao,
-        cg_percentual=percentual_comissao,
-        owner=get_current_user(),
-    )
+    raise NotImplementedError
+
+    # percentual_comissao = comanda.cm_garcom.comission
+    # return ComissaoGarcom.objects.create(
+    #     cg_garcom=comanda.cm_garcom,
+    #     cg_comanda=comanda,
+    #     cg_valor_total_comanda=comanda.cm_valor_total,
+    #     cg_valor=comanda.cm_valor_comissao,
+    #     cg_percentual=percentual_comissao,
+    #     owner=get_current_user(),
+    # )
 
 
 def criar_carimbo_cartao_fidelidade(comanda: Comanda):
@@ -159,7 +140,9 @@ def criar_carimbo_cartao_fidelidade(comanda: Comanda):
 
     condicao_premio = cartao_fidelidade.cr_condicao_premio
     if condicao_premio.cn_produto:
-        comprou_produto_condicao = ComandaItem.objects.filter(ct_comanda=comanda, ct_produto=condicao_premio.cn_produto).exists()
+        comprou_produto_condicao = ComandaItem.objects.filter(
+            ct_comanda=comanda, ct_produto=condicao_premio.cn_produto
+        ).exists()
         if not comprou_produto_condicao:
             return
 
@@ -193,7 +176,7 @@ def gerar_venda_por_comanda(comanda: Comanda):
     4. Cria uma instância de Pagamento associada à venda gerada.
 
     Observations:
-        A função assume que as classes Comanda, Venda, ComandaItem, VendaItem e Pagamento, 
+        A função assume que as classes Comanda, Venda, ComandaItem, VendaItem e Pagamento,
         bem como os métodos get_current_user e F, estão definidos e importados no contexto onde esta função é utilizada.
 
     """

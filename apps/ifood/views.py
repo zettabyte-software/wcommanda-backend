@@ -28,7 +28,8 @@ class PedidoIfoodViewSet(ReadOnlyModelViewSet):
     def webhook(self, request: Request):
         # print(request.data)
         # print(request.headers)
-        # client_secret = Configuracao.get_configuracao("WCM_CLIENT_SECRET_IFOOD")
+        # client_secret = None
+        # raise NotImplementedError("Removido")
         # signature = request.headers.get("X-Ifood-Signature", None)
 
         # evento_valido = WebhookPedidoIfood.validar_evento_ifood(request.data, signature, client_secret)

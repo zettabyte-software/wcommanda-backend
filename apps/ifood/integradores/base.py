@@ -19,7 +19,7 @@ _BASE_URL_API_IFOOD = "https://merchant-api.ifood.com.br"
 _BASE_HEADERS_IFOOD = {
     "Accept": "application/json",
     "Content-Type": "application/json",
-    "User-Agent": "wCommanda (wcommanda.com.br) - v2.0.0",
+    "User-Agent": "wCommanda v2.0.0",
 }
 
 logger = logging.getLogger(__name__)
@@ -27,8 +27,9 @@ logger = logging.getLogger(__name__)
 
 class BaseIntegradorIfood:
     def __init__(self, merchant: str):
-        client_id = Configuracao.get_configuracao("WCM_CLIENT_ID_IFOOD")
-        client_secret = Configuracao.get_configuracao("WCM_CLIENT_SECRET_IFOOD")
+        client_id = None
+        client_secret = None
+        raise NotImplementedError("Removido")
 
         if not client_id or not client_secret:
             raise ValidationError({"mensagem": "As credenciais do iFood não foram configuradas"})

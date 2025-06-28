@@ -7,25 +7,17 @@ from apps.system.base.models import Base
 from .types import TCodigoConfiguracao
 
 
+class opcoes_configuracoes:
+    WCM_CONTROLE_STATUS_ITENS = "WCM_CONTROLE_STATUS_ITENS"
+
+
+primitive_types_codes_map = {
+    "WCM_CONTROLE_STATUS_ITENS": bool,
+}
+
+
 class Configuracao(Base):
     owner = None
-
-    class opcoes_configuracoes:
-        WCM_CONTROLE_STATUS_ITENS = "WCM_CONTROLE_STATUS_ITENS"
-        WCM_REINICIO_CODIGO_COMANDA = "WCM_REINICIO_CODIGO_COMANDA"
-        WCM_CONTROLE_ESTOQUE = "WCM_CONTROLE_ESTOQUE"
-        WCM_PERCENTUAL_COMISSAO_GARCON = "WCM_PERCENTUAL_COMISSAO_GARCON"
-        WCM_CLIENT_ID_IFOOD = "WCM_CLIENT_ID_IFOOD"
-        WCM_CLIENT_SECRET_IFOOD = "WCM_CLIENT_SECRET_IFOOD"
-
-    primitive_types_codes_map = {
-        "WCM_CONTROLE_STATUS_ITENS": bool,
-        "WCM_REINICIO_CODIGO_COMANDA": bool,
-        "WCM_CONTROLE_ESTOQUE": bool,
-        "WCM_PERCENTUAL_COMISSAO_GARCON": float,
-        "WCM_CLIENT_ID_IFOOD": str,
-        "WCM_CLIENT_SECRET_IFOOD": str,
-    }
 
     cf_codigo = models.CharField(_("código"), max_length=40, editable=False)
     cf_descricao = models.CharField(_("descrição"), max_length=500)
@@ -33,7 +25,7 @@ class Configuracao(Base):
 
     @classmethod
     def normalize_value(cls, codigo, valor):
-        tipo_valor_parametro = cls.primitive_types_codes_map[codigo]
+        tipo_valor_parametro = primitive_types_codes_map[codigo]
 
         if tipo_valor_parametro is str:
             return valor
@@ -64,4 +56,4 @@ class Configuracao(Base):
         return self.cf_codigo
 
 
-configuracoes = Configuracao.opcoes_configuracoes
+configuracoes = opcoes_configuracoes

@@ -21,7 +21,8 @@ class IFoodWebhookAuthentication(authentication.BaseAuthentication):
         body = request.body
 
         try:
-            client_secret = Configuracao.get_configuracao("WCM_CLIENT_SECRET_IFOOD")
+            raise NotImplementedError("Removido")
+            client_secret = None
         except AttributeError as e:
             raise ImproperlyConfigured("IFOOD_CLIENT_SECRET not configured in settings") from e
 
