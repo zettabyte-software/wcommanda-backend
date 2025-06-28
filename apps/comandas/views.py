@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.db.models import Count, F
 from django.forms import model_to_dict
 from django.utils import timezone
@@ -8,6 +9,7 @@ from rest_framework.viewsets import GenericViewSet
 
 from apps.fidelidade.models import StatusCartaoFidelidadeChoices
 from apps.system.base.views import BaseModelViewSet
+from apps.system.conf.services import get_configuracao
 from apps.vendas.services import gerar_venda_por_comanda
 
 from .models import StatusComandaChoices, StatusComandaItemChoices
@@ -50,16 +52,21 @@ class ComandaViewSet(BaseModelViewSet):
         "data_criacao": ["exact"],
     }
 
+    @transaction.atomic
     def perform_create(self, serializer, **overwrite):
-        super().perform_create(serializer)
+        try:
+            super().perform_create(serializer)
 
-        comanda = serializer.instance
+            comanda = serializer.instance
 
-        atualizar_codigo_comanda(comanda)
+            atualizar_codigo_comanda(comanda)
 
-        if comanda.cm_mesa is not None:
-            comanda.cm_mesa.ms_ocupada = True
-            comanda.cm_mesa.save()
+            if comanda.cm_mesa is not None:
+                comanda.cm_mesa.ms_ocupada = True
+                comanda.cm_mesa.save()
+        except Exception as e:
+            transaction.set_rollback(True)
+            raise e
 
     @action(methods=["post"], detail=True)
     def finalizar(self, request, **kwargs):
@@ -114,6 +121,16 @@ class ComandaViewSet(BaseModelViewSet):
         itens.update(ct_status=StatusComandaItemChoices.CANCELADO)
 
         return Response()
+
+    @action(methods=["get"], detail=True)
+    def pode_finalizar(self, request, **kwargs):
+        comanda = self.get_object()
+        controla_status = get_configuracao("WCM_CONTROLE_STATUS_ITENS")
+        if not controla_status:
+            return Response({"pode_finalizar": True})
+
+        itens_nao_finalizados = ComandaItem.objects.filter(ct_comanda=comanda).exclude(ct_status=StatusComandaItemChoices.ENTREGUE)
+        return Response({"pode_finalizar": not itens_nao_finalizados.exists()})
 
     @action(methods=["post"], detail=True)
     def aplicar_cupon(self, request, **kwargs):
