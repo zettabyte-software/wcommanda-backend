@@ -52,6 +52,7 @@ class Assinatura(TenantModel):
     ss_cloudflare_id = models.CharField(_("id cloudflare"), max_length=50)
     ss_codigo_licenca = models.UUIDField(_("código da licença"), default=uuid.uuid4, editable=False)
     ss_status = models.IntegerField(_("status"), choices=StatusChoices.choices, default=StatusChoices.NORMAL)
+    ss_plano = models.ForeignKey(verbose_name=_("plano"), to="assinaturas.Plano", on_delete=models.CASCADE)
 
     class Meta:
         db_table = "assinatura"
@@ -60,7 +61,15 @@ class Assinatura(TenantModel):
         verbose_name_plural = _("Assinaturas")
 
 
-class Plano(Base):
+# TODO aplicar mixins
+class Plano(models.Model):
+    ativo = models.BooleanField(_("ativo"), default=True)
+    codigo = models.PositiveBigIntegerField(_("código"), editable=False, default=1)
+    data_criacao = models.DateField(_("data de criação"), auto_now_add=True)
+    hora_criacao = models.TimeField(_("hora de criação"), auto_now_add=True)
+    data_ultima_alteracao = models.DateField(_("data da última alteração"), auto_now=True)
+    hora_ultima_alteracao = models.TimeField(_("hora da última alteração"), auto_now=True)
+
     pl_nome = models.CharField(_("nome"), max_length=15)
     pl_tier = models.PositiveIntegerField(_("tíer"), choices=TierChoices.choices, default=TierChoices.TIER_4)
     pl_numero_usuarios = models.PositiveIntegerField(_("número usuarios"), default=2)

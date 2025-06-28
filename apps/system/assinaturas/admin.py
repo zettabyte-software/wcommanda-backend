@@ -30,7 +30,7 @@ class PlanoAdmin(admin.ModelAdmin):
         "id",
         "pl_nome",
         "pl_tier",
-        "assinatura",
+        # "assinatura",
         "pl_numero_usuarios",
         "pl_numero_telas",
         "pl_integra_ifood",
@@ -41,7 +41,7 @@ class PlanoAdmin(admin.ModelAdmin):
     list_filter = (
         "pl_tier",
         "ativo",
-        "assinatura",
+        # "assinatura",
     )
     search_fields = (
         "pl_nome",

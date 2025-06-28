@@ -5,8 +5,8 @@ class BaseModelSerializer(serializers.ModelSerializer):
     def __init__(self, instance=None, data=serializers.empty, **kwargs):
         exclude_fields = kwargs.pop("exclude_fields", None)
 
-        if self.__class__.__name__.find("Visualizacao") != -1:
-            self.Meta.read_only_fields = self.Meta.model.get_column_names()
+        # if self.__class__.__name__.find("Visualizacao") != -1:
+        #     self.Meta.read_only_fields = self.Meta.model.get_column_names()
 
         super().__init__(instance, data, **kwargs)
 

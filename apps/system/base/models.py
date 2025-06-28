@@ -13,6 +13,7 @@ from django_multitenant.fields import TenantForeignKey
 from django_multitenant.models import TenantModel
 from threadlocals.threadlocals import get_current_user
 
+# TODO separar métodos e campos como mixins -> BasAttrsMixin, BaseMethodsMixin = BaseModel
 
 class Base(TenantModel, LifecycleModel):
     system_model = False
@@ -51,11 +52,11 @@ class Base(TenantModel, LifecycleModel):
 
     def save(self, *args, **kwargs):
         if not hasattr(self, "owner"):
-            if self.system_model:
-                user_cls = get_user_model()
-                self.owner = user_cls.get_instacia_bot_wcommanda()
-            else:
-                self.owner = get_current_user()
+            # if self.system_model:
+            #     user_cls = get_user_model()
+            #     self.owner = user_cls.get_instacia_bot_wcommanda()
+            # else:
+            self.owner = get_current_user()
 
         if self.pk is None:
             max_code = self.__class__.objects.all().aggregate(max=models.Max("codigo"))["max"] or 0

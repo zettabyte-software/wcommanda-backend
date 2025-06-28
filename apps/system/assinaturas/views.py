@@ -3,12 +3,13 @@ import logging
 from django.conf import settings
 
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet, ViewSet
 
 import stripe
-from django_multitenant.utils import set_current_tenant
+from django_multitenant.utils import get_current_tenant, set_current_tenant
 
 from apps.system.base.views import BaseModelViewSet
 from utils.env import get_env_var
@@ -35,7 +36,17 @@ class AssinaturaViewSet(BaseModelViewSet):
         "update": AssinaturaAlteracaoSerializer,
         "partial_update": AssinaturaAlteracaoSerializer,
         "bulk_create": AssinaturaAlteracaoSerializer,
+        "info": AssinaturaVisualizacaoSerializer,
     }
+
+    @action(detail=False, methods=["get"])
+    def info(self, request):
+        assinatura = get_current_tenant()
+        if not assinatura:
+            return Response({"mensagem": "Nenhuma assinatura encontrada"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(assinatura)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PlanoViewSet(BaseModelViewSet):

@@ -8,7 +8,7 @@ from rest_framework_simplejwt.serializers import PasswordField
 
 from apps.filiais.models import Filial
 
-from .models import StatusSolicitacaoChoices, Usuario
+from .models import StatusSolicitacao, Usuario
 from .services import convidar_usuario_sistema
 
 
@@ -58,15 +58,16 @@ class ConvidarUsuarioSerializer(serializers.Serializer):
         convidar_usuario_sistema(email, filial)
 
 
+# TODO colocar um código no cache para não permitir que o convite seja aceito mais de uma vez
 class AceitarConviteSerializer(serializers.Serializer):
-    email = serializers.SlugRelatedField(slug_field="email", queryset=Usuario.objects.filter(status=StatusSolicitacaoChoices.PENDENTE))
+    email = serializers.SlugRelatedField(slug_field="email", queryset=Usuario.objects.filter(status=StatusSolicitacao.PENDENTE))
     nome = serializers.CharField()
     sobrenome = serializers.CharField()
     senha = PasswordField()
 
     def save(self, **kwargs):
         usuario = self.validated_data["email"]  # type: ignore
-        usuario.status = StatusSolicitacaoChoices.ACEITO
+        usuario.status = StatusSolicitacao.ACEITO
         usuario.first_name = self.validated_data["nome"]  # type: ignore
         usuario.last_name = self.validated_data["sobrenome"]  # type: ignore
         usuario.password = make_password(self.validated_data["senha"])  # type: ignore

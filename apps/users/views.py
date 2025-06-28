@@ -5,15 +5,17 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
+from django_multitenant.utils import get_current_tenant
+
 from apps.system.base.views import BaseModelViewSet
 
-from .models import StatusSolicitacaoChoices
+from .models import StatusSolicitacao
 from .serializers import AceitarConviteSerializer, ConvidarUsuarioSerializer, Usuario, UsuarioSerializer
 
 
 class UsuarioViewSet(BaseModelViewSet):
     model = Usuario
-    queryset = Usuario.objects.all().exclude(status=StatusSolicitacaoChoices.PENDENTE)
+    queryset = Usuario.objects.all().exclude(status=StatusSolicitacao.PENDENTE)
     serializer_classes = {
         "list": UsuarioSerializer,
         "retrieve": UsuarioSerializer,
@@ -61,3 +63,11 @@ class UsuarioViewSet(BaseModelViewSet):
     @action(methods=["post"], detail=False)
     def aceitar_convite(self, request):
         return self.generic_action()
+
+    @action(methods=["get"], detail=False)
+    def limite(self, request):
+        assinatura = get_current_tenant()
+        total_usuarios = Usuario.objects.filter(is_active=True, status=StatusSolicitacao.ACEITO).count()
+        return Response(
+            {"limite_restante": assinatura.ss_plano.pl_numero_usuarios - total_usuarios},
+        )

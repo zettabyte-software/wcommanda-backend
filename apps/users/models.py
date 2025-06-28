@@ -11,7 +11,7 @@ from django_multitenant.models import TenantManager
 from apps.system.base.models import Base
 
 
-class StatusSolicitacaoChoices(models.IntegerChoices):
+class StatusSolicitacao(models.IntegerChoices):
     PENDENTE = 1, _("Pendente")
     ACEITO = 2, _("Aceito")
     RECUSADO = 3, _("Recusado")
@@ -53,7 +53,7 @@ class Usuario(Base, AbstractUser):
 
     WCOMMANDA_USER_EMAIL = "bot@wcommanda.com.br"
 
-    status = models.PositiveSmallIntegerField(_("status"), choices=StatusSolicitacaoChoices.choices, default=StatusSolicitacaoChoices.PENDENTE)
+    status = models.PositiveSmallIntegerField(_("status"), choices=StatusSolicitacao.choices, default=StatusSolicitacao.PENDENTE)
     first_name = models.CharField(_("nome"), max_length=30)
     last_name = models.CharField(_("sobrenome"), max_length=60)
     email = models.EmailField(_("email"), unique=True)
