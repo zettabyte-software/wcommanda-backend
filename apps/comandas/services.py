@@ -79,7 +79,7 @@ def atualizar_codigo_comanda(comanda: Comanda):
 
     hoje = timezone.now().date()
     maior_codigo = Comanda.objects.filter(data_criacao=hoje).aggregate(max=Max("cm_codigo"))["max"] or 0
-    comanda.cm_codigo = maior_codigo.cm_codigo + 1
+    comanda.cm_codigo = maior_codigo + 1
     comanda.save()
 
 
