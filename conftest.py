@@ -13,7 +13,7 @@ from threadlocals.threadlocals import set_current_user
 
 from apps.mesas.models import Mesa
 from apps.produtos.models import Produto
-from apps.system.assinaturas.models import Assinatura
+from apps.system.assinaturas.models import Assinatura, Plano, TierChoices
 from apps.system.conf.models import Configuracao
 from apps.users.models import Usuario
 
@@ -45,12 +45,25 @@ def use_dummy_cache_backend(settings):
 
 @pytest.fixture(autouse=True)
 def assinatura():
+    plano = Plano.objects.create(
+        pl_nome="Dev",
+        pl_tier=TierChoices.TIER_4,
+        pl_numero_usuarios=100,
+        pl_integra_ifood=True,
+        pl_limite_integracoes_pedidos_ifood=99999,
+        pl_valor_mensalidade=0,
+        pl_observacao="",
+    )
+
     assinatura = Assinatura.objects.create(
         ss_nome="Teste",
         ss_subdominio="teste",
         ss_cloudflare_id="test-id",
+        ss_plano=plano,
     )
+
     set_current_tenant(assinatura)
+
     return assinatura
 
 
